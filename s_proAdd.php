@@ -16,7 +16,7 @@ $r_shopSup = $pdo->query($sql_shopSup)->fetchAll();
         margin-top: 10px;
         border: 2px dashed lightgray;
         /* width: 500px; */
-        height: 300px;
+        height: 430px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -104,9 +104,6 @@ $r_shopSup = $pdo->query($sql_shopSup)->fetchAll();
                         </div>
                         <div class="form-text"></div>
                     </div>
-
-
-
                     <div class="mb-3">
                         <label for="pro_describe" class="form-label">產品描述</label>
                         <textarea name="pro_describe" id="pro_describe" class="form-control"></textarea>
