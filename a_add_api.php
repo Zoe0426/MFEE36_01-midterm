@@ -21,7 +21,7 @@ $address = isset($_POST['act_address']) ? $_POST['act_address'] : "";
 
 
 // //子輸入
-$date = isset($_POST['group_date']) ? $_POST['group_date'] : "";
+$date = isset($_POST['group_date']) ? $_POST['group_date'] : 0;
 $time = isset($_POST['group_time']) ? $_POST['group_time'] : 2;
 $p_ad = isset($_POST['price_adult']) ? $_POST['price_adult'] : 0;
 $p_kid = isset($_POST['price_kid']) ? $_POST['price_kid'] : 0;
@@ -75,7 +75,7 @@ $stmt = $pdo->prepare($sqlChild); //準備(子)
 
 $stmt->execute([
     $parentSid, //父表品項編號
-    '2023-10-12',
+    '2023-05-19',
     $time,
     $p_ad,
     $p_kid,
@@ -98,15 +98,15 @@ if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒�
 //     ]);
 // }
 
-$stmt->execute([
-    $parentSid, //父表品項編號
-    $date,
-    $time,
-    $p_ad,
-    $p_kid,
-    '1',
-    $ppl_max
-]);
+// $stmt->execute([
+//     $parentSid, //父表品項編號
+//     $date,
+//     $time,
+//     $p_ad,
+//     $p_kid,
+//     '1',
+//     $ppl_max
+// ]);
 
 
 // $data = [ //（從前端來的資料，依需求準備好子資料表內容）
