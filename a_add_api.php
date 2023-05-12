@@ -2,6 +2,13 @@
 //連資料庫
 require './partsNOEDIT/connect-db.php';
 
+$output = [
+    'success' => false,
+    'postData' => $_POST, # 除錯用的
+    'code' => 0,
+    'error' => [],
+];
+
 //父輸入
 $type = isset($_POST['type_sid']) ? $_POST['type_sid'] : 0;
 $name = isset($_POST['act_name']) ? $_POST['act_name'] : "";
@@ -29,6 +36,10 @@ $stm->execute([
     $area,
     $address
 ]);
+if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
+    $output['success'] = true;
+    $output['message'] = "父表格新增成功";
+}
 
 
 $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo $lastsid;
@@ -45,9 +56,13 @@ $stm->execute([
     $time,
     $p_ad,
     $p_kid,
-    '1',
+    1,
     $ppl_max
 ]);
+if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
+    $output['success'] = true;
+    $output['message2'] = "子表格新增成功";
+}
 
 // foreach ($data as $d) { // 使用for迴圈插入多條記錄
 //     $stm->execute([
@@ -101,3 +116,6 @@ $stm->execute([
 // |ORD0005     |001              |貓食-大罐
 // |ORD0005     |002              |貓食-中罐
 // |ORD0005     |003              |貓食-小罐
+
+header('Content-Type: application/json');
+echo json_encode($output, JSON_UNESCAPED_UNICODE);
