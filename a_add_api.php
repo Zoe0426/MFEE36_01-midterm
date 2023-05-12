@@ -10,8 +10,6 @@ $output = [
 ];
 
 
-// echo ($_POST['act_name']);
-
 //父輸入
 $type = isset($_POST['type_sid']) ? $_POST['type_sid'] : 0;
 $name = isset($_POST['act_name']) ? $_POST['act_name'] : "";
@@ -60,7 +58,7 @@ if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒�
 
 
 $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 
-echo $lastsid;
+//echo $lastsid;
 
 
 //要加入子表的SQL語法
