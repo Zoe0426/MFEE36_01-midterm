@@ -6,8 +6,8 @@ $items = $pdo->query($sql)->fetchAll();
 
 
 
-<?php include './parts/html-head.php' ?>
-<?php include './parts/navbar.php' ?>
+<?php include './parts/partsNOEDIT/html-head.php' ?>
+<?php include './parts/partsNOEDIT/navbar.php' ?>
 
 
 <form name="rest_form" class="ps-2 pe-2">
@@ -137,7 +137,7 @@ $items = $pdo->query($sql)->fetchAll();
 
 </form>
 
-<?php include './parts/script.php' ?>
+<?php include './parts/partsNOEDIT/script.php' ?>
 <script>
 
 
@@ -150,4 +150,4 @@ $items = $pdo->query($sql)->fetchAll();
 
 
 </script>
-<?php include './parts/html-foot.php' ?>
+<?php include './parts/partsNOEDIT/html-foot.php' ?>
