@@ -74,7 +74,7 @@ $items = $pdo->query($sql)->fetchAll();
         <input type="text" name="pro_img" id="pro_img">
 
         <div class="col-3" onclick="shopAddMainImg()" id="finalImg">
-            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image"></i>
+            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image "></i>
         </div>
         <input type="text" name="pro_img" id="pro_img">
     </div>
