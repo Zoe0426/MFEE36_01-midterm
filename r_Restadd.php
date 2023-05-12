@@ -1,15 +1,12 @@
 <?php
 require './partsNOEDIT/connect-db.php';
+
 $sql = "SELECT `catg_sid`, `catg_name` FROM `rest_catg` WHERE 1";
 $items = $pdo->query($sql)->fetchAll();
+
 ?>
-
-
-
-<?php include './parts/partsNOEDIT/html-head.php' ?>
-<?php include './parts/partsNOEDIT/navbar.php' ?>
-
-
+<?php include './partsNOEDIT/html-head.php' ?>
+<?php include './partsNOEDIT/navbar.php' ?>
 <form name="rest_form" class="ps-2 pe-2">
     <!-- 分頁 -->
     <ul class="nav nav-pills mb-4 ">
@@ -137,17 +134,9 @@ $items = $pdo->query($sql)->fetchAll();
 
 </form>
 
-<?php include './parts/partsNOEDIT/script.php' ?>
+<?php include './partsNOEDIT/script.php' ?>
 <script>
 
 
-
-
-
-
-
-
-
-
 </script>
-<?php include './parts/partsNOEDIT/html-foot.php' ?>
+<?php include './partsNOEDIT/html-foot.php' ?>
