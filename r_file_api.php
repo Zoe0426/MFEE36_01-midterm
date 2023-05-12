@@ -7,7 +7,7 @@ $output = [
     'files' => $_FILES, // 除錯用的
 ];
 
-# echo json_encode($_FILES);
+// echo json_encode($_FILES);
 
 if (!empty($_FILES['tempImg'])) {
     $filename = sha1($_FILES['tempImg']['name'] . uniqid()) . '.jpg';

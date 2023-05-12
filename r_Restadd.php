@@ -18,17 +18,19 @@ $items = $pdo->query($sql)->fetchAll();
         border: 1px dashed lightgray;
         border-radius: 4px;
         height: 200px;
-        position: relative;
+
     }
 
 
     #imginfo {
         /* 為了不讓div內的img超出，故要記得做下列設定 */
+        z-index: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        background-color: pink;
+        /* object-fit: cover;
         display: none;
-        position: absolute;
+        position: absolute; */
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -54,29 +56,15 @@ $items = $pdo->query($sql)->fetchAll();
 
     </ul>
 
-
     <h3 class="mb-4">基本資料</h3>
     <!-- 圖片區 -->
     <div class="row mb-4 ">
-        <div class="col-3" onclick="shopAddMainImg()" id="finalImg">
-            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image"></i>
+        <div class="col-3" onclick="restImg()" id="finalImg">
+            <img src="" alt="" id="imginfo">
+            <!-- <i class="fa-solid fa-image"></i> -->
         </div>
         <input type="text" name="pro_img" id="pro_img">
 
-        <div class="col-3" onclick="shopAddMainImg()" id="finalImg">
-            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image"></i>
-        </div>
-        <input type="text" name="pro_img" id="pro_img">
-
-        <div class="col-3" onclick="shopAddMainImg()" id="finalImg">
-            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image"></i>
-        </div>
-        <input type="text" name="pro_img" id="pro_img">
-
-        <div class="col-3" onclick="shopAddMainImg()" id="finalImg">
-            <img src="" alt="" id="imginfo"><i class="fa-solid fa-image "></i>
-        </div>
-        <input type="text" name="pro_img" id="pro_img">
     </div>
 
     <!-- 資料區 -->
@@ -130,11 +118,146 @@ $items = $pdo->query($sql)->fetchAll();
             <div id="rest_notice" class="form-text"></div>
         </div>
     </div>
-
-
-
 </form>
 
+<!-- 營業設定 -->
+
+<div class="px-3">
+    <h3 class="mb-4">營業設定</h3>
+
+    <!-- 資料區 -->
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="start_date" class="form-label">開始日期</label>
+            <input type="text" class="form-control" id="start_date" name="start_date" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="end_date" class="form-label">結束日期</label>
+            <input type="text" class="form-control" id="end_date" name="end_date" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="people_max" class="form-label">人數上限</label>
+            <input type="text" class="form-control" id="people_max" name="people_max" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="pet_max" class="form-label">寵物上限</label>
+            <input type="text" class="form-control" id="pet_max" name="pet_max" data-required="1">
+            <div class="form-text"></div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="e_start" class="form-label">早上開始時間</label>
+            <input type="text" class="form-control" id="e_start" name="e_start" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="e_end" class="form-label">早上結束時間</label>
+            <input type="text" class="form-control" id="e_end" name="e_end" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="a_start" class="form-label">下午開始時間</label>
+            <input type="text" class="form-control" id="a_start" name="a_start" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="a_end" class="form-label">下午結束時間</label>
+            <input type="text" class="form-control" id="a_end" name="a_end" data-required="1">
+            <div class="form-text"></div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="n_start" class="form-label">晚上開始時間</label>
+            <input type="text" class="form-control" id="n_start" name="n_start" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <div class="col-3">
+            <label for="n_end" class="form-label">晚上結束時間</label>
+            <input type="text" class="form-control" id="n_end" name="n_end" data-required="1">
+            <div class="form-text"></div>
+        </div>
+        <!-- 用餐時間 -->
+        <div class="col-6 ">
+            <label for="" class="form-label">用餐時間</label>
+            <div class="d-flex">
+                <div class=" form-check me-5">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
+                    </label>
+                </div>
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <label for="" class="form-label">星期幾</label>
+            <div class="d-flex">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     function checkForm(event) {
@@ -166,13 +289,13 @@ $items = $pdo->query($sql)->fetchAll();
 
     const tempImg = document.querySelector("#tempImg");
 
-    function shopAddMainImg() {
+    function restImg() {
         //模擬點擊
         tempImg.click();
     }
 
     tempImg.addEventListener("change", () => {
-        const fd = new FormData(document.form1);
+        const fd = new FormData(document.rest_pic);
         fetch('r_file_apiTemp.php', { //這邊請填入自己要連結的api名稱
                 method: 'POST',
                 body: fd,
@@ -181,7 +304,7 @@ $items = $pdo->query($sql)->fetchAll();
                 if (obj.filename) {
                     const finalImg = document.querySelector('#finalImg');
                     const pro_img = document.querySelector('#pro_img');
-                    finalImg.firstChild.src = `./shopImgs/${obj.filename}`;
+                    finalImg.firstChild.src = `./imgs/${obj.filename}`;
                     finalImg.firstChild.style.display = "block";
                     pro_img.value = obj.filename;
                 }

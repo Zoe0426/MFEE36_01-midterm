@@ -25,15 +25,14 @@
         <!-- 登入 -->
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt1">
+                <a href="#" class="nav-link text-dark ">
                     登入
                 </a>
                 <div class="collapse w-100" id="collapseBt1">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt1">
+                    <a href="#" class="nav-link bg-transparent text-dark ">
                         - 個人資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt1">
+                    <a href="#" class="nav-link bg-transparent  text-dark ">
                         - 個人資料
                     </a>
                 </div>
@@ -88,7 +87,7 @@
                     <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
                         - 論壇資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
+                    <a href="#" class="nav-link bg-transparent  text-dark ">
                         - 論壇資料
                     </a>
                 </div>
@@ -98,10 +97,10 @@
                     購物車
                 </a>
                 <div class="collapse w-100" id="collapseBt6">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt6">
+                    <a href="./index_noEdit.php" class="nav-link bg-transparent text-dark ">
                         - 購物車資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt6">
+                    <a href="./o_order_details.php" class="nav-link bg-transparent  text-dark ">
                         - 購物車資料
                     </a>
                 </div>
