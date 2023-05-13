@@ -87,7 +87,8 @@ if ($mem) {
         spd.`proDet_sid`,
         spd.`proDet_name`,
         spd.`proDet_price`,
-        spd.`proDet_qty`
+        spd.`proDet_qty`,
+        oc.`prodQty`
     FROM
         `ord_cart` oc
         JOIN `shop_pro` sp ON oc.`rel_sid` = sp.`pro_sid`
@@ -113,7 +114,9 @@ if ($mem) {
         ag.`group_date`,
         ag.`price_adult`,
         ag.`price_kid`,
-        ag.`ppl_max`
+        ag.`ppl_max`,
+        oc.`adultQty`,
+        oc.`childQty`
     FROM
        `ord_cart` oc
         JOIN `act_info` ai ON oc.`rel_sid` = ai.`act_sid`

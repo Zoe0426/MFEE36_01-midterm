@@ -10,8 +10,16 @@ require './partsNOEDIT/connect-db.php' ?>
         display: block;
     }
 
-    #getItemsForm input[type="number"] {
+    #oGetItemsForm input[type="number"] {
         width: 60px;
+    }
+
+    .ocd:nth-child(odd) {
+        border: 2px dashed #ffc107;
+    }
+
+    .ocd:nth-child(even) {
+        border: 2px dashed #fff3cd;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -41,71 +49,17 @@ require './partsNOEDIT/connect-db.php' ?>
         </div>
     </form>
     <!-- =====顯示購物車內容===== -->
-    <form id="getItemsForm" name="getItems" onsubmit="getItems(event)">
+    <form id="oGetItemsForm" name="getItems" onsubmit="getItems(event)">
         <div class="container">
             <div class="row">
-                <div class="col-11">
-                    <!-- ===商品table -->
-                    <table class="table table-border table-striped" id="prodTable">
-                        <thead>
-                            <tr>
-                                <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" onchange="selectAllProducts()"></th>
-                                <th scope="col">商品編號</th>
-                                <th scope="col">商品名稱</th>
-                                <th scope="col">品項</th>
-                                <th scope="col">數量</th>
-                                <th scope="col">單價</th>
-                                <th scope="col">庫存</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> <input class="form-check-input" type="checkbox" value="1" name="prod"></td>
-                                <td id="oPsid">prod020</td>
-                                <td id="oPname">catfood</td>
-                                <td id="oPtype">pork</td>
-                                <td><input type="number" id="oPqty" min="0" value="2"></td>
-                                <td id="oPprice">300</td>
-                                <td id="oPstock">40</td>
-                            </tr>
+                <div id="oCartDisplay" class="col-10">
 
-
-                        </tbody>
-                    </table>
-                    <!-- ===活動table -->
-                    <table class="table table-border table-striped" id="actTable">
-                        <thead>
-                            <tr>
-                                <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
-                                <th scope="col">活動編號</th>
-                                <th scope="col">活動名稱</th>
-                                <th scope="col">期別</th>
-                                <th scope="col">人數(成人)</th>
-                                <th scope="col">單價(成人)</th>
-                                <th scope="col">人數(小孩)</th>
-                                <th scope="col">單價(小孩)</th>
-                                <th scope="col">剩餘名額</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> <input class="form-check-input" type="checkbox" value="1" name="act"></td>
-                                <td id="oAsid">20</td>
-                                <td id="oAname">Sunday Park gather</td>
-                                <td id="oAdate">2023-05-06</td>
-                                <td><input type="number" min="0" id="oPaqty" value="2"></td>
-                                <td id="oAaprice" value="200">200</td>
-                                <td><input type="number" min="0" id="oPcqty" value="2"></td>
-                                <td id="oAcprice" value="100">100</td>
-                                <td id="oAstock">40</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </form>
+
+
 </div>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
@@ -121,7 +75,7 @@ require './partsNOEDIT/connect-db.php' ?>
             .then(obj => {
                 console.log(obj);
                 showMemInfo(obj);
-                // showShop(obj);
+                showCartnCou(obj);
                 // showAct(obj);
                 // showCoupon(obj);
             })
@@ -204,6 +158,103 @@ require './partsNOEDIT/connect-db.php' ?>
                             </tr>
                         </tbody>
                     </table>`;
+    }
+    //====顯示購物車內容及coupon
+    function showCartnCou(obj) {
+        let oCartDisplay = document.getElementById("oCartDisplay");
+
+        //===商品table 
+        let ost = document.createElement("div");
+        let sData = obj.shoplist;
+        // console.log(sData);
+        let shopContent = "";
+        for (let i = 0; i < sData.length; i++) {
+            shopContent +=
+                `<tr>
+                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid},${sData[i].pro_name},${sData[i].proDet_name},${sData[i].proDet_price},]" name="prod"></td>
+                    <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
+                    <td>${sData[i].pro_name}</td>
+                    <td>${sData[i].proDet_name}</td>
+                    <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}"></td>
+                    <td>${sData[i].proDet_price}</td>
+                    <td id="oSqty${i}">${sData[i].proDet_qty}</td>
+                </tr>`;
+        }
+        ost.innerHTML = `<table class="ocd table table-border table-striped " id="prodTable">
+                <thead>
+                    <tr>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" onchange="selectAllProducts()"></th>
+                        <th scope="col">商品編號</th>
+                        <th scope="col">商品名稱</th>
+                        <th scope="col">品項</th>
+                        <th scope="col">數量</th>
+                        <th scope="col">單價</th>
+                        <th scope="col">庫存</th>
+                    </tr>
+                </thead>
+                <tbody>  
+                ${shopContent}
+                </tbody>
+            </table>`;
+        // console.log(ost);
+        oCartDisplay.append(ost);
+
+        //             <!-- ===活動table -->
+        let oat = document.createElement("div");
+        let aData = obj.actlist;
+        console.log(aData);
+        let actContent = "";
+        //             <table class="ocd table table-border table-striped" id="actTable">
+        //                 <thead>
+        //                     <tr>
+        //                         <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
+        //                         <th scope="col">活動編號</th>
+        //                         <th scope="col">活動名稱</th>
+        //                         <th scope="col">期別</th>
+        //                         <th scope="col">人數(成人)</th>
+        //                         <th scope="col">單價(成人)</th>
+        //                         <th scope="col">人數(小孩)</th>
+        //                         <th scope="col">單價(小孩)</th>
+        //                         <th scope="col">剩餘名額</th>
+        //                     </tr>
+        //                 </thead>
+        //                 <tbody>
+        //                     <tr>
+        //                         <td> <input class="form-check-input" type="checkbox" value="1" name="act"></td>
+        //                         <td id="oAsid">20</td>
+        //                         <td id="oAname">Sunday Park gather</td>
+        //                         <td id="oAdate">2023-05-06</td>
+        //                         <td><input type="number" min="0" id="oPaqty" value="2"></td>
+        //                         <td id="oAaprice" value="200">200</td>
+        //                         <td><input type="number" min="0" id="oPcqty" value="2"></td>
+        //                         <td id="oAcprice" value="100">100</td>
+        //                         <td id="oAstock">40</td>
+        //                     </tr>
+
+        //                 </tbody>
+        //             </table>
+        //             <!-- ===coupon -->
+        //             <table class="ocd table table-border table-striped" id="couponTable">
+        //                 <thead>
+        //                     <tr>
+        //                         <th scope="col"></th>
+        //                         <th scope="col">優惠券編號</th>
+        //                         <th scope="col">優惠券名稱</th>
+        //                         <th scope="col">優惠金額</th>
+        //                         <th scope="col">使用期限</th>
+        //                     </tr>
+        //                 </thead>
+        //                 <tbody>
+        //                     <tr>
+        //                         <td> <input class="form-check-input" type="checkbox" value="1" name="coupon"></td>
+        //                         <td id="oCcode">20</td>
+        //                         <td id="oCname">Sunday Park gather</td>
+        //                         <td id="oCprice">2023-05-06</td>
+        //                         <td id="oCdate">2023-05-06</td>
+        //                     </tr>
+        //                 </tbody>
+        //             </table>`
+
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
