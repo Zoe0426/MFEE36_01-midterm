@@ -16,10 +16,12 @@ require './partsNOEDIT/connect-db.php' ?>
 
     .ocd:nth-child(odd) {
         border: 2px dashed #ffc107;
+        border-collapse: collapse;
     }
 
     .ocd:nth-child(even) {
         border: 2px dashed #fff3cd;
+        border-collapse: collapse;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -52,8 +54,26 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetItemsForm" name="getItems" onsubmit="getItems(event)">
         <div class="container">
             <div class="row">
-                <div id="oCartDisplay" class="col-10">
-
+                <div class="col-10">
+                    <div id="oCartDisplay">
+                    </div>
+                    <div id="oPostPayDisplay">
+                        <div class="address mb-3">
+                            <label for="address" class="form-label">收件人姓名：</label>
+                            <input type="text" class="form-control" id="address">
+                            <div id="oAddErrMsg" class="form-text d-none"></div>
+                        </div>
+                        <div class="address mb-3">
+                            <label for="address" class="form-label">手機號碼：</label>
+                            <input type="text" class="form-control" id="address">
+                            <div id="oAddErrMsg" class="form-text d-none"></div>
+                        </div>
+                        <div class="address mb-3">
+                            <label for="address" class="form-label">寄送地址：</label>
+                            <input type="text" class="form-control" id="address">
+                            <div id="oAddErrMsg" class="form-text d-none"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +84,7 @@ require './partsNOEDIT/connect-db.php' ?>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    // ====拿某會員資料及購物車內容====
+    // ====拿XX會員的個人資料,購物車內容,及coupon====
     function getMemCart(e) {
         e.preventDefault();
         const fd = new FormData(document.getmem);
@@ -76,8 +96,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 console.log(obj);
                 showMemInfo(obj);
                 showCartnCou(obj);
-                // showAct(obj);
-                // showCoupon(obj);
+                showPostnPay();
             })
             .catch(ex => {
                 console.log(ex);
@@ -166,18 +185,17 @@ require './partsNOEDIT/connect-db.php' ?>
         //===商品table 
         let ost = document.createElement("div");
         let sData = obj.shoplist;
-        // console.log(sData);
         let shopContent = "";
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
-                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid},${sData[i].pro_name},${sData[i].proDet_name},${sData[i].proDet_price},]" name="prod"></td>
+                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid}]" name="prod"></td>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
                     <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}"></td>
                     <td>${sData[i].proDet_price}</td>
-                    <td id="oSqty${i}">${sData[i].proDet_qty}</td>
+                    <td id="oSstock${i}">${sData[i].proDet_qty}</td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped " id="prodTable">
@@ -196,64 +214,83 @@ require './partsNOEDIT/connect-db.php' ?>
                 ${shopContent}
                 </tbody>
             </table>`;
-        // console.log(ost);
         oCartDisplay.append(ost);
 
-        //             <!-- ===活動table -->
+        //===活動table
         let oat = document.createElement("div");
         let aData = obj.actlist;
         console.log(aData);
         let actContent = "";
-        //             <table class="ocd table table-border table-striped" id="actTable">
-        //                 <thead>
-        //                     <tr>
-        //                         <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
-        //                         <th scope="col">活動編號</th>
-        //                         <th scope="col">活動名稱</th>
-        //                         <th scope="col">期別</th>
-        //                         <th scope="col">人數(成人)</th>
-        //                         <th scope="col">單價(成人)</th>
-        //                         <th scope="col">人數(小孩)</th>
-        //                         <th scope="col">單價(小孩)</th>
-        //                         <th scope="col">剩餘名額</th>
-        //                     </tr>
-        //                 </thead>
-        //                 <tbody>
-        //                     <tr>
-        //                         <td> <input class="form-check-input" type="checkbox" value="1" name="act"></td>
-        //                         <td id="oAsid">20</td>
-        //                         <td id="oAname">Sunday Park gather</td>
-        //                         <td id="oAdate">2023-05-06</td>
-        //                         <td><input type="number" min="0" id="oPaqty" value="2"></td>
-        //                         <td id="oAaprice" value="200">200</td>
-        //                         <td><input type="number" min="0" id="oPcqty" value="2"></td>
-        //                         <td id="oAcprice" value="100">100</td>
-        //                         <td id="oAstock">40</td>
-        //                     </tr>
+        for (let i = 0; i < aData.length; i++) {
+            actContent +=
+                `<tr>
+                <td> <input class="form-check-input" type="checkbox" value="[${aData[i].act_sid},${aData[i].group_sid}]" name="act"></td>
+                <td>${aData[i].act_sid}</td>
+                <td>${aData[i].act_name}</td>
+                <td>${aData[i].group_date}</td>
+                <td><input type="number" min="0" id="oPaqty${i}" value="${aData[i].adultQty}"></td>
+                <td>${aData[i].price_adult}</td>
+                <td><input type="number" min="0" id="oPcqty${i}" value="${aData[i].childQty}"></td>
+                <td>${aData[i].price_kid}</td>
+                <td id="oAstock${i}">${aData[i].ppl_max}</td>
+            </tr>`;
+        }
+        oat.innerHTML = `
+            <table class="ocd table table-border table-striped" id="actTable">
+                <thead>
+                    <tr>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
+                        <th scope="col">活動編號</th>
+                        <th scope="col">活動名稱</th>
+                        <th scope="col">期別</th>
+                        <th scope="col">人數(成人)</th>
+                        <th scope="col">單價(成人)</th>
+                        <th scope="col">人數(小孩)</th>
+                        <th scope="col">單價(小孩)</th>
+                        <th scope="col">剩餘名額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ${actContent}
+                </tbody>
+            </table>`;
+        oCartDisplay.append(oat);
 
-        //                 </tbody>
-        //             </table>
-        //             <!-- ===coupon -->
-        //             <table class="ocd table table-border table-striped" id="couponTable">
-        //                 <thead>
-        //                     <tr>
-        //                         <th scope="col"></th>
-        //                         <th scope="col">優惠券編號</th>
-        //                         <th scope="col">優惠券名稱</th>
-        //                         <th scope="col">優惠金額</th>
-        //                         <th scope="col">使用期限</th>
-        //                     </tr>
-        //                 </thead>
-        //                 <tbody>
-        //                     <tr>
-        //                         <td> <input class="form-check-input" type="checkbox" value="1" name="coupon"></td>
-        //                         <td id="oCcode">20</td>
-        //                         <td id="oCname">Sunday Park gather</td>
-        //                         <td id="oCprice">2023-05-06</td>
-        //                         <td id="oCdate">2023-05-06</td>
-        //                     </tr>
-        //                 </tbody>
-        //             </table>`
+        //===優惠coupon
+        let oct = document.createElement("div");
+        let cData = obj.coupons;
+        console.log(cData);
+        let couContent = "";
+        for (let i = 0; i < cData.length; i++) {
+            couContent +=
+                `<tr>
+                    <td> <input class="form-check-input" type="radio" value="${cData[i].coupon_sid}" name="coupon"></td>
+                    <td id="oCcode">${cData[i].coupon_code}</td>
+                    <td id="oCname">${cData[i].coupon_name}</td>
+                    <td id="oCprice">$${cData[i].coupon_price}</td>
+                    <td id="oCdate">${(cData[i].coupon_expDate).slice(0,10)}</td>
+                </tr>`;
+        }
+        oct.innerHTML =
+            `<table class="ocd table table-border table-striped" id="couponTable">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">優惠券編號</th>
+                                <th scope="col">優惠券名稱</th>
+                                <th scope="col">優惠金額</th>
+                                <th scope="col">使用期限</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${couContent}
+                        </tbody>
+                    </table>`;
+        oCartDisplay.append(oct);
+    }
+    //====顯示地址及付款方式
+    function showPostnPay() {
+        const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
 
     }
 </script>

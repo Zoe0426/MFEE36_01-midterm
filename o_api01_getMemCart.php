@@ -130,7 +130,7 @@ if ($mem) {
     $actlist = $stm4->fetchAll();
     if ($actlist) {
         $output['getShopSuccess'] = true;
-        $output['actlist'] = $shoplist;
+        $output['actlist'] = $actlist;
     } else {
         $output['actlist'] = "noActItems";
     }
