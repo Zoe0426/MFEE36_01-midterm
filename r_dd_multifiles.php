@@ -25,7 +25,7 @@ $sqlParent = "INSERT INTO `rest_info` (
         `pt_max`,
         `ml_time`,
         `weekly`,
-        `created_at`` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
+        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 //加一筆資料到父表的SQL語法
 
 $stmt = $pdo->prepare($sqlParent); //準備(父)
@@ -57,19 +57,27 @@ $stmt->execute([
 
 //要送進父資料表的資料
 
-
-
 $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo $lastsid;
 
 
 //要加入子表 規則
-$sqlChild = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES (?, ?);";
+$sqlChild = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES ($parentSid,?);";
 $stm = $pdo->prepare($sqlChild); //準備(子)
 
 
 $data = [$_POST['r_sid']];
 
-for ($i = 0; $i < $data . length; $i++) { // 使用for迴圈插入多條記錄
+for ($i = 0; $i < $data . length; $i++) {
+    $stm->execute([
+        $parentSid,
+        $_POST['r_sid']
+    ]);
+}
+
+
+
+
+foreach ($data as $d) { // 使用for迴圈插入多條記錄
     $stm->execute([
         $parentSid, //父表品項編號
         $d['xxx'],
@@ -77,9 +85,6 @@ for ($i = 0; $i < $data . length; $i++) { // 使用for迴圈插入多條記錄
         $d['zzz'],
     ]);
 }
-
-
-
 
 //===========簡約功能說明===========
 //先新增一筆訂單到父表後，拿該筆訂單的編號，再到子表加入多筆對應的訂單明細

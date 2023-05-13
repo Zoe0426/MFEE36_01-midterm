@@ -15,8 +15,7 @@ if (!empty($_POST['rest_name'])) { #若附合此條件，則可以往下走
     # TODO：檢查欄位資料,判斷格式錯，isPass設為false （MUST）
     # TODO：整理變數，轉換資料格式
 
-    $sql = "INSERT INTO
-    `rest_info`(
+    $sql = "INSERT INTO `rest_info` (     
         `catg_sid`,
         `rest_name`,
         `rest_phone`,
@@ -39,38 +38,11 @@ if (!empty($_POST['rest_name'])) { #若附合此條件，則可以往下走
         `pt_max`,
         `ml_time`,
         `weekly`,
-        `created_at`
-    )
-VALUES
-    (
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        '?',
-        NOW()
-    );"; #(你的sql)
+        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 
     $stmt = $pdo->prepare($sql);
 
-    if ($isPass) { #以上所有條件成立，add到資料庫
+    if ($isPass) {
         $stmt->execute([
             $_POST['catg_sid'],
             $_POST['rest_name'],
@@ -95,7 +67,6 @@ VALUES
             $_POST['ml_time'],
             $_POST['weekly'],
         ]);
-
         $output['success'] = !!$stmt->rowCount(); #若加成功，$output訊息的success會顯示true
     }
 } else {

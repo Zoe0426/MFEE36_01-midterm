@@ -50,19 +50,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
     <!-- 分頁 -->
-    <div class="px-3">
-        <ul class=" nav nav-pills mb-4 mt-4">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">基本資料</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">營業設定</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">服務/規範</a>
-            </li>
+    <div class="px-3 pt-4">
 
-        </ul>
 
         <h3 class="mb-4">基本資料</h3>
         <!-- 圖片區 -->
@@ -133,7 +122,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <label for="f_pic" class="form-label">特色圖片</label>
             <div onclick="restImg()" id="finalImg">
                 <img src="" alt="" id="imginfo">
-                <!-- <i class="fa-solid fa-image"></i> -->
+
             </div>
             <input type="text" name="pro_img" id="pro_img">
         </div>
@@ -326,12 +315,42 @@ $ritems = $pdo->query($rsql)->fetchAll();
         </div>
     </div>
 
-
+    <button type="submit" class="btn btn-primary">新增餐廳</button>
 
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
+    function checkForm(event) {
+
+        event.preventDefault();
+        let isPass = true;
+
+        // TODO: 驗證表格內容，若不通過，isPass ＝false； 
+
+        if (isPass) { //格式完全正確，呼叫api
+            const fd = new FormData(document.rest_form);
+            fetch('r_add_api.php', {
+                    method: 'POST',
+                    body: fd,
+                })
+                .then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    //obj 會拿到 api 回傳的結果，請自由使用：）
+                })
+                .catch(ex => {
+                    console.log(ex);
+                })
+
+        } else {
+            // 沒通過檢查
+        }
+    }
+
+
+
+
     const tempImg = document.querySelector("#tempImg");
 
     function restImg() {
