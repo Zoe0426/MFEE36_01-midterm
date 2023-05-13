@@ -18,7 +18,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <style>
     #rest_pic,
     #pro_img {
-        /* 要記得將傳照片的form1表單與回傳照片名稱隱藏起來*/
+        /* form1表單與回傳照片名稱隱藏*/
         display: none;
     }
 
@@ -26,20 +26,17 @@ $ritems = $pdo->query($rsql)->fetchAll();
         /* 設計自己要放的照片框框 */
         border: 1px dashed lightgray;
         border-radius: 4px;
-        height: 200px;
+        height: 360px;
 
     }
 
-
     #imginfo {
         /* 為了不讓div內的img超出，故要記得做下列設定 */
-        z-index: 0;
         width: 100%;
         height: 100%;
-        background-color: pink;
-        /* object-fit: cover;
+        object-fit: cover;
         display: none;
-        position: absolute; */
+        position: absolute;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -52,8 +49,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <!-- 填表單的區域 -->
 
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
-
-    <div class="px-3"> <!-- 分頁 -->
+    <!-- 分頁 -->
+    <div class="px-3">
         <ul class=" nav nav-pills mb-4 mt-4">
             <li class="nav-item">
                 <a class="nav-link active" href="#">基本資料</a>
@@ -62,7 +59,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 <a class="nav-link" href="#">營業設定</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="checkbox.php">服務/規範</a>
+                <a class="nav-link" href="#">服務/規範</a>
             </li>
 
         </ul>
@@ -72,10 +69,9 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <div class="row mb-4 ">
             <div class="col-3" onclick="restImg()" id="finalImg">
                 <img src="" alt="" id="imginfo">
-                <!-- <i class="fa-solid fa-image"></i> -->
+
             </div>
             <input type="text" name="pro_img" id="pro_img">
-
         </div>
 
         <!-- 資料區 -->
@@ -130,9 +126,30 @@ $ritems = $pdo->query($rsql)->fetchAll();
             </div>
         </div>
     </div>
-
+    <hr>
     <!-- 餐廳特色 -->
-
+    <div class="row px-3">
+        <div class="col-4">
+            <label for="f_pic" class="form-label">特色圖片</label>
+            <div onclick="restImg()" id="finalImg">
+                <img src="" alt="" id="imginfo">
+                <!-- <i class="fa-solid fa-image"></i> -->
+            </div>
+            <input type="text" name="pro_img" id="pro_img">
+        </div>
+        <div class="col-8">
+            <div class="col mt-5 pt-4">
+                <label for="f_title" class="form-label">特色標題</label>
+                <input type="text" class="form-control" id="f_title" name="f_title" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col mt-4">
+                <label for="f_content" class="form-label">特色內容</label>
+                <textarea class="form-control" id="f_content" name="f_content"></textarea>
+                <div id="f_content" class="form-text"></div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -274,6 +291,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
         </div>
     </div>
     <hr>
+
     <!-- 服務/規範 -->
 
     <div class="mt-3 px-3 mb-4">
@@ -314,33 +332,6 @@ $ritems = $pdo->query($rsql)->fetchAll();
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    function checkForm(event) {
-
-        event.preventDefault();
-        let isPass = true; // 預設值是通過的
-
-        // TODO: 驗證表格內容，若不通過，isPass ＝false； 
-
-        if (isPass) { //格式完全正確，呼叫api
-
-            fetch('r_C_add_to_multifiles copy.php', {
-                    method: 'POST',
-                    body: fd,
-                })
-                .then(r => r.json())
-                .then(obj => {
-                    console.log(obj);
-                    //obj 會拿到 api 回傳的結果，請自由使用：）
-                })
-                .catch(ex => {
-                    console.log(ex);
-                })
-
-        } else {
-            // 沒通過檢查
-        }
-    }
-
     const tempImg = document.querySelector("#tempImg");
 
     function restImg() {
@@ -350,7 +341,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
     tempImg.addEventListener("change", () => {
         const fd = new FormData(document.rest_pic);
-        fetch('r_file_apiTemp.php', { //這邊請填入自己要連結的api名稱
+        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
                 method: 'POST',
                 body: fd,
             }).then(r => r.json())
