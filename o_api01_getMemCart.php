@@ -53,7 +53,7 @@ if (!empty($_POST['searchBy'])) {
     }
 }
 $mem = $data['member_sid'];
-//有找到Member，查coupon資料
+//有找到Member，拿購物車,coupon資料
 if ($mem) {
     //拿coupon資料
     $sqlCoupon = "SELECT

@@ -2,25 +2,12 @@
 require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
-    .o-d-none {
-        display: none;
-    }
-
-    .o-d-block {
-        display: block;
-    }
-
     #oGetItemsForm input[type="number"] {
         width: 60px;
     }
 
-    .ocd:nth-child(odd) {
+    .ocd {
         border: 2px dashed #ffc107;
-        border-collapse: collapse;
-    }
-
-    .ocd:nth-child(even) {
-        border: 2px dashed #fff3cd;
         border-collapse: collapse;
     }
 </style>
@@ -38,10 +25,9 @@ require './partsNOEDIT/connect-db.php' ?>
                     </select>
                 </div>
                 <div class="col-4">
-                    <input type="text" class="form-control mx-2 " id="fakeinput" disabled>
-                    <input type="text" class="form-control mx-2 o-d-none " id="sbname" name="sbname">
-                    <input type="text" class="form-control mx-2 o-d-none " id="sbmobile" name="sbmobile">
-                    <input type="text" class="form-control mx-2 o-d-none " id="sbmemsid" name="sbmemsid">
+                    <input type="text" class="form-control mx-2" id="sbname" name="sbname">
+                    <input type="text" class="form-control mx-2 d-none" id="sbmobile" name="sbmobile">
+                    <input type="text" class="form-control mx-2 d-none" id="sbmemsid" name="sbmemsid">
                 </div>
                 <div class="col-2">
                     <button type="submit" class="btn btn-warning ">搜尋</button>
@@ -51,35 +37,18 @@ require './partsNOEDIT/connect-db.php' ?>
         </div>
     </form>
     <!-- =====顯示購物車內容===== -->
-    <form id="oGetItemsForm" name="getItems" onsubmit="getItems(event)">
+    <form id="oGetItemsForm" name="createOrder" onsubmit="createOrder(event)">
         <div class="container">
             <div class="row">
                 <div class="col-10">
                     <div id="oCartDisplay">
                     </div>
-                    <div id="oPostPayDisplay">
-                        <div class="address mb-3">
-                            <label for="address" class="form-label">收件人姓名：</label>
-                            <input type="text" class="form-control" id="address">
-                            <div id="oAddErrMsg" class="form-text d-none"></div>
-                        </div>
-                        <div class="address mb-3">
-                            <label for="address" class="form-label">手機號碼：</label>
-                            <input type="text" class="form-control" id="address">
-                            <div id="oAddErrMsg" class="form-text d-none"></div>
-                        </div>
-                        <div class="address mb-3">
-                            <label for="address" class="form-label">寄送地址：</label>
-                            <input type="text" class="form-control" id="address">
-                            <div id="oAddErrMsg" class="form-text d-none"></div>
-                        </div>
+                    <div id="oPostPayDisplay" class="container-fluid ">
                     </div>
                 </div>
             </div>
         </div>
     </form>
-
-
 </div>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
@@ -102,16 +71,18 @@ require './partsNOEDIT/connect-db.php' ?>
                 console.log(ex);
             })
     }
+    // ====成立訂單====
+    function createOrder(e) {
+        e.preventDefault();
+        const newodfd = new FormData(document.createOrder);
+        fetch()
+    }
     // ====搜尋顯示哪種input====
     function searchm(e) {
-        console.log("changed");
         const sbname = document.getElementById("sbname");
         const sbmobile = document.getElementById("sbmobile");
         const sbmemsid = document.getElementById("sbmemsid");
-        const fakeinput = document.getElementById("fakeinput");
         let sb = e.target.value;
-        fakeinput.style.display = "none";
-        console.log("none")
         sbname.style.display = "none";
         sbmobile.style.display = "none";
         sbmemsid.style.display = "none";
@@ -170,10 +141,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row" id="displaySid">${obj.sid}</th>
-                                <td id="displayName">${obj.name}</td>
-                                <td id="displayPhone">${obj.mobile}</td>
-                                <td id="displayBirth">${obj.birth}</td>
+                                <th scope="row">${obj.sid}</th>
+                                <td>${obj.name}</td>
+                                <td>${obj.mobile}</td>
+                                <td>${obj.birth}</td>
                             </tr>
                         </tbody>
                     </table>`;
@@ -198,10 +169,10 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td id="oSstock${i}">${sData[i].proDet_qty}</td>
                 </tr>`;
         }
-        ost.innerHTML = `<table class="ocd table table-border table-striped " id="prodTable">
+        ost.innerHTML = `<table class="ocd table table-border table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" onchange="selectAllProducts()"></th>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" id="oshopAll" onchange="selectAllProducts()"></th>
                         <th scope="col">商品編號</th>
                         <th scope="col">商品名稱</th>
                         <th scope="col">品項</th>
@@ -236,10 +207,10 @@ require './partsNOEDIT/connect-db.php' ?>
             </tr>`;
         }
         oat.innerHTML = `
-            <table class="ocd table table-border table-striped" id="actTable">
+            <table class="ocd table table-border table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" id="oActAll" onchange="selectAllActs()"></th>
                         <th scope="col">活動編號</th>
                         <th scope="col">活動名稱</th>
                         <th scope="col">期別</th>
@@ -265,14 +236,14 @@ require './partsNOEDIT/connect-db.php' ?>
             couContent +=
                 `<tr>
                     <td> <input class="form-check-input" type="radio" value="${cData[i].coupon_sid}" name="coupon"></td>
-                    <td id="oCcode">${cData[i].coupon_code}</td>
-                    <td id="oCname">${cData[i].coupon_name}</td>
-                    <td id="oCprice">$${cData[i].coupon_price}</td>
-                    <td id="oCdate">${(cData[i].coupon_expDate).slice(0,10)}</td>
+                    <td>${cData[i].coupon_code}</td>
+                    <td>${cData[i].coupon_name}</td>
+                    <td>$${cData[i].coupon_price}</td>
+                    <td>${(cData[i].coupon_expDate).slice(0,10)}</td>
                 </tr>`;
         }
         oct.innerHTML =
-            `<table class="ocd table table-border table-striped" id="couponTable">
+            `<table class="ocd table table-border table-striped">
                         <thead>
                             <tr>
                                 <th scope="col"></th>
@@ -291,7 +262,26 @@ require './partsNOEDIT/connect-db.php' ?>
     //====顯示地址及付款方式
     function showPostnPay() {
         const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
-
+        const opp = document.createElement('div');
+        opp.innerHTML =
+            `<div class="postInfo row g-0">
+            <div class="mb-3 col-4 px-0 me-3">
+                <label for="postName" class="form-label">收件人姓名：</label>
+                <input type="text" class="form-control" id="postName" name="postName" value="">
+                <div id="oNameErrMsg" class="form-text d-none"></div>
+            </div>
+            <div class="mb-3 col-4 me-3">
+                <label for="postMob" class="form-label">手機號碼：</label>
+                <input type="text" class="form-control" id="postMob" name="postMobile" value="">
+                <div id="oMobErrMsg" class="form-text d-none"></div>
+            </div>
+            <div class="mb-3 col-10">
+                <label for="address" class="form-label">寄送地址：</label>
+                <input type="text" class="form-control" id="address" name="address" value="">
+                <div id="oAddErrMsg" class="form-text d-none"></div>
+            </div>
+        </div>`;
+        oPostPayDisplay.append(opp);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
