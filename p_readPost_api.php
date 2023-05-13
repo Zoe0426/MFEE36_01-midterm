@@ -122,7 +122,7 @@ if ($totalRows){ //判斷符合條件的數據總數 $totalRows 是否存在，�
 
     function p_delete(post_sid){
         if(confirm(`是否要刪除編號為 ${post_sid} 的資料？`)){
-            location.href='p_delete_api.php?post_sid='+ post_sid;
+            location.href='p_delete_api.php?post_sid=' + post_sid;
         }
     }
 </script>
