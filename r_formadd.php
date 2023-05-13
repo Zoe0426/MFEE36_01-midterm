@@ -321,32 +321,32 @@ $ritems = $pdo->query($rsql)->fetchAll();
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    function checkForm(event) {
+    // function checkForm(event) {
 
-        event.preventDefault();
-        let isPass = true;
+    //     event.preventDefault();
+    //     let isPass = true;
 
-        // TODO: 驗證表格內容，若不通過，isPass ＝false； 
+    //     // TODO: 驗證表格內容，若不通過，isPass ＝false； 
 
-        if (isPass) { //格式完全正確，呼叫api
-            const fd = new FormData(document.rest_form);
-            fetch('r_add_api.php', {
-                    method: 'POST',
-                    body: fd,
-                })
-                .then(r => r.json())
-                .then(obj => {
-                    console.log(obj);
-                    //obj 會拿到 api 回傳的結果，請自由使用：）
-                })
-                .catch(ex => {
-                    console.log(ex);
-                })
+    //     if (isPass) { //格式完全正確，呼叫api
+    //         const fd = new FormData(document.rest_form);
+    //         fetch('r_add_api.php', {
+    //                 method: 'POST',
+    //                 body: fd,
+    //             })
+    //             .then(r => r.json())
+    //             .then(obj => {
+    //                 console.log(obj);
+    //                 //obj 會拿到 api 回傳的結果，請自由使用：）
+    //             })
+    //             .catch(ex => {
+    //                 console.log(ex);
+    //             })
 
-        } else {
-            // 沒通過檢查
-        }
-    }
+    //     } else {
+    //         // 沒通過檢查
+    //     }
+    // }
 
 
 

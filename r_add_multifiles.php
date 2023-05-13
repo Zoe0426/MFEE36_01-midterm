@@ -70,7 +70,7 @@ $data = [$_POST['r_sid']];
 for ($i = 0; $i < $data . length; $i++) {
     $stm->execute([
         $parentSid,
-        $_POST['r_sid']
+        $data[$i],
     ]);
 }
 
