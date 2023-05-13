@@ -115,13 +115,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <div class="row mb-4">
             <div class="col-6">
                 <label for="rest_info" class="form-label">餐廳簡介</label>
-                <textarea class="form-control" id="rest_info" name="rest_info" data-required="1"></textarea>
+                <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"></textarea>
                 <div id="rest_info" class="form-text"></div>
             </div>
 
             <div class="col-6">
                 <label for="rest_notice" class="form-label">注意事項</label>
-                <textarea class="form-control" id="rest_notice" name="rest_notice"></textarea>
+                <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"></textarea>
                 <div id="rest_notice" class="form-text"></div>
             </div>
         </div>
@@ -145,7 +145,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             </div>
             <div class="col mt-4">
                 <label for="f_content" class="form-label">特色內容</label>
-                <textarea class="form-control" id="f_content" name="f_content"></textarea>
+                <textarea class="form-control" id="f_content" name="f_content" placeholder="最多150字"></textarea>
                 <div id="f_content" class="form-text"></div>
             </div>
         </div>
@@ -163,12 +163,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <div class="row mb-4">
             <div class="col-3">
                 <label for="start_date" class="form-label">開始日期</label>
-                <input type="text" class="form-control" id="start_date" name="start_date" data-required="1">
+                <input type="date" class="form-control" id="start_date" name="start_date" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
                 <label for="end_date" class="form-label">結束日期</label>
-                <input type="text" class="form-control" id="end_date" name="end_date" data-required="1">
+                <input type="date" class="form-control" id="end_date" name="end_date" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
@@ -186,34 +186,34 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <div class="row mb-4">
             <div class="col-3">
                 <label for="e_start" class="form-label">早上開始時間</label>
-                <input type="text" class="form-control" id="e_start" name="e_start" data-required="1">
+                <input type="time" class="form-control" id="e_start" name="e_start" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
                 <label for="e_end" class="form-label">早上結束時間</label>
-                <input type="text" class="form-control" id="e_end" name="e_end" data-required="1">
+                <input type="time" class="form-control" id="e_end" name="e_end" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
                 <label for="a_start" class="form-label">下午開始時間</label>
-                <input type="text" class="form-control" id="a_start" name="a_start" data-required="1">
+                <input type="time" class="form-control" id="a_start" name="a_start" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
                 <label for="a_end" class="form-label">下午結束時間</label>
-                <input type="text" class="form-control" id="a_end" name="a_end" data-required="1">
+                <input type="time" class="form-control" id="a_end" name="a_end" data-required="1">
                 <div class="form-text"></div>
             </div>
         </div>
         <div class="row mb-4">
             <div class="col-3">
                 <label for="n_start" class="form-label">晚上開始時間</label>
-                <input type="text" class="form-control" id="n_start" name="n_start" data-required="1">
+                <input type="time" class="form-control" id="n_start" name="n_start" data-required="1">
                 <div class="form-text"></div>
             </div>
             <div class="col-3">
                 <label for="n_end" class="form-label">晚上結束時間</label>
-                <input type="text" class="form-control" id="n_end" name="n_end" data-required="1">
+                <input type="time" class="form-control" id="n_end" name="n_end" data-required="1">
                 <div class="form-text"></div>
             </div>
             <!-- 用餐時間 -->
