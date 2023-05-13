@@ -1,23 +1,9 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
-$output = [
-    'success' => false, #新增資料成功或失敗的結果（MUST）
-    'postData' => $_POST, # 除錯用的
-    'code' => 0,
-    'error' => [],
-];
-
-
-if (!empty($_POST['rest_name'])) { #若附合此條件，則可以往下走
-
-    $isPass = true;
-    # TODO：檢查欄位資料,判斷格式錯，isPass設為false （MUST）
-    # TODO：整理變數，轉換資料格式
-
-    $sql = "INSERT INTO `rest_info` (     
-        `catg_sid`,
+$sqlParent = "INSERT INTO `rest_info` (     
         `rest_name`,
+        `catg_sid`,
         `rest_phone`,
         `rest_address`,
         `rest_info`,
@@ -40,39 +26,65 @@ if (!empty($_POST['rest_name'])) { #若附合此條件，則可以往下走
         `weekly`,
         `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 
-    $stmt = $pdo->prepare($sql);
 
-    if ($isPass) {
-        $stmt->execute([
-            $_POST['catg_sid'],
-            $_POST['rest_name'],
-            $_POST['rest_phone'],
-            $_POST['rest_address'],
-            $_POST['rest_info'],
-            $_POST['rest_notice'],
-            $_POST['rest_menu'],
-            $_POST['rest_f_title'],
-            $_POST['rest_f_title'],
-            $_POST['rest_f_ctnt'],
-            $_POST['rest_f_img'],
-            $_POST['date_start'],
-            $_POST['date_end'],
-            $_POST['m_start'],
-            $_POST['m_end'],
-            $_POST['e_start'],
-            $_POST['e_end'],
-            $_POST['n_start'],
-            $_POST['p_max'],
-            $_POST['pt_max'],
-            $_POST['ml_time'],
-            $_POST['weekly'],
-        ]);
-        $output['success'] = !!$stmt->rowCount(); #若加成功，$output訊息的success會顯示true
-    }
-} else {
-    $output['error'] = ""; #不符合條件
+$stmt = $pdo->prepare($sqlParent);
+$stmt->execute([
+    $_POST['catg_sid'],
+    $_POST['rest_name'],
+    $_POST['rest_phone'],
+    $_POST['rest_address'],
+    $_POST['rest_info'],
+    $_POST['rest_notice'],
+    $_POST['rest_menu'],
+    $_POST['rest_f_title'],
+    $_POST['rest_f_ctnt'],
+    $_POST['rest_f_img'],
+    $_POST['date_start'],
+    $_POST['date_end'],
+    $_POST['m_start'],
+    $_POST['m_end'],
+    $_POST['e_start'],
+    $_POST['e_end'],
+    $_POST['n_start'],
+    $_POST['n_end'],
+    $_POST['p_max'],
+    $_POST['pt_max'],
+    $_POST['ml_time'],
+    $_POST['weekly'],
+]);
+
+//要送進父資料表的資料
+$parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo $lastsid;
+
+
+
+$sqlChild1 = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES (?,?);";
+$stm1 = $pdo->prepare($sqlChild1);
+
+// INSERT INTO 子表格1 (父表格外部鍵, 欄位1, 欄位2, ...)
+// VALUES (父表格的值, 值1, 值2, ...);
+
+$data1 = [$_POST['r_sid']];
+
+for ($i = 0; $i < count($data1); $i++) {
+    $stm1->execute([
+        $parentSid,
+        $data[$i],
+    ]);
 }
 
+
+$sqlChild2 = "INSERT INTO rest_c_rs (`rest_sid`, `s_sid` )VALUES (?,?);";
+$stm2 = $pdo->prepare($sqlChild2);
+
+$data2 = [$_POST['s_sid']];
+
+for ($k = 0; $k < count($data2); $k++) {
+    $stm2->execute([
+        $parentSid,
+        $data[$k],
+    ]);
+}
 
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

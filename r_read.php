@@ -33,9 +33,14 @@ if ($totalRows) {
 
 <?php include './partsNOEDIT/html-head.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
+<style>
+    .t_row {
+        width: 100%;
+        padding: 0 40px;
+    }
+</style>
 
-
-<div class="container pt-4">
+<div class="t_row pt-4">
     <div class="row mb-3 p-0">
         <div class="col-3 p-0">
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
@@ -55,15 +60,14 @@ if ($totalRows) {
                     排序
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">熱門程度</a></li>
+                    <li><a class="dropdown-item" href="#">餐廳評價</a></li>
                 </ul>
             </div>
             <button type="button" class="btn btn-primary">新增餐廳</button>
         </div>
-
-
     </div>
+
 
     <div class="row">
         <table class="table table-bordered table-striped">
@@ -76,6 +80,8 @@ if ($totalRows) {
                     <th scope="col">餐廳地址</th>
                     <th scope="col">早上開始時間</th>
                     <th scope="col">晚上結束時間</th>
+                    <th scope="col">人數上限</th>
+                    <th scope="col">寵物上限</th>
                     <th scope="col">編輯</th>
                     <th scope="col">刪除</th>
                 </tr>
@@ -91,6 +97,8 @@ if ($totalRows) {
                         <td><?= $r['rest_address'] ?></td>
                         <td><?= $r['m_start'] ?></td>
                         <td><?= $r['n_end'] ?></td>
+                        <td><?= $r['p_max'] ?></td>
+                        <td><?= $r['pt_max'] ?></td>
                         <td><a href="#">
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
