@@ -10,11 +10,15 @@ require './partsNOEDIT/connect-db.php' ?>
         border: 2px dashed #ffc107;
         border-collapse: collapse;
     }
+
+    .o-d-none {
+        display: none;
+    }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container pt-4">
     <!-- =====選擇會員===== -->
-    <form name="getmem" onsubmit="getMemCart(event)">
+    <form id="oGetmem" onsubmit="getMemCart(event)">
         <div class="container-fluid">
             <div class="row g-0">
                 <div class="col-4">
@@ -26,8 +30,8 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
                 <div class="col-4">
                     <input type="text" class="form-control mx-2" id="sbname" name="sbname">
-                    <input type="text" class="form-control mx-2 d-none" id="sbmobile" name="sbmobile">
-                    <input type="text" class="form-control mx-2 d-none" id="sbmemsid" name="sbmemsid">
+                    <input type="text" class="form-control mx-2 o-d-none" id="sbmobile" name="sbmobile">
+                    <input type="text" class="form-control mx-2 o-d-none" id="sbmemsid" name="sbmemsid">
                 </div>
                 <div class="col-2">
                     <button type="submit" class="btn btn-warning ">搜尋</button>
@@ -37,17 +41,18 @@ require './partsNOEDIT/connect-db.php' ?>
         </div>
     </form>
     <!-- =====顯示購物車內容===== -->
-    <form id="oGetItemsForm" name="createOrder" onsubmit="createOrder(event)">
+    <form id="oGetItemsForm" onsubmit="createOrder(event)">
         <div class="container">
             <div class="row">
                 <div class="col-10">
                     <div id="oCartDisplay">
                     </div>
-                    <div id="oPostPayDisplay" class="container-fluid ">
+                    <div id="oPostPayDisplay" class="container-fluid">
                     </div>
                 </div>
             </div>
         </div>
+        <button type="submit" class="btn btn-warning ">成立訂單</button>
     </form>
 </div>
 </div>
@@ -56,7 +61,7 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====拿XX會員的個人資料,購物車內容,及coupon====
     function getMemCart(e) {
         e.preventDefault();
-        const fd = new FormData(document.getmem);
+        const fd = new FormData(document.getElementById('oGetmem'));
         fetch('o_api01_getMemCart.php', {
                 method: 'POST',
                 body: fd,
@@ -74,8 +79,19 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====成立訂單====
     function createOrder(e) {
         e.preventDefault();
-        const newodfd = new FormData(document.createOrder);
-        fetch()
+        const newodfd = new FormData(document.getElementById("oGetItemsForm"));
+        console.log(newodfd);
+        fetch('o_api02_newOrder.php', {
+                method: 'POST',
+                body: newodfd,
+            }).then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
     }
     // ====搜尋顯示哪種input====
     function searchm(e) {
@@ -160,7 +176,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
-                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid}]" name="prod"></td>
+                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid}]" name="prod[]"></td>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
@@ -195,7 +211,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < aData.length; i++) {
             actContent +=
                 `<tr>
-                <td> <input class="form-check-input" type="checkbox" value="[${aData[i].act_sid},${aData[i].group_sid}]" name="act"></td>
+                <td> <input class="form-check-input" type="checkbox" value="[${aData[i].act_sid},${aData[i].group_sid}]" name="act[]"></td>
                 <td>${aData[i].act_sid}</td>
                 <td>${aData[i].act_name}</td>
                 <td>${aData[i].group_date}</td>
@@ -264,7 +280,7 @@ require './partsNOEDIT/connect-db.php' ?>
         const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
         const opp = document.createElement('div');
         opp.innerHTML =
-            `<div class="postInfo row g-0">
+            `<div class="postInfo row g-0 ">
             <div class="mb-3 col-4 px-0 me-3">
                 <label for="postName" class="form-label">收件人姓名：</label>
                 <input type="text" class="form-control" id="postName" name="postName" value="">
@@ -281,6 +297,8 @@ require './partsNOEDIT/connect-db.php' ?>
                 <div id="oAddErrMsg" class="form-text d-none"></div>
             </div>
         </div>`;
+        oPostPayDisplay.classList.add("ocd");
+        oPostPayDisplay.classList.add("p");
         oPostPayDisplay.append(opp);
     }
 </script>
