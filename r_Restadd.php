@@ -40,6 +40,8 @@ $items = $pdo->query($sql)->fetchAll();
     <input type="file" name="tempImg" accept="image/jpeg" id="tempImg">
 </form>
 
+<!-- 填表單的區域 -->
+
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
 
     <!-- 分頁 -->
@@ -118,145 +120,146 @@ $items = $pdo->query($sql)->fetchAll();
             <div id="rest_notice" class="form-text"></div>
         </div>
     </div>
-</form>
 
-<!-- 營業設定 -->
 
-<div class="px-3">
-    <h3 class="mb-4">營業設定</h3>
+    <!-- 營業設定 -->
 
-    <!-- 資料區 -->
-    <div class="row mb-4">
-        <div class="col-3">
-            <label for="start_date" class="form-label">開始日期</label>
-            <input type="text" class="form-control" id="start_date" name="start_date" data-required="1">
-            <div class="form-text"></div>
-        </div>
-        <div class="col-3">
-            <label for="end_date" class="form-label">結束日期</label>
-            <input type="text" class="form-control" id="end_date" name="end_date" data-required="1">
-            <div class="form-text"></div>
-        </div>
-        <div class="col-3">
-            <label for="people_max" class="form-label">人數上限</label>
-            <input type="text" class="form-control" id="people_max" name="people_max" data-required="1">
-            <div class="form-text"></div>
-        </div>
-        <div class="col-3">
-            <label for="pet_max" class="form-label">寵物上限</label>
-            <input type="text" class="form-control" id="pet_max" name="pet_max" data-required="1">
-            <div class="form-text"></div>
-        </div>
-    </div>
+    <div class="px-3">
+        <h3 class="mb-4">營業設定</h3>
 
-    <div class="row mb-4">
-        <div class="col-3">
-            <label for="e_start" class="form-label">早上開始時間</label>
-            <input type="text" class="form-control" id="e_start" name="e_start" data-required="1">
-            <div class="form-text"></div>
+        <!-- 資料區 -->
+        <div class="row mb-4">
+            <div class="col-3">
+                <label for="start_date" class="form-label">開始日期</label>
+                <input type="text" class="form-control" id="start_date" name="start_date" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="end_date" class="form-label">結束日期</label>
+                <input type="text" class="form-control" id="end_date" name="end_date" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="people_max" class="form-label">人數上限</label>
+                <input type="text" class="form-control" id="people_max" name="people_max" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="pet_max" class="form-label">寵物上限</label>
+                <input type="text" class="form-control" id="pet_max" name="pet_max" data-required="1">
+                <div class="form-text"></div>
+            </div>
         </div>
-        <div class="col-3">
-            <label for="e_end" class="form-label">早上結束時間</label>
-            <input type="text" class="form-control" id="e_end" name="e_end" data-required="1">
-            <div class="form-text"></div>
+
+        <div class="row mb-4">
+            <div class="col-3">
+                <label for="e_start" class="form-label">早上開始時間</label>
+                <input type="text" class="form-control" id="e_start" name="e_start" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="e_end" class="form-label">早上結束時間</label>
+                <input type="text" class="form-control" id="e_end" name="e_end" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="a_start" class="form-label">下午開始時間</label>
+                <input type="text" class="form-control" id="a_start" name="a_start" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="a_end" class="form-label">下午結束時間</label>
+                <input type="text" class="form-control" id="a_end" name="a_end" data-required="1">
+                <div class="form-text"></div>
+            </div>
         </div>
-        <div class="col-3">
-            <label for="a_start" class="form-label">下午開始時間</label>
-            <input type="text" class="form-control" id="a_start" name="a_start" data-required="1">
-            <div class="form-text"></div>
+        <div class="row mb-4">
+            <div class="col-3">
+                <label for="n_start" class="form-label">晚上開始時間</label>
+                <input type="text" class="form-control" id="n_start" name="n_start" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="n_end" class="form-label">晚上結束時間</label>
+                <input type="text" class="form-control" id="n_end" name="n_end" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <!-- 用餐時間 -->
+            <div class="col-6 ">
+                <label for="" class="form-label">用餐時間</label>
+                <div class="d-flex">
+                    <div class=" form-check me-5">
+                        <input class="form-check-input" type="radio" name="60min" id="60min" value="60">
+                        <label class="form-check-label" for="60min">
+                            60分鐘
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="radio" name="90min" id="90min" value="90">
+                        <label class="form-check-label" for="90min">
+                            90分鐘
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="120min" id="120min" value="120">
+                        <label class="form-check-label" for="120min">
+                            120分鐘
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-3">
-            <label for="a_end" class="form-label">下午結束時間</label>
-            <input type="text" class="form-control" id="a_end" name="a_end" data-required="1">
-            <div class="form-text"></div>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col-3">
-            <label for="n_start" class="form-label">晚上開始時間</label>
-            <input type="text" class="form-control" id="n_start" name="n_start" data-required="1">
-            <div class="form-text"></div>
-        </div>
-        <div class="col-3">
-            <label for="n_end" class="form-label">晚上結束時間</label>
-            <input type="text" class="form-control" id="n_end" name="n_end" data-required="1">
-            <div class="form-text"></div>
-        </div>
-        <!-- 用餐時間 -->
-        <div class="col-6 ">
-            <label for="" class="form-label">用餐時間</label>
+        <!-- 星期幾 -->
+        <div class="row mt-4">
+            <label for="" class="form-label">星期幾</label>
             <div class="d-flex">
-                <div class=" form-check me-5">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Default radio
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="0" id="sunday">
+                    <label class="form-check-label" for="sunday">
+                        星期日
                     </label>
                 </div>
                 <div class="form-check me-5">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Default radio
+                    <input class="form-check-input" type="checkbox" value="1" id="monday">
+                    <label class="form-check-label" for="monday">
+                        星期一
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Default radio
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="2" id="tuesday">
+                    <label class="form-check-label" for="tuesday">
+                        星期二
                     </label>
                 </div>
-            </div>
-        </div>
-        <div class="row ">
-            <label for="" class="form-label">星期幾</label>
-            <div class="d-flex">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="3" id="wendsday">
+                    <label class="form-check-label" for="wendsday">
+                        星期三
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="4" id="thursday">
+                    <label class="form-check-label" for="thursday">
+                        星期四
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="5" id="friday">
+                    <label class="form-check-label" for="friday">
+                        星期五
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
+                <div class="form-check ">
+                    <input class="form-check-input" type="checkbox" value="6" id="saturday">
+                    <label class="form-check-label" for="saturday">
+                        星期六
                     </label>
                 </div>
             </div>
         </div>
     </div>
+    <!-- 服務/規範 -->
 
-</div>
-</div>
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
