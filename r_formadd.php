@@ -1,8 +1,17 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
+// 餐廳類別
 $sql = "SELECT `catg_sid`, `catg_name` FROM `rest_catg` WHERE 1";
 $items = $pdo->query($sql)->fetchAll();
+
+// 服務項目
+$ssql = "SELECT `s_sid`, `s_name` FROM `rest_svc` WHERE 1";
+$sitems = $pdo->query($ssql)->fetchAll();
+
+//攜帶規則
+$rsql = "SELECT `r_sid`, `r_name` FROM `rest_rule` WHERE 1";
+$ritems = $pdo->query($rsql)->fetchAll();
 
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -44,87 +53,93 @@ $items = $pdo->query($sql)->fetchAll();
 
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
 
-    <!-- 分頁 -->
-    <ul class=" nav nav-pills mb-4 mt-4">
-        <li class="nav-item">
-            <a class="nav-link active" href="#">基本資料</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">營業設定</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="checkbox.php">服務/規範</a>
-        </li>
+    <div class="px-3"> <!-- 分頁 -->
+        <ul class=" nav nav-pills mb-4 mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">基本資料</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">營業設定</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="checkbox.php">服務/規範</a>
+            </li>
 
-    </ul>
+        </ul>
 
-    <h3 class="mb-4">基本資料</h3>
-    <!-- 圖片區 -->
-    <div class="row mb-4 ">
-        <div class="col-3" onclick="restImg()" id="finalImg">
-            <img src="" alt="" id="imginfo">
-            <!-- <i class="fa-solid fa-image"></i> -->
+        <h3 class="mb-4">基本資料</h3>
+        <!-- 圖片區 -->
+        <div class="row mb-4 ">
+            <div class="col-3" onclick="restImg()" id="finalImg">
+                <img src="" alt="" id="imginfo">
+                <!-- <i class="fa-solid fa-image"></i> -->
+            </div>
+            <input type="text" name="pro_img" id="pro_img">
+
         </div>
-        <input type="text" name="pro_img" id="pro_img">
 
-    </div>
+        <!-- 資料區 -->
+        <div class="row mb-4">
+            <div class="col-6">
+                <label for="rest_name" class="form-label">餐廳名稱</label>
+                <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1">
+                <div class="form-text"></div>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">餐廳類別</label>
+                <select class="form-select" name="catg">
+                    <option value="">--請選擇餐廳類別--</option>
+                    <?php foreach ($items as $i) : ?>
+                        <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="col-3">
+                <label for="rest_menu" class="form-label">菜單上傳</label>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="inputGroupFile01">
+                </div>
+            </div>
+        </div>
 
-    <!-- 資料區 -->
-    <div class="row mb-4">
-        <div class="col-6">
-            <label for="rest_name" class="form-label">餐廳名稱</label>
-            <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1">
-            <div class="form-text"></div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <label for="rest_phone" class="form-label">餐廳電話</label>
+                <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1">
+                <div class="form-text"></div>
+            </div>
+
+            <div class="col-6">
+                <label for="rest_address" class="form-label">餐廳地址</label>
+                <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1">
+                <div class="form-text"></div>
+            </div>
         </div>
-        <div class="col-3">
-            <label for="" class="form-label">餐廳類別</label>
-            <select class="form-select" name="catg">
-                <option value="">--請選擇餐廳類別--</option>
-                <?php foreach ($items as $i) : ?>
-                    <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <div class="col-3">
-            <label for="rest_menu" class="form-label">菜單上傳</label>
-            <div class="input-group mb-3">
-                <input type="file" class="form-control" id="inputGroupFile01">
+
+        <div class="row mb-4">
+            <div class="col-6">
+                <label for="rest_info" class="form-label">餐廳簡介</label>
+                <textarea class="form-control" id="rest_info" name="rest_info" data-required="1"></textarea>
+                <div id="rest_info" class="form-text"></div>
+            </div>
+
+            <div class="col-6">
+                <label for="rest_notice" class="form-label">注意事項</label>
+                <textarea class="form-control" id="rest_notice" name="rest_notice"></textarea>
+                <div id="rest_notice" class="form-text"></div>
             </div>
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-6">
-            <label for="rest_phone" class="form-label">餐廳電話</label>
-            <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1">
-            <div class="form-text"></div>
-        </div>
-
-        <div class="col-6">
-            <label for="rest_address" class="form-label">餐廳地址</label>
-            <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1">
-            <div class="form-text"></div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-6">
-            <label for="rest_info" class="form-label">餐廳簡介</label>
-            <textarea class="form-control" id="rest_info" name="rest_info" data-required="1"></textarea>
-            <div id="rest_info" class="form-text"></div>
-        </div>
-
-        <div class="col-6">
-            <label for="rest_notice" class="form-label">注意事項</label>
-            <textarea class="form-control" id="rest_notice" name="rest_notice"></textarea>
-            <div id="rest_notice" class="form-text"></div>
-        </div>
-    </div>
+    <!-- 餐廳特色 -->
 
 
+
+
+    <hr>
     <!-- 營業設定 -->
 
-    <div class="px-3">
+    <div class="px-3 mb-4">
         <h3 class="mb-4">營業設定</h3>
 
         <!-- 資料區 -->
@@ -258,7 +273,43 @@ $items = $pdo->query($sql)->fetchAll();
             </div>
         </div>
     </div>
+    <hr>
     <!-- 服務/規範 -->
+
+    <div class="mt-3 px-3 mb-4">
+        <label for="" class="form-label">
+            <h3>服務項目</h3>
+        </label>
+        <div class="d-flex ">
+            <?php foreach ($sitems as $k => $j) : ?>
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="service" id="service<?= $j['s_sid'] ?>">
+                    <label class="form-check-label" for="service<?= $j['s_sid'] ?>">
+                        <?= $j['s_name'] ?>
+                    </label>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+
+    <div class="mb-3 mt-3 px-3">
+        <label for="" class="form-label">
+            <h3>攜帶規則</h3>
+        </label>
+        <div class="d-flex ">
+            <?php foreach ($ritems as $k => $r) : ?>
+                <div class="form-check me-5">
+                    <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rule" id="rule<?= $r['r_sid'] ?>">
+                    <label class="form-check-label" for="rule<?= $r['r_sid'] ?>">
+                        <?= $r['r_name'] ?>
+                    </label>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+
+
+
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>
