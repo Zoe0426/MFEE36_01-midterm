@@ -347,6 +347,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             }).then(r => r.json())
             .then(obj => {
                 if (obj.filename) {
+                    //這邊怪怪的
                     const finalImg = document.querySelector('#finalImg');
                     const pro_img = document.querySelector('#pro_img');
                     finalImg.firstChild.src = `./imgs/${obj.filename}`;
