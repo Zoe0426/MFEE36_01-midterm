@@ -87,7 +87,7 @@ if ($totalRows) {
                         <td><?= $r['act_sid'] ?></td>
                         <td><?= $r['act_name'] ?></td>
                         <td><?= $r['act_content'] ?></td>
-                        <td><a href="edit.php?sid=<?= $r['act_sid'] ?>">
+                        <td><a href="a_edit.php?sid=<?= $r['act_sid'] ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </td>
