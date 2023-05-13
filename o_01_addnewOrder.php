@@ -119,27 +119,11 @@ require './partsNOEDIT/connect-db.php' ?>
                 body: fd,
             }).then(r => r.json())
             .then(obj => {
-                let oMemTb = document.querySelector(".o-mem-table");
-                oMemTb.innerHTML = `
-                <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">會員編號</th>
-                                <th scope="col">姓名</th>
-                                <th scope="col">電話</th>
-                                <th scope="col">生日</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row" id="displaySid">${obj.sid}</th>
-                                <td id="displayName">${obj.name}</td>
-                                <td id="displayPhone">${obj.mobile}</td>
-                                <td id="displayBirth">${obj.birth}</td>
-                            </tr>
-                        </tbody>
-                    </table>`
-
+                console.log(obj);
+                showMemInfo(obj);
+                // showShop(obj);
+                // showAct(obj);
+                // showCoupon(obj);
             })
             .catch(ex => {
                 console.log(ex);
@@ -197,6 +181,29 @@ require './partsNOEDIT/connect-db.php' ?>
                 checkbox.checked = false;
             });
         }
+    }
+    //====顯示會員資料====
+    function showMemInfo(obj) {
+        let oMemTb = document.querySelector(".o-mem-table");
+        oMemTb.innerHTML = `
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">會員編號</th>
+                                <th scope="col">姓名</th>
+                                <th scope="col">電話</th>
+                                <th scope="col">生日</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" id="displaySid">${obj.sid}</th>
+                                <td id="displayName">${obj.name}</td>
+                                <td id="displayPhone">${obj.mobile}</td>
+                                <td id="displayBirth">${obj.birth}</td>
+                            </tr>
+                        </tbody>
+                    </table>`;
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

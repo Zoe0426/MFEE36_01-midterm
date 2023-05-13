@@ -1,13 +1,13 @@
 <?php
-// sbname: asdf
-// sbmobile: 
-// sbmemsid: 
+
 require './partsNOEDIT/connect-db.php';
 
 $output = [
-    'success' => false,
+    'getMemberSuccess' => false,
+    'getCouponSuccess' => false,
 ];
 $searchBy = isset($_POST['searchBy']) ? intval($_POST['searchBy']) : 0;
+//有資料再查尋
 if (!empty($_POST['searchBy'])) {
     $sbmemsid = isset($_POST['sbmemsid']) ? $_POST['sbmemsid'] : null;
     $sbmobile = isset($_POST['sbmobile']) ? $_POST['sbmobile'] : null;
@@ -19,7 +19,7 @@ if (!empty($_POST['searchBy'])) {
         $stm->execute([$sbmemsid]);
         $data = $stm->fetch();
 
-        $output['success'] = true;
+        $output['getMemberSuccess'] = true;
         $output['sid'] = $data['member_sid'];
         $output['name'] = $data['member_name'];
         $output['mobile'] = $data['member_mobile'];
@@ -32,7 +32,7 @@ if (!empty($_POST['searchBy'])) {
         $stm->execute([$sbmobile]);
         $data = $stm->fetch();
 
-        $output['success'] = true;
+        $output['getMemberSuccess'] = true;
         $output['sid'] = $data['member_sid'];
         $output['name'] = $data['member_name'];
         $output['mobile'] = $data['member_mobile'];
@@ -45,15 +45,69 @@ if (!empty($_POST['searchBy'])) {
         $stm->execute([$sbname]);
         $data = $stm->fetch();
 
-        $output['success'] = true;
+        $output['getMemberSuccess'] = true;
         $output['sid'] = $data['member_sid'];
         $output['name'] = $data['member_name'];
         $output['mobile'] = $data['member_mobile'];
         $output['birth'] = $data['member_birth'];
     }
 }
+$mem = $data['member_sid'];
+//有找到Member，查coupon資料
+if ($mem) {
+    //拿coupon資料
+    $sqlCoupon = "SELECT
+        cs.member_sid,
+        cs.coupon_sid,
+        ct.coupon_code,
+        ct.coupon_name,
+        ct.coupon_price,
+        ct.coupon_expDate
+        FROM
+        mem_coupon_send cs
+        JOIN mem_coupon_type ct ON cs.coupon_sid = ct.coupon_sid
+        WHERE
+        ct.coupon_expDate > NOW()
+        AND cs.coupon_status = 0
+        AND cs.member_sid = ?";
+    $stm2 = $pdo->prepare($sqlCoupon);
+    $stm2->execute([$mem]);
+    $coupons = $stm2->fetchAll();
+    //此member，有資料回傳前端
+    if ($coupons) {
+        $output['getCouponSuccess'] = true;
+        $output['coupons'] = $coupons;
+    } else {
+        $output['coupons'] = "noCoupons";
+    }
+    //拿商城資料
+    $sqlShop = "SELECT
+        sp.`pro_sid`,
+        sp.`pro_name`,
+        spd.`proDet_sid`,
+        spd.`proDet_name`,
+        spd.`proDet_price`,
+        spd.`proDet_qty`
+    FROM
+        `ord_cart` oc
+        JOIN `shop_pro` sp ON oc.`rel_sid` = sp.`pro_sid`
+        JOIN `shop_prodet` spd ON sp.`pro_sid` = spd.`pro_sid`
+        AND oc.`rel_seqNum_sid` = spd.`proDet_sid`
+    WHERE
+        oc.member_sid = ?;";
 
-// print_r($data);
+    $stm3 = $pdo->prepare($sqlShop);
+    $stm3->execute([$mem]);
+    $shoplist = $stm3->fetchAll();
+    if ($shoplist) {
+        $output['getShopSuccess'] = true;
+        $output['shoplist'] = $shoplist;
+    } else {
+        $output['shoplist'] = "noShopItems";
+    }
+    //拿活動資料
+    $sqlAct = "";
+}
 
 
 header('Content-Type: application/json');
