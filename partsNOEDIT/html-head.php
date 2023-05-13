@@ -31,6 +31,7 @@
             width: 250px;
             position: fixed;
             top: 72px;
+            z-index: 99;
         }
 
         .content {
