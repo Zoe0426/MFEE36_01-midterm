@@ -70,7 +70,7 @@ if (!empty($_POST['rest_name'])) { #若附合此條件，則可以往下走
         $output['success'] = !!$stmt->rowCount(); #若加成功，$output訊息的success會顯示true
     }
 } else {
-    $output['error'] = "xxx"; #不符合條件
+    $output['error'] = ""; #不符合條件
 }
 
 

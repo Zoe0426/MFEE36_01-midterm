@@ -10,7 +10,11 @@ if ($page < 1) {
     exit;
 }
 
+
+
 $t_sql = "SELECT COUNT(1) FROM rest_info";
+
+
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
@@ -20,7 +24,7 @@ if ($totalRows) {
         header("Location: ?page=$totalPages");
         exit;
     }
-    $sql = sprintf("SELECT * FROM rest_info ORDER BY rest_sid DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT ri.*, rc.`catg_name` FROM `rest_info` ri JOIN `rest_catg` rc ON ri.`catg_sid` = rc.`catg_sid` ORDER BY rest_sid DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
     $rows = $pdo->query($sql)->fetchAll();
 }
@@ -44,8 +48,17 @@ if ($totalRows) {
                 <?php endforeach ?>
             </select>
         </div>
-        <div class="col-2 ms-auto ">
-            <button type="button" class="btn btn-primary">排序</button>
+
+        <div class="col-3  hstack">
+            <div class="dropdown pe-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    排序
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                </ul>
+            </div>
             <button type="button" class="btn btn-primary">新增餐廳</button>
         </div>
 
@@ -73,7 +86,7 @@ if ($totalRows) {
 
                         <td><?= $r['rest_sid'] ?></td>
                         <td><?= $r['rest_name'] ?></td>
-                        <td><?= $r['catg_sid'] ?></td>
+                        <td><?= $r['catg_name'] ?></td>
                         <td><?= $r['rest_phone'] ?></td>
                         <td><?= $r['rest_address'] ?></td>
                         <td><?= $r['m_start'] ?></td>

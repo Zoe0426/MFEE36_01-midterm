@@ -2,15 +2,15 @@
 require './partsNOEDIT/connect-db.php';
 
 // 餐廳類別
-$sql = "SELECT `catg_sid`, `catg_name` FROM `rest_catg` WHERE 1";
+$sql = "SELECT `catg_sid`, `catg_name` FROM `rest_catg`";
 $items = $pdo->query($sql)->fetchAll();
 
 // 服務項目
-$ssql = "SELECT `s_sid`, `s_name` FROM `rest_svc` WHERE 1";
+$ssql = "SELECT `s_sid`, `s_name` FROM `rest_svc`";
 $sitems = $pdo->query($ssql)->fetchAll();
 
 //攜帶規則
-$rsql = "SELECT `r_sid`, `r_name` FROM `rest_rule` WHERE 1";
+$rsql = "SELECT `r_sid`, `r_name` FROM `rest_rule`";
 $ritems = $pdo->query($rsql)->fetchAll();
 
 ?>
@@ -24,9 +24,10 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
     #finalImg {
         /* 設計自己要放的照片框框 */
-        border: 1px dashed lightgray;
-        border-radius: 4px;
+        border-radius: 6px;
         height: 360px;
+        border: 3px dotted lightgray;
+        background: #f5f5f5;
 
     }
 
@@ -55,10 +56,9 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
         <h3 class="mb-4">基本資料</h3>
         <!-- 圖片區 -->
-        <div class="row mb-4 ">
+        <div class="row mb-4 px-3">
             <div class="col-3" onclick="restImg()" id="finalImg">
                 <img src="" alt="" id="imginfo">
-
             </div>
             <input type="text" name="pro_img" id="pro_img">
         </div>
@@ -115,6 +115,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             </div>
         </div>
     </div>
+
     <hr>
     <!-- 餐廳特色 -->
     <div class="row px-3">
@@ -315,7 +316,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">新增餐廳</button>
+    <button type="submit" class="btn btn-primary mt-4 mb-4">新增餐廳</button>
 
 
 </form>
