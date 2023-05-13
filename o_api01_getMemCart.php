@@ -106,7 +106,31 @@ if ($mem) {
         $output['shoplist'] = "noShopItems";
     }
     //拿活動資料
-    $sqlAct = "";
+    $sqlAct = "SELECT
+        ai.`act_sid`,
+        ai.`act_name`,
+        ag.`group_sid`,
+        ag.`group_date`,
+        ag.`price_adult`,
+        ag.`price_kid`,
+        ag.`ppl_max`
+    FROM
+       `ord_cart` oc
+        JOIN `act_info` ai ON oc.`rel_sid` = ai.`act_sid`
+        JOIN `act_group` ag ON ai.`act_sid` = ag.`act_sid`
+        AND oc.`rel_seqNum_sid` = ag.`group_sid`
+    WHERE
+        oc.member_sid = 'mem00001'";
+
+    $stm4 = $pdo->prepare($sqlAct);
+    $stm4->execute([$mem]);
+    $actlist = $stm4->fetchAll();
+    if ($actlist) {
+        $output['getShopSuccess'] = true;
+        $output['actlist'] = $shoplist;
+    } else {
+        $output['actlist'] = "noActItems";
+    }
 }
 
 
