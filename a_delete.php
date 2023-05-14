@@ -2,16 +2,25 @@
 //require 'a_admin_required.php';
 require './partsNOEDIT/connect-db.php';
 
-$sid = isset($_GET['act_sid']) ? intval($_GET['act_sid']) : 0;
 
-$sql = " DELETE FROM act_info WHERE act_sid={$sid}";
+$output = [
+    'success' => false, #刪除成功或失敗的結果（MUST）
+    'code' => 0,
+    'error' => [],
+];
 
-$pdo->query($sql);
+if (!empty($_GET['act_sid'])) {
+    $act_sid = intval($_GET['act_sid']);
+    //echo intval($_GET['act_sid']);
 
-$comeFrom = 'list.php';
-if (!empty($_SERVER['HTTP_REFERER'])) {
-    $comeFrom = $_SERVER['HTTP_REFERER'];
+    $sql = "DELETE FROM `act_info` WHERE `act_sid`={$act_sid}";
+    $pdo->query($sql);
+    $output["act_sid"] = $_GET['act_sid'];
+    $output['success'] = true;
+} else {
+    $output['dataStatus'] = "no act sid";
 }
 
 
-header('Location: ' . $comeFrom);
+header('Content-Type: application/json');
+echo json_encode($_GET['act_sid'], JSON_UNESCAPED_UNICODE);

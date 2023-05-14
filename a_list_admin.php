@@ -19,7 +19,12 @@ if ($totalRows) {
         header("Location: ?page=$totalPages");
         exit;
     }
+
+
+
     $sql = sprintf("SELECT * FROM act_info ORDER BY act_sid DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+
+
 
     $rows = $pdo->query($sql)->fetchAll();
 }
@@ -104,7 +109,11 @@ if ($totalRows) {
 
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'a_delete.php?sid=' + sid;
+            fetch('a_delete.php?act_sid=' + sid)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+            location.reload();
         }
 
     }
