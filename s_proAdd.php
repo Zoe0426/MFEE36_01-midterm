@@ -46,7 +46,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         height: 430px;
     }
 
-    #s_Form1,
+    .s_Form1,
     #s_proImg {
         display: none;
     }
@@ -70,10 +70,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <div class="row">
     <div class="col-1"></div>
     <div class="col">
-        <form name="s_Form1" id="s_Form1">
-            <input type="file" name="shopTepProImg" accept="image/jpeg" id="shopTepProImg">
+        <form name="s_Form1" class="s_Form1">
+            <input type="file" name="shopTepProImg" accept="image/jpeg" id="s_tepProImg">
         </form>
-        <form class="pt-4" name="s_Form2" return flase>
+        <div id="s_proDetImgBox"></div>
+
+        <form class="pt-4" name="s_Form3" return flase>
             <h2>新增商品</h2>
             <div class="row pb-3 border-bottom">
                 <div class="col-5">
@@ -139,10 +141,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     </div>
                 </div>
             </div>
-            <div class="row pb-3 border-bottom mt-4">
+            <div class="row pb-3 border-bottom mt-4" id="s_proDetBox">
                 <div class="col-3 mb-3">
                     <div class="mb-3">
-                        <div class="s_ImgBox s_proDetImgBox" onclick="shopAddMainImg()"><img src="" id="s_imginfo">+</div>
+                        <div class="s_ImgBox s_proDetImgBox"><img src="" id="s_imginfo">+</div>
                         <input type="text" name="pro_img" id="s_proImg">
                     </div>
                     <div class="mb-3 s_spec">
@@ -151,6 +153,9 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                             <div class="col-6">
                                 <select class="form-select s_spec_sid1" name="spec_sid1[]">
                                     <option value="" selected disabled>--請選擇--</option>
+                                    <?php foreach ($r_shopSpec as $r) : ?>
+                                        <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-6">
@@ -194,6 +199,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         </div>
                         <div class="form-text"></div>
                     </div>
+                    <button type="button" class="btn btn-success s_add">+</button>
+                    <button type="button" class="btn btn-danger s_del d-none">-</button>
                 </div>
             </div>
 
@@ -211,9 +218,103 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <script>
     const theDocFrag = document.createDocumentFragment();
 
+    //==================  +/-的事件監聽==================
+    const theProDetBox = document.querySelector('#s_proDetBox')
+    theProDetBox.addEventListener('click', (event) => {
+        const target = event.target
+        //console.log(event)
+        if (target.classList.contains('s_add')) {
+            const theCopy = `<div class="col-3 mb-3">
+                    <div class="mb-3">
+                        <div class="s_ImgBox s_proDetImgBox" ><img src="" id="s_imginfo">+</div>
+                        <input type="text" name="pro_img" id="s_proImg">
+                    </div>
+                    <div class="mb-3 s_spec">
+                        <label class="form-label">規格一</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <select class="form-select s_spec_sid1" name="spec_sid1[]">
+                                    <option value="" selected disabled>--請選擇--</option>
+                                    <?php foreach ($r_shopSpec as $r) : ?>
+                                        <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <select class="form-select s_specDet_sid1" name="specDet_sid1[]" disabled></select>
+                            </div>
+                        </div>
+                        <div class="form-text"></div>
+                    </div>
+                    <div class="mb-3 s_spec">
+                        <label class="form-label">規格二</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
+                            </div>
+                            <div class="col-6">
+                                <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
+                            </div>
+                        </div>
+                        <div class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="s_proDet_price">價格</label>
+                        <input type="number" class="form-control" name="proDet_price[]">
+                        <div class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="s_proDet_qty">數量</label>
+                        <input type="number" class="form-control" name="proDet_qty[]">
+                        <div class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">適用年齡</label>
+                        <div class="d-flex">
+                            <select class="form-select" name="pro_forAge[]">
+                                <option value="" selected disabled>--請選擇--</option>
+                                <option value="1">幼年</option>
+                                <option value="2">成年</option>
+                                <option value="3">高齡</option>
+                                <option value="4">皆可</option>
+                            </select>
+                        </div>
+                        <div class="form-text"></div>
+                    </div>
+                    <button type="button" class="btn btn-success s_add">+</button>
+                    <button type="button" class="btn btn-danger s_del">-</button>
+                </div>`
+            theProDetBox.insertAdjacentHTML("beforeend", theCopy)
+            const parentCol = event.target.parentNode;
+            const index = Array.from(parentCol.parentNode.children).indexOf(parentCol);
+            createProDetBox()
+            createproDetImgBox(index + 1)
+        }
+        if (target.classList.contains('s_del')) {
+            event.target.closest('.col-3').remove()
+        }
+
+
+        //這邊要改
+        if (target.classList.contains('s_proDetImgBox')) {
+            const clickedItem = event.target.parentNode.parentNode.parentNode;
+            const index = Array.from(clickedItem.children).indexOf(event.target.parentNode.parentNode);
+            //console.log(index)
+            const proDetImg1 = document.querySelectorAll('.s_tepProPetImg')
+            proDetImg1[index].click()
+            proDetImg1[index].addEventListener("change", () => {
+
+            })
+        }
+    })
+
+    //新增細項照片
+
+
+
 
     //新增主照片+API
-    const shopTepProImg = document.querySelector("#shopTepProImg");
+    const shopTepProImg = document.querySelector("#s_tepProImg");
 
     function shopAddMainImg() {
         //模擬點擊
@@ -232,7 +333,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     const s_proImgBox = document.querySelector('#s_proImgBox');
                     const s_proImg = document.querySelector('#s_proImg');
                     // s_proImgBox.innerText = "";
-                    s_proImgBox.firstChild.src = `./shopImgs/${obj.filename}`;
+                    s_proImgBox.firstChild.src = `./s_Imgs/${obj.filename}`;
                     s_proImgBox.firstChild.style.display = "block";
                     s_proImg.value = obj.filename;
                 }
@@ -247,7 +348,15 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             a.remove(a.lastChild)
         }
     }
-
+    //==================新增option==================
+    function createOp(a, b, c) {
+        const theOp = document.createElement(a);
+        theOp.setAttribute("value", b);
+        const theTxt = document.createTextNode(c);
+        theOp.append(theTxt);
+        theDocFrag.append(theOp);
+        return theDocFrag
+    }
 
     //==================產品子類別自動生成==================
     const catSel = document.querySelector("#s_cat_sid");
@@ -263,17 +372,11 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         catDetSel.removeAttribute('disabled')
         for (let a of catDet) {
             if (catSelId == a.cat_sid) {
-                const theOp = document.createElement('option');
-                theOp.setAttribute("value", a.catDet_sid);
-                const theTxt = document.createTextNode(a.catDet_name);
-                theOp.append(theTxt);
-                theDocFrag.append(theOp);
+                createOp('option', a.catDet_sid, a.catDet_name)
             }
         }
         catDetSel.append(theDocFrag)
     }
-    //createCatDet('G')
-
 
     //==================供應商產地自動生成==================
     const supSel = document.querySelector('#s_sup_sid')
@@ -289,101 +392,97 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         removeChild(supMIWSel)
         for (let a of supMIW) {
             if (supSelId == a.sup_sid) {
-                const theOp = document.createElement('option');
-                theOp.setAttribute('value', a.sup_MIW_sid)
-                const theTxt = document.createTextNode(a.sup_MIW)
-                theOp.append(theTxt);
-                theDocFrag.append(theOp);
+                createOp('option', a.sup_MIW_sid, a.sup_MIW)
             }
         }
         supMIWSel.append(theDocFrag)
     }
-    //createSupMIW(1)
     //====================================
 
     //==================商品規格自動生成==================
-    const spec = <?= json_encode($r_shopSpec, JSON_UNESCAPED_UNICODE) ?>;
-    const specDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
-    let specSel1 = document.querySelectorAll('.s_spec_sid1')
-    let specDetSel1 = document.querySelectorAll(".s_specDet_sid1")
-    let specSel2 = document.querySelectorAll('.s_spec_sid2')
-    let specDetSel2 = document.querySelectorAll(".s_specDet_sid2")
-    // console.log(spec)
-    for (let a = 0, amax = specSel1.length; a < amax; a++) {
-        specSel1[a].addEventListener('change', () => {
-            const specSelId = specSel1[a].value;
-            createSpecDet1(specSelId, a);
-            createSpec2(specSelId, a);
-        })
-        for (let b of spec) {
-            const theOp = document.createElement('option');
-            theOp.setAttribute('value', b.spec_sid)
-            const theTxt = document.createTextNode(b.spec_name);
-            theOp.append(theTxt)
-            theDocFrag.append(theOp)
-        }
-        specSel1[a].append(theDocFrag)
-    }
+    function createProDetBox(k) {
+        const spec = <?= json_encode($r_shopSpec, JSON_UNESCAPED_UNICODE) ?>;
+        const specDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
+        const specSel1 = document.querySelectorAll('.s_spec_sid1')
+        const specDetSel1 = document.querySelectorAll(".s_specDet_sid1")
+        const specSel2 = document.querySelectorAll('.s_spec_sid2')
+        const specDetSel2 = document.querySelectorAll(".s_specDet_sid2")
 
-    function createSpec2(specSelId, a) {
-        specSel2[a].removeAttribute('disabled')
-        while (specSel2[a].hasChildNodes()) {
-            specSel2[a].remove(specSel2[a].lastChild)
-        }
-        for (let b of spec) {
-            if (b.spec_sid != specSelId) {
-                const theOp = document.createElement('option');
-                theOp.setAttribute('value', b.spec_sid)
-                const theTxt = document.createTextNode(b.spec_name);
-                theOp.append(theTxt)
-                theDocFrag.append(theOp)
-            }
-        }
-        specSel2[a].append(theDocFrag)
-        for (let c = 0, cmax = specSel2.length; c < cmax; c++) {
-            specSel2[c].addEventListener('change', () => {
-                const specSelId = specSel2[c].value;
-                createSpecDet2(specSelId, c);
+        for (let a = 0, amax = specSel1.length; a < amax; a++) {
+            specSel1[a].addEventListener('change', () => {
+                const specSelId = specSel1[a].value;
+                createSpecDet1(specSelId, a);
+                createSpec2(specSelId, a);
+                while (specDetSel2[a].hasChildNodes()) {
+                    specDetSel2[a].remove(specDetSel2[a].lastChild)
+                }
             })
         }
-    }
 
-    function createSpecDet2(specSelId, index) {
-        specDetSel2[index].removeAttribute('disabled');
-        removeChild(specDetSel2[index])
-        createSpecDet(specSelId)
-        specDetSel2[index].append(theDocFrag)
-    }
-
-    function createSpecDet1(specSelId, index) {
-        specDetSel1[index].removeAttribute('disabled');
-        removeChild(specDetSel1[index])
-        createSpecDet(specSelId)
-        specDetSel1[index].append(theDocFrag)
-    }
-
-    function createSpecDet(specSelId) {
-        const arr = [];
-        for (let a of specDet) {
-            if (specSelId == a.spec_sid) {
-                arr.push(a);
+        function createSpec2(specSelId, a) {
+            specSel2[a].removeAttribute('disabled')
+            while (specSel2[a].hasChildNodes()) {
+                specSel2[a].remove(specSel2[a].lastChild)
+            }
+            for (let b of spec) {
+                if (b.spec_sid != specSelId) {
+                    createOp('option', b.spec_sid, b.spec_name)
+                }
+            }
+            specSel2[a].append(theDocFrag)
+            for (let c = 0, cmax = specSel2.length; c < cmax; c++) {
+                specSel2[c].addEventListener('change', () => {
+                    const specSelId = specSel2[c].value;
+                    createSpecDet2(specSelId, c);
+                })
             }
         }
-        //若小規格有數字，則由小到大排序
-        arr.sort(function(a, b) {
-            let c = parseInt(a.specDet_name);
-            let d = parseInt(b.specDet_name);
-            return c - d
-        })
 
-        for (let b of arr) {
-            const theOp = document.createElement('option');
-            theOp.setAttribute('value', b.specDet_sid);
-            const theTxt = document.createTextNode(b.specDet_name);
-            theOp.append(theTxt)
-            theDocFrag.append(theOp)
+        function createSpecDet2(specSelId, index) {
+            specDetSel2[index].removeAttribute('disabled');
+            removeChild(specDetSel2[index])
+            createSpecDet(specSelId)
+            specDetSel2[index].append(theDocFrag)
         }
-        return theDocFrag
+
+        function createSpecDet1(specSelId, index) {
+            specDetSel1[index].removeAttribute('disabled');
+            removeChild(specDetSel1[index])
+            createSpecDet(specSelId)
+            specDetSel1[index].append(theDocFrag)
+        }
+
+        function createSpecDet(specSelId) {
+            const arr = [];
+            for (let a of specDet) {
+                if (specSelId == a.spec_sid) {
+                    arr.push(a);
+                }
+            }
+            //若小規格有數字，則由小到大排序
+            arr.sort(function(a, b) {
+                let c = parseInt(a.specDet_name);
+                let d = parseInt(b.specDet_name);
+                return c - d
+            })
+            for (let b of arr) {
+                createOp('option', b.specDet_sid, b.specDet_name)
+            }
+        }
     }
+    createProDetBox()
+
+    //==================自動生成各項目照片框==================
+    function createproDetImgBox(a) {
+        const proDetImg = document.querySelector('#s_proDetImgBox')
+        const formName = `s_Form2${a}`
+        const theForm = document.createElement('form')
+        theForm.setAttribute('name', formName)
+        theForm.classList.add('s_Form', 's_detImg')
+        const theInput = ` <input type="file" name="shopTepProImg" accept="image/jpeg" class="s_tepProPetImg">`
+        theForm.innerHTML = theInput
+        proDetImg.append(theForm)
+    }
+    createproDetImgBox(0)
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
