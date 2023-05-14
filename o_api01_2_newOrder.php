@@ -8,11 +8,10 @@ $output = [
     'error' => [],
 
 ];
+
 $shopOrders = isset($_POST['prod']) ? $_POST['prod'] : '';
 $actOrders = isset($_POST['act']) ? $_POST['act'] : '';
-
-
-
+//商城-若有商城資料，取DB的金額*數量，封裝Order_detail的資料陣列。
 if ($_POST['prod']) {
     $forProd = [];
     foreach ($shopOrders as $d) {
@@ -22,16 +21,28 @@ if ($_POST['prod']) {
         $dProDetsid = $dDataget['proDet_sid'];
         $dProQty = intval($dDataget['prodQty']);
 
-        $sqls = "SELECT sp.`pro_sid`, spd.`proDet_sid`, sp.`pro_name`, spd.`proDet_name`, spd.`proDet_price`, spd.proDet_price*? AS pdSubtotal 
+        $sqls = "SELECT 
+        sp.`pro_sid` AS rel_sid, 
+        spd.`proDet_sid` AS rel_seq_sid, 
+        sp.`pro_name` AS relName, 
+        spd.`proDet_name` AS rel_seqName, 
+        spd.`proDet_price` AS prodAmount, 
+        spd.proDet_price*? AS amount
         FROM `shop_pro` sp 
-            JOIN `shop_prodet` spd 
-            ON sp.`pro_sid` = spd.`pro_sid` 
+        JOIN `shop_prodet` spd 
+        ON sp.`pro_sid` = spd.`pro_sid` 
         WHERE sp.pro_sid=? AND spd.proDet_sid = ?";
 
         $stm = $pdo->prepare($sqls);
         $stm->execute([$dProQty, $dProsid, $dProDetsid]);
-        $result = $stm->fetch();
-        $forProd[] = $result;
+        $sResult = $stm->fetch();
+        $sResult['relType'] = 'prod';
+        $sResult['prodQty'] = $dProQty;
+        $sResult['adultAmount'] = null;
+        $sResult['childAmount'] = null;
+        $sResult['adultQty'] = null;
+        $sResult['childQty'] = null;
+        $forProd[] = $sResult;
     }
     $output['forProd'] = $forProd;
 }

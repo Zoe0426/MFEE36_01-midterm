@@ -74,7 +74,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 console.log(obj);
                 showMemInfo(obj);
                 showCartnCou(obj);
-                showPostnPay();
+                showPostnPay(obj);
             })
             .catch(ex => {
                 console.log(ex);
@@ -306,7 +306,7 @@ require './partsNOEDIT/connect-db.php' ?>
         oCartDisplay.append(oct);
     }
     //====顯示地址及付款方式
-    function showPostnPay() {
+    function showPostnPay(obj) {
         const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
         const opp = document.createElement('div');
         opp.innerHTML =
@@ -326,6 +326,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <input type="text" class="form-control" id="address" name="address" value="">
                     <div class="form-text d-none"></div>
                 </div>
+                <input type="text" name="member_sid" class="o-d-none" value="${obj.sid}">
             </div>`;
         oPostPayDisplay.classList.add("ocd");
         oPostPayDisplay.classList.add("p");
