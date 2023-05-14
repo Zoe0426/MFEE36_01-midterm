@@ -4,7 +4,7 @@ require './partsNOEDIT/connect-db.php';
 
 
 
-$d = "%7B%22pro_sid%22%3A%22P003%22%2C%22pro_name%22%3A%22Pet%20Health%20C%22%2C%22proDet_sid%22%3A%22PD008%22%2C%22proDet_name%22%3A%22Pet%20Health%20C%20Medium%22%2C%22proDet_price%22%3A%22500%22%2C%22proDet_qty%22%3A%22100%22%2C%22prodQty%22%3A%221%22%7D";
+$d = "%7B%22act_sid%22%3A%221%22%2C%22act_name%22%3A%22%E5%8F%B0%E5%8C%97%E8%88%87%E6%AF%9B%E5%AE%B6%E5%BA%AD%E6%9C%89%E7%B4%84%EF%BC%8C%E9%82%80%E4%BD%A0%E4%B8%80%E8%B5%B7%E4%BE%86%E6%8C%BA%E5%AF%B5%EF%BC%81%22%2C%22group_sid%22%3A%223%22%2C%22group_date%22%3A%222023-07-22%22%2C%22price_adult%22%3A%22200%22%2C%22price_kid%22%3A%22100%22%2C%22ppl_max%22%3A%2250%22%2C%22adultQty%22%3A%221%22%2C%22childQty%22%3A%221%22%7D";
 $dParsed = urldecode($d);
 $dataget = json_decode($dParsed, true);
 $dProsid = $dataget['pro_sid'];
@@ -17,7 +17,7 @@ $stm->execute([$dProQty, $dProsid, $dProDetsid]);
 $result = $stm->fetch();
 
 header('Content-Type: application/json');
-echo json_encode($result, JSON_UNESCAPED_UNICODE);
+echo json_encode($forProd, JSON_UNESCAPED_UNICODE);
 
 // $sqlCoupon = "SELECT
 // cs.member_sid,

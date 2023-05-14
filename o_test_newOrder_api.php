@@ -2,6 +2,7 @@
 //連資料庫
 require './partsNOEDIT/connect-db.php';
 
+
 $sqlHead = "SELECT IFNULL(MAX(order_sid), 'ORD0000') FROM `ord_order`";
 $stmt1 = $pdo->query($sqlHead);
 $last_ord_sid = $stmt1->fetchColumn();
