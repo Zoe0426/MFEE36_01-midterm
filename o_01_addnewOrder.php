@@ -87,20 +87,6 @@ require './partsNOEDIT/connect-db.php' ?>
         const InfoBar = document.querySelector("#oInfoBar");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
 
-        // let testprods = newodfd.getAll("prod[]");
-        // for (let i = 0; i < testprods.length; i++) {
-        //     testprods[i] = decodeURIComponent(testprods[i]);
-        //     console.log(testprods[i]);
-        // }
-
-        // Clear the old values
-        // newodfd.delete('prod[]');
-
-        // // Append the new values
-        // for (let value of testprods) {
-        //     newodfd.append('prod[]', value);
-        // }
-
         //沒有選任何商品就報錯
         let prods = newodfd.getAll("prod[]").length;
         let acts = newodfd.getAll("act[]").length;
@@ -122,7 +108,7 @@ require './partsNOEDIT/connect-db.php' ?>
         }
 
         if (isPass) {
-            fetch('o_api02_newOrder.php', {
+            fetch('o_api01_2_newOrder.php', {
                     method: 'POST',
                     body: newodfd,
                 }).then(r => r.json())
@@ -255,7 +241,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < aData.length; i++) {
             actContent +=
                 `<tr>
-                <td> <input class="form-check-input" type="checkbox" value="[${aData[i].act_sid},${aData[i].group_sid}]" name="act[]"></td>
+                <td> <input class="form-check-input" type="checkbox" value="${encodeURIComponent(JSON.stringify(aData[i]))}" name="act[]"></td>
                 <td>${aData[i].act_sid}</td>
                 <td>${aData[i].act_name}</td>
                 <td>${aData[i].group_date}</td>
