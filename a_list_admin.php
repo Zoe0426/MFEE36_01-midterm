@@ -99,7 +99,7 @@ if ($totalRows) {
                         <td><?= $r['group_time'] ?></td>
                         <td><?= $r['ppl_max'] ?></td>
                         <td><?= $r['act_post_date'] ?></td>
-                        <td><a href="a_edit.php?sid=<?= $r['act_sid'] ?>">
+                        <td><a href="a_edit.php?act_sid=<?= $r['act_sid'] ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </td>
