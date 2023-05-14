@@ -21,8 +21,7 @@ if ($totalRows) {
     }
 
 
-
-    $sql = sprintf("SELECT * FROM act_info ORDER BY act_sid DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT ai.`act_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` FROM `act_info` ai JOIN `act_group` ag ON ai.`act_sid`=ag.`act_sid`ORDER BY `act_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
@@ -80,6 +79,10 @@ if ($totalRows) {
                     <th scope="col">#</th>
                     <th scope="col">活動名稱</th>
                     <th scope="col">活動內容</th>
+                    <th scope="col">日期</th>
+                    <th scope="col">時段</th>
+                    <th scope="col">人數上限</th>
+                    <th scope="col">上架時間</th>
                     <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                 </tr>
             </thead>
@@ -92,6 +95,10 @@ if ($totalRows) {
                         <td><?= $r['act_sid'] ?></td>
                         <td><?= $r['act_name'] ?></td>
                         <td><?= $r['act_content'] ?></td>
+                        <td><?= $r['group_date'] ?></td>
+                        <td><?= $r['group_time'] ?></td>
+                        <td><?= $r['ppl_max'] ?></td>
+                        <td><?= $r['act_post_date'] ?></td>
                         <td><a href="a_edit.php?sid=<?= $r['act_sid'] ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
