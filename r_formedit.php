@@ -9,13 +9,29 @@ $items = $pdo->query($sql)->fetchAll();
 $ssql = "SELECT `s_sid`, `s_name` FROM `rest_svc`";
 $sitems = $pdo->query($ssql)->fetchAll();
 
-//攜帶規則
+// 攜帶規則
 $rsql = "SELECT `r_sid`, `r_name` FROM `rest_rule`";
 $ritems = $pdo->query($rsql)->fetchAll();
 
+
+
 $sid = isset($_GET['rest_sid']) ? intval($_GET['rest_sid']) : 0;
-$sqll = "SELECT * FROM `rest_info` WHERE rest_sid = {$sid}";
+// $sqll = "SELECT * FROM `rest_info` WHERE rest_sid = {$sid}";
+
+$sqll = "SELECT ri.*, rc.`catg_name` FROM `rest_info` ri JOIN `rest_catg` rc ON ri.`catg_sid` = rc.`catg_sid` WHERE rest_sid = {$sid}";
 $r = $pdo->query($sqll)->fetch();
+if (empty($r)) {
+    header('Location: r_read.php');
+    exit;
+}
+
+$sql2 = "SELECT * FROM `rest_c_rs` WHERE rest_sid = {$sid}";
+$a = $pdo->query($sql2)->fetch();
+
+$sql3 = "SELECT * FROM `rest_c_rr` WHERE rest_sid = {$sid}";
+$b = $pdo->query($sql3)->fetch();
+
+
 
 
 ?>
@@ -77,7 +93,7 @@ $r = $pdo->query($sqll)->fetch();
                 <div class="col-3">
                     <label for="" class="form-label">餐廳類別</label>
                     <select class="form-select" name="catg_sid">
-                        <option value="<?= $r['catg_sid'] ?>"><?= $r['catg_sid'] ?></option>
+                        <option value="<?= $r['catg_sid'] ?>"><?= $r['catg_name'] ?></option>
                         <?php foreach ($items as $i) : ?>
                             <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
                         <?php endforeach ?>
@@ -296,7 +312,7 @@ $r = $pdo->query($sqll)->fetch();
                     <div class="d-flex ">
                         <?php foreach ($sitems as $k => $j) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc<?= $j['s_sid'] ?>">
+                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>">
                                 <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
                                     <?= $j['s_name'] ?>
                                 </label>
@@ -310,11 +326,11 @@ $r = $pdo->query($sqll)->fetch();
                         <h3>攜帶規則</h3>
                     </label>
                     <div class="d-flex ">
-                        <?php foreach ($ritems as $k => $r) : ?>
+                        <?php foreach ($ritems as $k => $d) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule[]" id="rest_rule<?= $r['r_sid'] ?>">
-                                <label class="form-check-label" for="rest_rule[]<?= $r['r_sid'] ?>">
-                                    <?= $r['r_name'] ?>
+                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>">
+                                <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
+                                    <?= $d['r_name'] ?>
                                 </label>
                             </div>
                         <?php endforeach ?>

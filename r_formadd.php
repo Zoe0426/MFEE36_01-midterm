@@ -291,7 +291,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     <div class="d-flex ">
                         <?php foreach ($sitems as $k => $j) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc<?= $j['s_sid'] ?>">
+                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>">
                                 <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
                                     <?= $j['s_name'] ?>
                                 </label>
@@ -307,7 +307,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     <div class="d-flex ">
                         <?php foreach ($ritems as $k => $r) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule[]" id="rest_rule<?= $r['r_sid'] ?>">
+                                <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $r['r_sid'] ?>">
                                 <label class="form-check-label" for="rest_rule[]<?= $r['r_sid'] ?>">
                                     <?= $r['r_name'] ?>
                                 </label>
