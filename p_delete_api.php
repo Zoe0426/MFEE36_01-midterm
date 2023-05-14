@@ -8,17 +8,26 @@ $output=[
 ];
 
 if(!empty($_GET['post_sid'])){
-    $post_sid=$_GET['post_sid'] ? intval($_GET['post_sid']) : '';
+    $post_sid=intval($_GET['post_sid']);
+    $sql="DELETE FROM `post_list_admin` WHERE `post_sid`={$post_sid}";
+    $pdo->query($sql);
+    $output["post_sid"]=$_GET['post_sid'];
+    $output['success']= true;
+
+}else{
+    $output['dataStatus']="no post sid";
 }
 
 
-$post_sid=isset($_GET['sid'])?intval($_GET['post_sid']):0;
-$sql="DELETE FROM `post_list_admin` WHERE `post_sid`={$post_sid}";
 
-$pdo->query($sql);
+
+// $comeFrom = 'p_readPost_api.php';
+// if(! empty($_SERVER['HTTP_REFERER'])){
+//     $comeFrom = $_SERVER['HTTP_REFERER'];
+// }
 
 
 
 header('Content-Type: application/json');
-echo json_encode($output, JSON_UNESCAPED_UNICODE);
+echo json_encode($_GET['post_sid'], JSON_UNESCAPED_UNICODE);
 ?>
