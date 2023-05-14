@@ -19,10 +19,9 @@ $sql2 = "SELECT DISTINCT `group_time` FROM `act_group`";
 $groupTimeList = $pdo->query($sql2)->fetchAll();
 
 $sql3 = "SELECT `group_sid`, `act_sid`, `group_date`, `group_time`, `price_adult`, `price_kid`, `group_status`, `ppl_max`, `act_post_date` FROM `act_group`";
-$groupDateList = $pdo->query($sql3)->fetchAll();
+$groupList = $pdo->query($sql3)->fetch();
 
-$sql4 = "SELECT DISTINCT `group_time` FROM `act_group`";
-$groupTimeList = $pdo->query($sql4)->fetchAll();
+
 
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -60,12 +59,12 @@ $groupTimeList = $pdo->query($sql4)->fetchAll();
                     </div>
                     <div class="mb-3">
                         <label for="ppl_max" class="form-label">人數上限</label>
-                        <input type="text" class="form-control" id="ppl_max" name="ppl_max" data-required="1" value="<?= $groupDateList['ppl_max'] ?>">
+                        <input type="text" class="form-control" id="ppl_max" name="ppl_max" data-required="1" value="<?= $groupList['ppl_max'] ?>">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="act_city" class="form-label">縣市</label>
-                        <input type="text" class="form-control" id="act_city" name="act_city" data-required="1" value="<?= $r['ppl_max'] ?>">
+                        <input type="text" class="form-control" id="act_city" name="act_city" data-required="1" value="<?= $r['act_city'] ?>">
                         <div class="form-text"></div>
                         <label for="act_area" class="form-label">地區</label>
                         <input type="text" class="form-control" id="act_area" name="act_area" data-required="1" value="<?= $r['act_area'] ?>">
@@ -99,10 +98,10 @@ $groupTimeList = $pdo->query($sql4)->fetchAll();
                     </div>
                     <div class="mb-3">
                         <label for="price_adult" class="form-label">價格(大人)</label>
-                        <input type="text" class="form-control" id="price_adult" name="price_adult" data-required="1" value="<?= $groupDateList['price_adult'] ?>">
+                        <input type="text" class="form-control" id="price_adult" name="price_adult" data-required="1" value="<?= $groupList['price_adult'] ?>">
                         <div class="form-text"></div>
                         <label for="price_kid" class="form-label">價格(小孩)</label>
-                        <input type="text" class="form-control" id="price_kid" name="price_kid" data-required="1" value="<?= $groupDateList['price_kid'] ?>">
+                        <input type="text" class="form-control" id="price_kid" name="price_kid" data-required="1" value="<?= $groupList['price_kid'] ?>">
                         <div class="form-text"></div>
                     </div>
                     <!-- <div class="mb-3">
