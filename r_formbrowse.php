@@ -70,8 +70,6 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
     <!-- 分頁 -->
     <div class="px-3 pt-4">
-
-
         <h3 class="mb-4 px-3">基本資料</h3>
         <!-- 圖片區 -->
         <div class="row mb-4 px-3">
@@ -86,12 +84,12 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_name" class="form-label">餐廳名稱</label>
-                    <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1" value="<?= $r['rest_name'] ?>">
+                    <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1" value="<?= $r['rest_name'] ?>" disabled>
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="" class="form-label">餐廳類別</label>
-                    <select class="form-select" name="catg_sid">
+                    <select class="form-select" name="catg_sid" disabled>
                         <option value="<?= $r['catg_sid'] ?>"><?= $r['catg_name'] ?></option>
                         <?php foreach ($items as $i) : ?>
                             <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
@@ -109,13 +107,13 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_phone" class="form-label">餐廳電話</label>
-                    <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1" value="<?= $r['rest_phone'] ?>">
+                    <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1" value="<?= $r['rest_phone'] ?>" disabled>
                     <div class="form-text"></div>
                 </div>
 
                 <div class="col-6">
                     <label for="rest_address" class="form-label">餐廳地址</label>
-                    <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1" value="<?= $r['rest_address'] ?>">
+                    <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1" value="<?= $r['rest_address'] ?>" disabled>
                     <div class="form-text"></div>
                 </div>
             </div>
@@ -123,13 +121,13 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_info" class="form-label">餐廳簡介</label>
-                    <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"><?= $r['rest_info'] ?></textarea>
+                    <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1" disabled><?= $r['rest_info'] ?></textarea>
                     <div id="rest_info" class="form-text"></div>
                 </div>
 
                 <div class="col-6">
                     <label for="rest_notice" class="form-label">注意事項</label>
-                    <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"><?= $r['rest_notice'] ?></textarea>
+                    <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字" disabled><?= $r['rest_notice'] ?></textarea>
                     <div id="rest_notice" class="form-text"></div>
                 </div>
             </div>
@@ -150,12 +148,12 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="col-8">
                 <div class="col ">
                     <label for="rest_f_title" class="form-label">特色標題</label>
-                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1" value="<?= $r['rest_f_title'] ?>">
+                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1" value="<?= $r['rest_f_title'] ?> " disabled>
                     <div class="form-text"></div>
                 </div>
                 <div class="col mt-4">
                     <label for="rest_f_ctnt" class="form-label">特色內容</label>
-                    <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字"><?= $r['rest_f_ctnt'] ?></textarea>
+                    <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字" disabled><?= $r['rest_f_ctnt'] ?></textarea>
                     <div id="f_content" class="form-text"></div>
                 </div>
             </div>
@@ -173,22 +171,22 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="date_start" class="form-label">開始日期</label>
-                    <input type="date" class="form-control" id="date_start" name="date_start" data-required="1" value="<?= $r['date_start'] ?>">
+                    <input type="date" class="form-control" id="date_start" name="date_start" data-required="1" disabled value="<?= $r['date_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="date_end" class="form-label">結束日期</label>
-                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1" value="<?= $r['date_end'] ?>">
+                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1" disabled value="<?= $r['date_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="p_max" class="form-label">人數上限</label>
-                    <input type="text" class="form-control" id="p_max" name="p_max" data-required="1" value="<?= $r['p_max'] ?>">
+                    <input type="text" class="form-control" id="p_max" name="p_max" data-required="1" disabled value="<?= $r['p_max'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="pt_max" class="form-label">寵物上限</label>
-                    <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1" value="<?= $r['pt_max'] ?>">
+                    <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1" disabled value="<?= $r['pt_max'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
@@ -196,34 +194,34 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="m_start" class="form-label">早上開始時間</label>
-                    <input type="time" class="form-control" id="m_start" name="m_start" data-required="1" value="<?= $r['m_start'] ?>">
+                    <input type="time" class="form-control" id="m_start" name="m_start" data-required="1" disabled value="<?= $r['m_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="m_end" class="form-label">早上結束時間</label>
-                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1" value="<?= $r['m_end'] ?>">
+                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1" disabled value="<?= $r['m_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_start" class="form-label">下午開始時間</label>
-                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1" value="<?= $r['e_start'] ?>">
+                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1" disabled value="<?= $r['e_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_end" class="form-label">下午結束時間</label>
-                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1" value="<?= $r['e_end'] ?>">
+                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1" disabled value="<?= $r['e_end'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="n_start" class="form-label">晚上開始時間</label>
-                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1" value="<?= $r['n_start'] ?>">
+                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1" disabled value="<?= $r['n_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="n_end" class="form-label">晚上結束時間</label>
-                    <input type="time" class="form-control" id="n_end" name="n_end" data-required="1" value="<?= $r['n_end'] ?>">
+                    <input type="time" class="form-control" id="n_end" name="n_end" data-required="1" disabled value="<?= $r['n_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <!-- 用餐時間 -->
@@ -311,7 +309,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     <div class="d-flex">
                         <?php foreach ($sitems as $k => $j) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
+                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" disabled <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
                                 <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
                                     <?= $j['s_name'] ?>
                                 </label>
@@ -328,7 +326,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     <div class="d-flex ">
                         <?php foreach ($ritems as $k => $d) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
+                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" disabled <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
                                 <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
                                     <?= $d['r_name'] ?>
                                 </label>
@@ -337,9 +335,6 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     </div>
                 </div>
 
-                <div class="row">
-                    <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">更新資訊</button>
-                </div>
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>

@@ -34,6 +34,7 @@ $sqlParent = "INSERT INTO `rest_info` (
 
 
 $stmt = $pdo->prepare($sqlParent);
+
 $stmt->execute([
     $_POST['rest_name'],
     $_POST['catg_sid'],
@@ -64,7 +65,7 @@ $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo
 
 
 $data1 = $_POST['rest_svc'];
-print_r($data1);
+
 
 $sqlChild1 = "INSERT INTO rest_c_rs (`rest_sid`, `s_sid` ) VALUES (?, ?);";
 $stm1 = $pdo->prepare($sqlChild1);
@@ -85,6 +86,7 @@ foreach ($data2 as $value) {
         $value,
     ]);
 }
+
 
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

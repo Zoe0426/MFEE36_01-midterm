@@ -52,7 +52,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
     <div class="px-3 pt-4">
 
 
-        <h3 class="mb-4">基本資料</h3>
+        <h3 class="mb-4 px-3">基本資料</h3>
         <!-- 圖片區 -->
         <div class="row mb-4 px-3">
             <!-- <div class="col-3" onclick="restImg()" id="finalImg">
@@ -327,7 +327,6 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
         event.preventDefault();
         let isPass = true;
-
 
         if (isPass) { //格式完全正確，呼叫api
             const fd = new FormData(document.rest_form);

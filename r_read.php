@@ -98,7 +98,7 @@ if ($totalRows) {
                         <td><?= $r['m_start'] ?></td>
                         <td><?= $r['n_end'] ?></td>
                         <td><?= $r['p_max'] ?></td>
-                        <td><a href="#">
+                        <td><a href="r_formbrowse.php?rest_sid=<?= $r['rest_sid'] ?>">
                                 <i class="fa-solid fa-circle-info text-primary"></i>
                             </a></td>
                         <td><a href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>">
