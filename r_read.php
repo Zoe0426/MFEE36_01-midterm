@@ -64,7 +64,7 @@ if ($totalRows) {
                     <li><a class="dropdown-item" href="#">餐廳評價</a></li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-primary">新增餐廳</button>
+            <a class="btn btn-primary" href="r_formadd.php">新增餐廳</a>
         </div>
     </div>
 

@@ -21,7 +21,7 @@ if (!empty($_GET['rest_sid'])) {
 // WHERE rest_sid = $delSid";
 
 
-// 只刪除父表格
+
 $sql1 = "DELETE FROM rest_info WHERE rest_sid = $delSid";
 $stm1 = $pdo->query($sql1);
 

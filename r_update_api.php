@@ -35,7 +35,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) { #若附合某�
     `n_start`=?,
     `n_end`=?,
     `p_max`=?,
-    `pt_max`=?,
+    `pt_max`=?
     -- `ml_time`=?,
     -- `weekly`=?,
     WHERE `rest_sid`= ? "; #(你的sql)

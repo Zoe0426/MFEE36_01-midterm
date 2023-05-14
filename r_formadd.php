@@ -338,7 +338,9 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 .then(r => r.json())
                 .then(obj => {
                     console.log(obj);
-                    //obj 會拿到 api 回傳的結果，請自由使用：）
+                    setTimeout(() => {
+                        location.href = 'r_read.php';
+                    }, 2000);
                 })
                 .catch(ex => {
                     console.log(ex);
