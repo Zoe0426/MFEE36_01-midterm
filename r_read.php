@@ -153,7 +153,7 @@ if ($totalRows) {
 <script>
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'r_delete_api.php?sid=' + sid;
+            location.href = 'r_delete_api.php?rest_sid=' + sid;
         }
     }
 </script>

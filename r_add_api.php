@@ -59,6 +59,32 @@ $stmt->execute([
     // $_POST['weekly'],
 ]);
 
+$parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo $lastsid;
+
+
+
+$data1 = $_POST['rest_svc'];
+print_r($data1);
+
+$sqlChild1 = "INSERT INTO rest_c_rs (`rest_sid`, `s_sid` ) VALUES (?, ?);";
+$stm1 = $pdo->prepare($sqlChild1);
+foreach ($data1 as $value) {
+    $stm1->execute([
+        $parentSid,
+        $value,
+    ]);
+}
+
+$data2 = $_POST['rest_rule'];
+
+$sqlChild1 = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES (?,?);";
+$stm2 = $pdo->prepare($sqlChild1);
+foreach ($data2 as $value) {
+    $stm2->execute([
+        $parentSid,
+        $value,
+    ]);
+}
 
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);
