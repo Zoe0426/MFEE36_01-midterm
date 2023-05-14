@@ -52,7 +52,11 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-warning ">成立訂單</button>
+        <div class="row px-4">
+            <div class="alert alert-danger text-center" role="alert" id="oInfoBar"></div>
+            <button type="submit" class="btn btn-warning ">成立訂單</button>
+        </div>
+
     </form>
 </div>
 </div>
@@ -79,19 +83,58 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====成立訂單====
     function createOrder(e) {
         e.preventDefault();
+        let isPass = true;
+        const InfoBar = document.querySelector("#oInfoBar");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
-        console.log(newodfd);
-        fetch('o_api02_newOrder.php', {
-                method: 'POST',
-                body: newodfd,
-            }).then(r => r.json())
-            .then(obj => {
-                console.log(obj);
 
-            })
-            .catch(ex => {
-                console.log(ex);
-            })
+        // let testprods = newodfd.getAll("prod[]");
+        // for (let i = 0; i < testprods.length; i++) {
+        //     testprods[i] = decodeURIComponent(testprods[i]);
+        //     console.log(testprods[i]);
+        // }
+
+        // Clear the old values
+        // newodfd.delete('prod[]');
+
+        // // Append the new values
+        // for (let value of testprods) {
+        //     newodfd.append('prod[]', value);
+        // }
+
+        //沒有選任何商品就報錯
+        let prods = newodfd.getAll("prod[]").length;
+        let acts = newodfd.getAll("act[]").length;
+        if (prods === 0 && acts === 0) {
+            isPass = false;
+            console.log("ispass false")
+            console.log(oInfoBar);
+            oInfoBar.innerHTML = "請選擇至少一件商品或活動";
+        }
+
+        let postFormInputs = document.querySelectorAll(".postInfo input");
+        for (let i of postFormInputs) {
+            if ((i.value).trim() === '') {
+                isPass = false;
+                i.style.border = '1px solid #ccc';
+                i.nextElementSibling.innerHTML = '此欄位必需填寫';
+                oInfoBar.innerHTML = '寄送資訊欄位不可空白';
+            }
+        }
+
+        if (isPass) {
+            fetch('o_api02_newOrder.php', {
+                    method: 'POST',
+                    body: newodfd,
+                }).then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+
+                })
+                .catch(ex => {
+                    console.log(ex);
+                })
+        }
+
     }
     // ====搜尋顯示哪種input====
     function searchm(e) {
@@ -112,10 +155,11 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====選擇所有商品====
     function selectAllProducts() {
-        console.log('clicked');
+        // console.log('clicked');
         const shopAllCheckbox = document.querySelector('input[name="shopAll"]');
-        const prodCheckboxes = document.querySelectorAll('input[name="prod"]');
-
+        // console.log(shopAllCheckbox);
+        const prodCheckboxes = document.querySelectorAll('input[name="prod[]"]');
+        // console.log(prodCheckboxes);
         if (shopAllCheckbox.checked) {
             prodCheckboxes.forEach((checkbox) => {
                 checkbox.checked = true;
@@ -130,7 +174,7 @@ require './partsNOEDIT/connect-db.php' ?>
     function selectAllActs() {
         console.log('clicked');
         const actAllCheckbox = document.querySelector('input[name="actAll"]');
-        const actCheckboxes = document.querySelectorAll('input[name="act"]');
+        const actCheckboxes = document.querySelectorAll('input[name="act[]"]');
 
         if (actAllCheckbox.checked) {
             actCheckboxes.forEach((checkbox) => {
@@ -176,7 +220,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
-                    <td><input class="form-check-input" type="checkbox" value="[${sData[i].pro_sid},${sData[i].proDet_sid}]" name="prod[]"></td>
+                    <td><input class="form-check-input" type="checkbox" value="${encodeURIComponent(JSON.stringify(sData[i]))}" name="prod[]"></td>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
@@ -188,7 +232,7 @@ require './partsNOEDIT/connect-db.php' ?>
         ost.innerHTML = `<table class="ocd table table-border table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" id="oshopAll" onchange="selectAllProducts()"></th>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" onchange="selectAllProducts()"></th>
                         <th scope="col">商品編號</th>
                         <th scope="col">商品名稱</th>
                         <th scope="col">品項</th>
@@ -206,7 +250,7 @@ require './partsNOEDIT/connect-db.php' ?>
         //===活動table
         let oat = document.createElement("div");
         let aData = obj.actlist;
-        console.log(aData);
+        // console.log(aData);
         let actContent = "";
         for (let i = 0; i < aData.length; i++) {
             actContent +=
@@ -226,7 +270,7 @@ require './partsNOEDIT/connect-db.php' ?>
             <table class="ocd table table-border table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" id="oActAll" onchange="selectAllActs()"></th>
+                        <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
                         <th scope="col">活動編號</th>
                         <th scope="col">活動名稱</th>
                         <th scope="col">期別</th>
@@ -246,7 +290,7 @@ require './partsNOEDIT/connect-db.php' ?>
         //===優惠coupon
         let oct = document.createElement("div");
         let cData = obj.coupons;
-        console.log(cData);
+        // console.log(cData);
         let couContent = "";
         for (let i = 0; i < cData.length; i++) {
             couContent +=
@@ -281,25 +325,29 @@ require './partsNOEDIT/connect-db.php' ?>
         const opp = document.createElement('div');
         opp.innerHTML =
             `<div class="postInfo row g-0 ">
-            <div class="mb-3 col-4 px-0 me-3">
-                <label for="postName" class="form-label">收件人姓名：</label>
-                <input type="text" class="form-control" id="postName" name="postName" value="">
-                <div id="oNameErrMsg" class="form-text d-none"></div>
-            </div>
-            <div class="mb-3 col-4 me-3">
-                <label for="postMob" class="form-label">手機號碼：</label>
-                <input type="text" class="form-control" id="postMob" name="postMobile" value="">
-                <div id="oMobErrMsg" class="form-text d-none"></div>
-            </div>
-            <div class="mb-3 col-10">
-                <label for="address" class="form-label">寄送地址：</label>
-                <input type="text" class="form-control" id="address" name="address" value="">
-                <div id="oAddErrMsg" class="form-text d-none"></div>
-            </div>
-        </div>`;
+                <div class="mb-3 col-4 px-0 me-3">
+                    <label for="postName" class="form-label">收件人姓名：</label>
+                    <input type="text" class="form-control" id="postName" name="postName" value="">
+                    <div class="form-text d-none"></div>
+                </div>
+                <div class="mb-3 col-4 me-3">
+                    <label for="postMob" class="form-label">手機號碼：</label>
+                    <input type="text" class="form-control" id="postMob" name="postMobile" value="">
+                    <div class="form-text d-none"></div>
+                </div>
+                <div class="mb-3 col-10">
+                    <label for="address" class="form-label">寄送地址：</label>
+                    <input type="text" class="form-control" id="address" name="address" value="">
+                    <div class="form-text d-none"></div>
+                </div>
+            </div>`;
         oPostPayDisplay.classList.add("ocd");
         oPostPayDisplay.classList.add("p");
         oPostPayDisplay.append(opp);
+
+
+        // document.querySelector('#oGetItemsForm')
+
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
