@@ -47,7 +47,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     }
 
     .s_Form1,
-    #s_proImg {
+    #s_proImg,
+    .s_proDetImg {
         display: none;
     }
 
@@ -73,7 +74,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         <form name="s_Form1" class="s_Form1">
             <input type="file" name="shopTepProImg" accept="image/jpeg" id="s_tepProImg">
         </form>
-        <div id="s_proDetImgBox"></div>
+        <div id="s_proDetTepImgBox"></div>
 
         <form class="pt-4" name="s_Form3" return flase>
             <h2>新增商品</h2>
@@ -145,7 +146,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 <div class="col-3 mb-3">
                     <div class="mb-3">
                         <div class="s_ImgBox s_proDetImgBox"><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img" id="s_proImg">
+                        <input type="text" name="pro_img[]" class="s_proDetImg">
                     </div>
                     <div class="mb-3 s_spec">
                         <label class="form-label">規格一</label>
@@ -227,7 +228,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             const theCopy = `<div class="col-3 mb-3">
                     <div class="mb-3">
                         <div class="s_ImgBox s_proDetImgBox" ><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img" id="s_proImg">
+                        <input type="text" name="pro_img[]" class="s_proDetImg">
                     </div>
                     <div class="mb-3 s_spec">
                         <label class="form-label">規格一</label>
@@ -302,16 +303,30 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             //console.log(index)
             const proDetImg1 = document.querySelectorAll('.s_tepProPetImg')
             proDetImg1[index].click()
-            proDetImg1[index].addEventListener("change", () => {
 
+            //新增細項照片+API
+            proDetImg1[index].addEventListener("change", (event) => {
+                const formName = event.target.parentNode;
+                //console.log(formName)
+                const fd = new FormData(formName);
+                fetch('s_upLoadProImg-api.php', {
+                        method: 'POST',
+                        body: fd,
+                    }).then(r => r.json())
+                    .then(obj => {
+                        if (obj.filename) {
+                            console.log(index)
+                            const s_proDetImgBox = document.querySelectorAll('.s_proDetImgBox');
+                            const s_proDetImg = document.querySelectorAll('.s_proDetImg');
+                            // s_proImgBox.innerText = "";
+                            s_proDetImgBox[index].firstChild.src = `./s_Imgs/${obj.filename}`;
+                            s_proDetImgBox[index].firstChild.style.display = "block";
+                            s_proDetImg[index].value = obj.filename;
+                        }
+                    })
             })
         }
     })
-
-    //新增細項照片
-
-
-
 
     //新增主照片+API
     const shopTepProImg = document.querySelector("#s_tepProImg");
@@ -474,7 +489,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
     //==================自動生成各項目照片框==================
     function createproDetImgBox(a) {
-        const proDetImg = document.querySelector('#s_proDetImgBox')
+        const proDetImg = document.querySelector('#s_proDetTepImgBox')
         const formName = `s_Form2${a}`
         const theForm = document.createElement('form')
         theForm.setAttribute('name', formName)
