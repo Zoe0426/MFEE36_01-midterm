@@ -26,11 +26,10 @@ if (empty($r)) {
 }
 
 $sql2 = "SELECT * FROM `rest_c_rs` WHERE rest_sid = {$sid}";
-$a = $pdo->query($sql2)->fetch();
+$a = $pdo->query($sql2)->fetchAll(PDO::FETCH_COLUMN, 1);
 
 $sql3 = "SELECT * FROM `rest_c_rr` WHERE rest_sid = {$sid}";
-$b = $pdo->query($sql3)->fetch();
-
+$b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
 
 
 
@@ -309,16 +308,17 @@ $b = $pdo->query($sql3)->fetch();
                     <label for="" class="form-label">
                         <h3>服務項目</h3>
                     </label>
-                    <div class="d-flex ">
+                    <div class="d-flex">
                         <?php foreach ($sitems as $k => $j) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>">
+                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
                                 <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
                                     <?= $j['s_name'] ?>
                                 </label>
                             </div>
                         <?php endforeach ?>
                     </div>
+
                 </div>
 
                 <div class="mb-3 mt-3 px-3">
@@ -328,7 +328,7 @@ $b = $pdo->query($sql3)->fetch();
                     <div class="d-flex ">
                         <?php foreach ($ritems as $k => $d) : ?>
                             <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>">
+                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
                                 <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
                                     <?= $d['r_name'] ?>
                                 </label>
@@ -338,7 +338,7 @@ $b = $pdo->query($sql3)->fetch();
                 </div>
 
                 <div class="row">
-                    <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">新增餐廳</button>
+                    <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">更新資訊</button>
                 </div>
 
 </form>
@@ -381,7 +381,7 @@ $b = $pdo->query($sql3)->fetch();
             // console.log(usp.toString());
 
 
-            fetch('edit-api.php', {
+            fetch('r_update_api.php', {
                     method: 'POST',
                     body: fd, //寫這行可省略ContentType
                 }).then(r => r.json())
@@ -415,6 +415,6 @@ $b = $pdo->query($sql3)->fetch();
                 })
         }
 
-    }
-</script>
-<?php include './partsNOEDIT/html-foot.php' ?>
+    } <
+    /scrip>
+    <?php include './partsNOEDIT/html-foot.php' ?>
