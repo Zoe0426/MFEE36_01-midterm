@@ -11,7 +11,7 @@ $output = [
 
 //父表格變數
 $admin_name=isset($_POST['admin_name']) ? $_POST['admin_name'] : " ";
-$board_sid=isset($_POST['board_sid']) ? intval($_POST['board_sid']) : 0;
+$board_sid=isset($_POST['board_name']) ? intval($_POST['board_name']) : 0;
 $post_title=isset($_POST['post_title']) ? $_POST["post_title"] : " ";
 $post_content=isset($_POST['post_content']) ? $_POST["post_content"] : " ";
 

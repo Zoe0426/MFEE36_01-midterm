@@ -103,7 +103,7 @@ if ($totalRows){ //判斷符合條件的數據總數 $totalRows 是否存在，�
                         <td><?= $r['post_content'] ?></td>
                         <td><?= $r['post_date'] ?></td>
                         <td><?= $r['update_date'] ?></td>
-                        <td><a href="p_update_api.php?post_sid=<?= $r['post_sid'] ?>">
+                        <td><a href="p_list_admin_update.php?post_sid=<?= $r['post_sid'] ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </td>

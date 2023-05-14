@@ -22,7 +22,7 @@ $r_post=$stmt->fetchAll();
               <form name="form1" onsubmit="checkForm(event)">
                 <div class="mb-3">
                   <label for="admin_name">管理者名稱：</label>
-                  <select name="admin_name" id="admin_name">
+                  <select name="admin_name" id="admin_name" data-required="1">
                     <option value="Lilian">Lilian</option>
                     <option value="Jenny">Jenny</option>
                     <option value="Gabrielle">Gabrielle</option>
@@ -37,7 +37,7 @@ $r_post=$stmt->fetchAll();
                 </div> -->
                 <div class="mb-3">
                   <label for="board_name">看板：</label>
-                  <select name="board_name" id="board_name">
+                  <select name="board_name" id="board_name" data-required="1">
                    <?php foreach ($r_post as $r) : ?>
                       <option value="<?= $r['board_sid'] ?>"><?= $r['board_name'] ?></option>
                     <?php endforeach; ?>
@@ -46,7 +46,7 @@ $r_post=$stmt->fetchAll();
 
                 <div class="mb-3">
                   <label for="post_title" class="form-label">文章標題：</label>
-                  <input type="text" name="post_title" id="post_title" />
+                  <input type="text" name="post_title" id="post_title" data-required="1"/>
                 </div>
                 <div class="mb-3">
                   <label for="post_content" class="form-label">
@@ -58,6 +58,7 @@ $r_post=$stmt->fetchAll();
                     id="post_content"
                     cols="30"
                     rows="10"
+                    data-required="1"
                   ></textarea>
                 </div>
                 <!-- 這個需要隱藏，這是上傳圖片用的form -->

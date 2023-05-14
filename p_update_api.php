@@ -23,6 +23,7 @@ if(!empty($_POST['post_title']) and !empty($_POST['post_sid'])){ #若符合某�
     `board_sid`=?,
     `post_title`=?,
     `post_content`=?,
+    `update_date`=NOW()
     WHERE `post_sid`=?"; 
 
     $stmt=$pdo->prepare($sql);
@@ -34,10 +35,9 @@ if(!empty($_POST['post_title']) and !empty($_POST['post_sid'])){ #若符合某�
             $_POST['post_title'],
             $_POST['post_content'],
             $_POST['post_sid'],
-
         ]);
 
-        $output['success']=!!$stmt->rowCount();
+        $output['success']=$stmt->rowCount();
     }
 }
 header('Content-Type: application/json');
