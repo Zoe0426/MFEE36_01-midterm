@@ -8,7 +8,7 @@ $output = [
     'error' => [],
 
 ];
-$couponSid = isset($_POST['coupon']) ? $_POST['coupon'] : "";
+$couponSendSid = isset($_POST['coupon']) ? $_POST['coupon'] : "";
 $postAddress = isset($_POST['address']) ? $_POST['address'] : '';
 $member_sid = isset($_POST['member_sid']) ? $_POST['member_sid'] : '';
 $shopOrders = isset($_POST['prod']) ? $_POST['prod'] : '';
@@ -84,16 +84,16 @@ if ($actOrders) {
 //封裝所有訂單明細
 $orderDetails = array_merge($forProd, $forAct);
 //若有COUPON，去資料庫拿金額
-if ($couponSid) {
+if ($couponSendSid) {
     $sqlc =
         "SELECT ct.coupon_price
         FROM mem_coupon_send cs
         JOIN mem_coupon_type ct ON cs.coupon_sid = ct.coupon_sid
     WHERE
-        cs.coupon_sid = ?";
+        cs.couponSend_sid = ?";
 
     $stm = $pdo->prepare($sqlc);
-    $stm->execute([$couponSid]);
+    $stm->execute([$couponSendSid]);
     $couponAmount = $stm->fetchColumn();
 } else {
     $couponAmount = 0;
@@ -132,7 +132,7 @@ VALUES
 NOW(),?,NOW())";
 $stmt2 = $pdo->prepare($sqlParent);
 $stmt2->execute([
-    $new_ord_sid, $member_sid, $couponSid,
+    $new_ord_sid, $member_sid, $couponSendSid,
     $postAddress, 1, 1,
     3, $relAmount, 80,
     $couponAmount, 0, "Admin01",
@@ -167,5 +167,24 @@ foreach ($orderDetails as $o) {
     ]);
 }
 $output['createNewOrderDetails'] = !!$stmt2->rowCount();
+//更新購物車內容
+if ($output['createNewOrderDetails'] == true) {
+    foreach ($orderDetails as $o) {
+        $sqlDelCart = "UPDATE `ord_cart`
+        SET `orderStatus` = '002'
+        WHERE
+        `rel_sid` = ? AND `rel_seqNum_sid` = ?";
+        $stm4 = $pdo->prepare($sqlDelCart);
+        $stm4->execute([
+            $o['rel_sid'],
+            $o['rel_seq_sid']
+        ]);
+    }
+    $sqlDelCoupon = "UPDATE `mem_coupon_send` SET `coupon_status`=1 WHERE couponSend_sid =?;";
+    $stm5 = $pdo->prepare($sqlDelCoupon);
+    $stm5->execute([$couponSendSid]);
+}
+//
+$output['success'] = true;
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

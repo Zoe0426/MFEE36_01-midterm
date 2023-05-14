@@ -56,14 +56,41 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid">
                     </div>
                 </div>
-                <div class="priceInfo col-2 ocd"></div>
+                <div class="priceInfo col-2 ocd o-d-none"></div>
             </div>
         </div>
     </form>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
+    const oCartDisplay = document.getElementById("oCartDisplay");
+    const oPostPayDisplay = document.getElementById('oPostPayDisplay');
+
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -75,7 +102,15 @@ require './partsNOEDIT/connect-db.php' ?>
             .then(obj => {
                 console.log(obj);
                 showMemInfo(obj);
-                showCartnCou(obj);
+                if (obj.shoplist !== 'noShopItems') {
+                    showShopList(obj);
+                }
+                if (obj.actlist !== 'noActItems') {
+                    showActList(obj);
+                }
+                if (obj.coupons !== 'noCoupons') {
+                    showCoupon(obj);
+                }
                 showPostnPay(obj);
             })
             .catch(ex => {
@@ -126,7 +161,10 @@ require './partsNOEDIT/connect-db.php' ?>
                 }).then(r => r.json())
                 .then(obj => {
                     console.log(obj);
-
+                    if (obj.success == true) {
+                        oCartDisplay.innerHTML = '';
+                        oPostPayDisplay.innerHTML = '';
+                    }
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -174,11 +212,8 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tbody>
                     </table>`;
     }
-    //====顯示購物車內容及coupon
-    function showCartnCou(obj) {
-        let oCartDisplay = document.getElementById("oCartDisplay");
-
-        //===商品table 
+    //====顯示商城商品
+    function showShopList(obj) {
         let ost = document.createElement("div");
         let sData = obj.shoplist;
         let shopContent = "";
@@ -211,8 +246,9 @@ require './partsNOEDIT/connect-db.php' ?>
                 </tbody>
             </table>`;
         oCartDisplay.append(ost);
-
-        //===活動table
+    }
+    //====顯示活動
+    function showActList(obj) {
         let oat = document.createElement("div");
         let aData = obj.actlist;
         // console.log(aData);
@@ -251,8 +287,9 @@ require './partsNOEDIT/connect-db.php' ?>
                 </tbody>
             </table>`;
         oCartDisplay.append(oat);
-
-        //===優惠coupon
+    }
+    //====顯示coupon
+    function showCoupon(obj) {
         let oct = document.createElement("div");
         let cData = obj.coupons;
         // console.log(cData);
@@ -260,7 +297,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < cData.length; i++) {
             couContent +=
                 `<tr>
-                    <td> <input class="form-check-input" type="radio" value="${cData[i].coupon_sid}" name="coupon"></td>
+                    <td> <input class="form-check-input" type="radio" value="${cData[i].couponSend_sid}" name="coupon"></td>
                     <td>${cData[i].coupon_code}</td>
                     <td>${cData[i].coupon_name}</td>
                     <td>$${cData[i].coupon_price}</td>
@@ -290,8 +327,8 @@ require './partsNOEDIT/connect-db.php' ?>
         const opp = document.createElement('div');
         opp.innerHTML =
             `<div class="postInfo row g-0 pt-3">
-                <h5 class="text-secondary">寄送資訊:</h5>
-                <div class="mb-3 col-5 px-0 me-3 pt-2">
+                <h5 class="text-secondary mb-3">寄送資訊:</h5>
+                <div class="mb-3 col-5 px-0 me-3">
                     <label for="postName" class="form-label">收件人姓名</label>
                     <input type="text" class="form-control" id="postName" name="postName" value="${obj.name}">
                     <div class="form-text text-danger"></div>
@@ -314,8 +351,7 @@ require './partsNOEDIT/connect-db.php' ?>
         const oGetItemsForm = document.getElementById('oGetItemsForm');
         const send = document.createElement('div');
         send.innerHTML = `        
-        <div class="row px-4 pt-3 g-0">
-            
+        <div class="row pt-3 g-0">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
                 <button type="submit" class="btn btn-warning mx-auto">成立訂單</button>
             

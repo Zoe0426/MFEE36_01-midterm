@@ -14,7 +14,9 @@ if (!empty($_POST['searchBy'])) {
     $sbname = isset($_POST['sbname']) ? $_POST['sbname'] : null;
 
     if ($searchBy == 3) {
-        $sqlmem = "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` FROM `mem_member` WHERE `member_sid` = ? ";
+        $sqlmem =
+            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
+        FROM `mem_member` WHERE `member_sid` = ? ";
         $stm = $pdo->prepare($sqlmem);
         $stm->execute([$sbmemsid]);
         $data = $stm->fetch();
@@ -27,7 +29,9 @@ if (!empty($_POST['searchBy'])) {
     }
 
     if ($searchBy == 2) {
-        $sqlmobile = "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` FROM `mem_member` WHERE `member_mobile` = ? ";
+        $sqlmobile =
+            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
+        FROM `mem_member` WHERE `member_mobile` = ? ";
         $stm = $pdo->prepare($sqlmobile);
         $stm->execute([$sbmobile]);
         $data = $stm->fetch();
@@ -40,7 +44,9 @@ if (!empty($_POST['searchBy'])) {
     }
 
     if ($searchBy == 1) {
-        $sqlname = "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` FROM `mem_member` WHERE `member_name` = ? ";
+        $sqlname =
+            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
+        FROM `mem_member` WHERE `member_name` = ? ";
         $stm = $pdo->prepare($sqlname);
         $stm->execute([$sbname]);
         $data = $stm->fetch();
@@ -58,7 +64,7 @@ if ($mem) {
     //拿coupon資料
     $sqlCoupon = "SELECT
         cs.member_sid,
-        cs.coupon_sid,
+        cs.couponSend_sid,
         ct.coupon_code,
         ct.coupon_name,
         ct.coupon_price,
@@ -95,7 +101,7 @@ if ($mem) {
         JOIN `shop_prodet` spd ON sp.`pro_sid` = spd.`pro_sid`
         AND oc.`rel_seqNum_sid` = spd.`proDet_sid`
     WHERE
-        oc.member_sid = ?;";
+        oc.member_sid = ? AND oc.orderStatus = '001';";
 
     $stm3 = $pdo->prepare($sqlShop);
     $stm3->execute([$mem]);
@@ -123,7 +129,7 @@ if ($mem) {
         JOIN `act_group` ag ON ai.`act_sid` = ag.`act_sid`
         AND oc.`rel_seqNum_sid` = ag.`group_sid`
     WHERE
-        oc.member_sid = 'mem00001'";
+        oc.member_sid = ? AND oc.orderStatus = '001'";
 
     $stm4 = $pdo->prepare($sqlAct);
     $stm4->execute([$mem]);
