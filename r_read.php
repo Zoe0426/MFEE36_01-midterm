@@ -101,7 +101,7 @@ if ($totalRows) {
                         <td><a href="#">
                                 <i class="fa-solid fa-circle-info text-primary"></i>
                             </a></td>
-                        <td><a href="#">
+                        <td><a href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>">
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
                         </td>

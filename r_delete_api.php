@@ -14,18 +14,23 @@ if (!empty($_GET['rest_sid'])) {
 
 
 // 父表格+子表格
-$sql = "DELETE rest_info , rest_c_rr , rest_c_rs
-FROM rest_info
-LEFT JOIN `rest_c_rr` ON rest_c_rr.rest_sid = rest_info.rest_sid
-LEFT JOIN `rest_c_rs` ON rest_c_rs.rest_sid = rest_info.rest_sid
-WHERE rest_sid = $delSid";
+// $sql = "DELETE rest_info , rest_c_rr , rest_c_rs
+// FROM rest_info
+// LEFT JOIN `rest_c_rr` ON rest_c_rr.rest_sid = rest_info.rest_sid
+// LEFT JOIN `rest_c_rs` ON rest_c_rs.rest_sid = rest_info.rest_sid
+// WHERE rest_sid = $delSid";
 
 
 // 只刪除父表格
+$sql1 = "DELETE FROM rest_info WHERE rest_sid = $delSid";
+$stm1 = $pdo->query($sql1);
 
-// $sql = "DELETE FROM rest_info WHERE rest_sid = $delSid";
+$sql2 = "DELETE FROM rest_c_rr WHERE rest_sid = $delSid";
+$stm2 = $pdo->query($sql2);
 
-$stm = $pdo->query($sql);
+$sql3 = "DELETE FROM rest_c_rs WHERE rest_sid = $delSid";
+$stm3 = $pdo->query($sql3);
+
 
 $comeFrom = 'r_read.php';
 if (!empty($_SERVER['HTTP_REFERER'])) {

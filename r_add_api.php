@@ -77,8 +77,8 @@ foreach ($data1 as $value) {
 
 $data2 = $_POST['rest_rule'];
 
-$sqlChild1 = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES (?,?);";
-$stm2 = $pdo->prepare($sqlChild1);
+$sqlChild2 = "INSERT INTO rest_c_rr (`rest_sid`, `r_sid` )VALUES (?,?);";
+$stm2 = $pdo->prepare($sqlChild2);
 foreach ($data2 as $value) {
     $stm2->execute([
         $parentSid,

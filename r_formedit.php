@@ -13,6 +13,11 @@ $sitems = $pdo->query($ssql)->fetchAll();
 $rsql = "SELECT `r_sid`, `r_name` FROM `rest_rule`";
 $ritems = $pdo->query($rsql)->fetchAll();
 
+$sid = isset($_GET['rest_sid']) ? intval($_GET['rest_sid']) : 0;
+$sqll = "SELECT * FROM `rest_info` WHERE rest_sid = {$sid}";
+$r = $pdo->query($sqll)->fetch();
+
+
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
@@ -66,13 +71,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_name" class="form-label">餐廳名稱</label>
-                    <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1">
+                    <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1" value="<?= $r['rest_name'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="" class="form-label">餐廳類別</label>
                     <select class="form-select" name="catg_sid">
-                        <option value="">--請選擇餐廳類別--</option>
+                        <option value="<?= $r['catg_sid'] ?>"><?= $r['catg_sid'] ?></option>
                         <?php foreach ($items as $i) : ?>
                             <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
                         <?php endforeach ?>
@@ -89,13 +94,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_phone" class="form-label">餐廳電話</label>
-                    <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1">
+                    <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1" value="<?= $r['rest_phone'] ?>">
                     <div class="form-text"></div>
                 </div>
 
                 <div class="col-6">
                     <label for="rest_address" class="form-label">餐廳地址</label>
-                    <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1">
+                    <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1" value="<?= $r['rest_address'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
@@ -103,13 +108,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="rest_info" class="form-label">餐廳簡介</label>
-                    <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"></textarea>
+                    <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"><?= $r['rest_info'] ?></textarea>
                     <div id="rest_info" class="form-text"></div>
                 </div>
 
                 <div class="col-6">
                     <label for="rest_notice" class="form-label">注意事項</label>
-                    <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"></textarea>
+                    <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"><?= $r['rest_notice'] ?></textarea>
                     <div id="rest_notice" class="form-text"></div>
                 </div>
             </div>
@@ -130,12 +135,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="col-8">
                 <div class="col ">
                     <label for="rest_f_title" class="form-label">特色標題</label>
-                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1">
+                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1" value="<?= $r['rest_f_title'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col mt-4">
                     <label for="rest_f_ctnt" class="form-label">特色內容</label>
-                    <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字"></textarea>
+                    <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字"><?= $r['rest_f_ctnt'] ?></textarea>
                     <div id="f_content" class="form-text"></div>
                 </div>
             </div>
@@ -153,22 +158,22 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="date_start" class="form-label">開始日期</label>
-                    <input type="date" class="form-control" id="date_start" name="date_start" data-required="1">
+                    <input type="date" class="form-control" id="date_start" name="date_start" data-required="1" value="<?= $r['date_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="date_end" class="form-label">結束日期</label>
-                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1">
+                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1" value="<?= $r['date_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="p_max" class="form-label">人數上限</label>
-                    <input type="text" class="form-control" id="p_max" name="p_max" data-required="1">
+                    <input type="text" class="form-control" id="p_max" name="p_max" data-required="1" value="<?= $r['p_max'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="pt_max" class="form-label">寵物上限</label>
-                    <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1">
+                    <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1" value="<?= $r['pt_max'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
@@ -176,34 +181,34 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="m_start" class="form-label">早上開始時間</label>
-                    <input type="time" class="form-control" id="m_start" name="m_start" data-required="1">
+                    <input type="time" class="form-control" id="m_start" name="m_start" data-required="1" value="<?= $r['m_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="m_end" class="form-label">早上結束時間</label>
-                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1">
+                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1" value="<?= $r['m_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_start" class="form-label">下午開始時間</label>
-                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1">
+                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1" value="<?= $r['e_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_end" class="form-label">下午結束時間</label>
-                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1">
+                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1" value="<?= $r['e_end'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="n_start" class="form-label">晚上開始時間</label>
-                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1">
+                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1" value="<?= $r['n_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="n_end" class="form-label">晚上結束時間</label>
-                    <input type="time" class="form-control" id="n_end" name="n_end" data-required="1">
+                    <input type="time" class="form-control" id="n_end" name="n_end" data-required="1" value="<?= $r['n_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <!-- 用餐時間 -->
@@ -324,59 +329,76 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     function checkForm(event) {
-
         event.preventDefault();
+
+        const nameField = document.querySelector('#name');
+        const fields = document.querySelectorAll('form *[data-required="1"]');
+        const infoBar = document.querySelector('#infoBar');
         let isPass = true;
 
+        // for (let f of fields) {
+        //     f.style.border = '1px solid #ccc';
+        //     f.nextElementSibling.innerHTML = '';
+        // }
 
-        if (isPass) { //格式完全正確，呼叫api
-            const fd = new FormData(document.rest_form);
-            fetch('r_add_api.php', {
+
+        nameField.style.border = '1px solid #ccc';
+        nameField.nextElementSibling.innerHTML = '';
+
+        // for (let f of fields) {
+        //     if (!f.value) {
+        //         isPass = false;
+        //         f.style.border = '1px solid red';
+        //         f.nextElementSibling.innerHTML = '請輸入資料';
+        //     }
+        // }
+
+        if (nameField.value.length < 2 || !nameField.value) {
+            isPass = false;
+            nameField.style.border = '1px solid red';
+            nameField.nextElementSibling.innerHTML = '請輸入至少三個字';
+        }
+
+        if (isPass) {
+            const fd = new FormData(document.form1); //沒有外觀只有資料
+            // const usp = new URLSearchParams(fd); //裡面一定要是FormData
+            // console.log(usp.toString());
+
+
+            fetch('edit-api.php', {
                     method: 'POST',
-                    body: fd,
-                })
-                .then(r => r.json())
+                    body: fd, //寫這行可省略ContentType
+                }).then(r => r.json())
                 .then(obj => {
+                    if (obj.success) {
+                        infoBar.classList.remove('alert-danger');
+                        infoBar.classList.add('alert-success');
+                        infoBar.innerHTML = "編輯成功";
+                        infoBar.style.display = 'block';
+
+                    } else {
+                        infoBar.classList.remove('alert-success');
+                        infoBar.classList.add('alert-danger');
+                        infoBar.innerHTML = "編輯失敗";
+                        infoBar.style.display = 'block';
+                    }
+                    setTimeout(() => {
+                        infoBar.style.display = 'none';
+                    }, 2000);
+
                     console.log(obj);
-                    //obj 會拿到 api 回傳的結果，請自由使用：）
                 })
                 .catch(ex => {
                     console.log(ex);
+                    infoBar.classList.remove('alert-success');
+                    infoBar.classList.add('alert-danger');
+                    infoBar.innerHTML = "發生錯誤";
+                    setTimeout(() => {
+                        infoBar.style.display = 'none';
+                    }, 2000);
                 })
-
-        } else {
-            // 沒通過檢查
         }
+
     }
-
-
-
-
-    const tempImg = document.querySelector("#tempImg");
-
-    function restImg() {
-        //模擬點擊
-        tempImg.click();
-    }
-
-    tempImg.addEventListener("change", () => {
-        const fd = new FormData(document.rest_pic);
-        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
-                method: 'POST',
-                body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                if (obj.filename) {
-                    const imginfo = document.querySelector('#imginfo');
-                    const imginfo_f = document.querySelector('#imginfo_f');
-                    const pro_img = document.querySelector('#pro_img');
-                    imginfo.src = `./imgs/${obj.filename}`;
-                    imginfo.style.display = "block";
-                    pro_img.value = obj.filename;
-                }
-            }).catch(ex => {
-                console.log(ex)
-            })
-    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
