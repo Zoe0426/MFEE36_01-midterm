@@ -8,14 +8,14 @@ $output = [
     'error' => [],
 
 ];
+$couponSid = isset($_POST['coupon']) ? $_POST['coupon'] : "";
 $postAddress = isset($_POST['address']) ? $_POST['address'] : '';
 $member_sid = isset($_POST['member_sid']) ? $_POST['member_sid'] : '';
 $shopOrders = isset($_POST['prod']) ? $_POST['prod'] : '';
 $actOrders = isset($_POST['act']) ? $_POST['act'] : '';
 //商城-若有商城資料，取DB的金額*數量，封裝Order_detail的資料陣列。
-
-if ($_POST['prod']) {
-    $forProd = [];
+$forProd = [];
+if ($shopOrders) {
     foreach ($shopOrders as $d) {
         $dParsed =  urldecode($d);
         $dDataget = json_decode($dParsed, true);
@@ -46,11 +46,10 @@ if ($_POST['prod']) {
         $sResult['childQty'] = null;
         $forProd[] = $sResult;
     }
-    // $output['forProd'] = $forProd;
 }
 //商城-若有活動資料，取DB的金額*人數量，封裝Order_detail的資料陣列。
-if ($_POST['act']) {
-    $forAct = [];
+$forAct = [];
+if ($actOrders) {
     foreach ($actOrders as $a) {
         $aParsed =  urldecode($a);
         $aDataget = json_decode($aParsed, true);
@@ -81,14 +80,11 @@ if ($_POST['act']) {
         $aResult['relType'] = 'act';
         $forAct[] = $aResult;
     }
-    // $output['forAct'] = $forAct;
 }
 //封裝所有訂單明細
 $orderDetails = array_merge($forProd, $forAct);
-
-$couponSid = isset($_POST['coupon']) ? $_POST['coupon'] : "";
 //若有COUPON，去資料庫拿金額
-if ($_POST['coupon']) {
+if ($couponSid) {
     $sqlc =
         "SELECT ct.coupon_price
         FROM mem_coupon_send cs
@@ -99,17 +95,14 @@ if ($_POST['coupon']) {
     $stm = $pdo->prepare($sqlc);
     $stm->execute([$couponSid]);
     $couponAmount = $stm->fetchColumn();
+} else {
+    $couponAmount = 0;
 }
 //
 $relAmount = 0;
 foreach ($orderDetails as $o) {
     $relAmount += intval($o['amount']);
 }
-$output['couponPrice'] = $couponAmount;
-$output['relAmount'] = $relAmount;
-$output['member_sid'] = $member_sid;
-$output['orderDetails'] = $orderDetails;
-
 
 //===========CREATE ORDER===========
 
@@ -145,7 +138,7 @@ $stmt2->execute([
     $couponAmount, 0, "Admin01",
     null
 ]);
-
+$output['createNewOrder'] = !!$stmt2->rowCount();
 //====加到子表格====
 
 //所有訂單明細
@@ -173,9 +166,6 @@ foreach ($orderDetails as $o) {
         $o['amount']
     ]);
 }
-
-
-
-// print_r($shopOrders);
+$output['createNewOrderDetails'] = !!$stmt2->rowCount();
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

@@ -14,6 +14,12 @@ require './partsNOEDIT/connect-db.php' ?>
     .o-d-none {
         display: none;
     }
+
+    .priceInfo {
+        position: sticky;
+        top: 100px;
+        height: 250px;
+    }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container pt-4">
@@ -50,19 +56,15 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid">
                     </div>
                 </div>
+                <div class="priceInfo col-2 ocd"></div>
             </div>
         </div>
-        <div class="row px-4">
-            <div class="alert alert-danger text-center" role="alert" id="oInfoBar"></div>
-            <button type="submit" class="btn btn-warning ">成立訂單</button>
-        </div>
-
     </form>
 </div>
-</div>
+
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    // ====拿XX會員的個人資料,購物車內容,及coupon====
+    // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
         const fd = new FormData(document.getElementById('oGetmem'));
@@ -80,7 +82,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 console.log(ex);
             })
     }
-    // ====成立訂單====
+    // ====CREATE ORDER====
     function createOrder(e) {
         e.preventDefault();
         let isPass = true;
@@ -92,18 +94,28 @@ require './partsNOEDIT/connect-db.php' ?>
         let acts = newodfd.getAll("act[]").length;
         if (prods === 0 && acts === 0) {
             isPass = false;
-            console.log("ispass false")
-            console.log(oInfoBar);
+            oInfoBar.style.display = "block";
             oInfoBar.innerHTML = "請選擇至少一件商品或活動";
+            setTimeout(() => {
+                oInfoBar.style.display = "none";
+            }, 3000);
         }
 
         let postFormInputs = document.querySelectorAll(".postInfo input");
         for (let i of postFormInputs) {
             if ((i.value).trim() === '') {
                 isPass = false;
-                i.style.border = '1px solid #ccc';
+                i.style.border = '1px solid red';
+                console.log(i);
+                i.style.display = 'block';
+                i.nextElementSibling.display = "block";
                 i.nextElementSibling.innerHTML = '此欄位必需填寫';
                 oInfoBar.innerHTML = '寄送資訊欄位不可空白';
+                setTimeout(() => {
+                    i.style.border = "1px solid #ccc";
+                    i.nextElementSibling.innerHTML = '';
+                    i.nextElementSibling.display = "none";
+                }, 3000);
             }
         }
 
@@ -137,39 +149,6 @@ require './partsNOEDIT/connect-db.php' ?>
             sbmobile.style.display = "block";
         } else if (sb === "3") {
             sbmemsid.style.display = "block";
-        }
-    }
-    //====選擇所有商品====
-    function selectAllProducts() {
-        // console.log('clicked');
-        const shopAllCheckbox = document.querySelector('input[name="shopAll"]');
-        // console.log(shopAllCheckbox);
-        const prodCheckboxes = document.querySelectorAll('input[name="prod[]"]');
-        // console.log(prodCheckboxes);
-        if (shopAllCheckbox.checked) {
-            prodCheckboxes.forEach((checkbox) => {
-                checkbox.checked = true;
-            });
-        } else {
-            prodCheckboxes.forEach((checkbox) => {
-                checkbox.checked = false;
-            });
-        }
-    }
-    //====選擇所有活動====
-    function selectAllActs() {
-        console.log('clicked');
-        const actAllCheckbox = document.querySelector('input[name="actAll"]');
-        const actCheckboxes = document.querySelectorAll('input[name="act[]"]');
-
-        if (actAllCheckbox.checked) {
-            actCheckboxes.forEach((checkbox) => {
-                checkbox.checked = true;
-            });
-        } else {
-            actCheckboxes.forEach((checkbox) => {
-                checkbox.checked = false;
-            });
         }
     }
     //====顯示會員資料====
@@ -310,31 +289,72 @@ require './partsNOEDIT/connect-db.php' ?>
         const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
         const opp = document.createElement('div');
         opp.innerHTML =
-            `<div class="postInfo row g-0 ">
-                <div class="mb-3 col-4 px-0 me-3">
-                    <label for="postName" class="form-label">收件人姓名：</label>
-                    <input type="text" class="form-control" id="postName" name="postName" value="">
-                    <div class="form-text d-none"></div>
+            `<div class="postInfo row g-0 pt-3">
+                <h5 class="text-secondary">寄送資訊:</h5>
+                <div class="mb-3 col-5 px-0 me-3 pt-2">
+                    <label for="postName" class="form-label">收件人姓名</label>
+                    <input type="text" class="form-control" id="postName" name="postName" value="${obj.name}">
+                    <div class="form-text text-danger"></div>
                 </div>
-                <div class="mb-3 col-4 me-3">
-                    <label for="postMob" class="form-label">手機號碼：</label>
-                    <input type="text" class="form-control" id="postMob" name="postMobile" value="">
-                    <div class="form-text d-none"></div>
+                <div class="mb-3 col-5 me-3">
+                    <label for="postMob" class="form-label">手機號碼</label>
+                    <input type="text" class="form-control" id="postMob" name="postMobile" value="${obj.mobile}">
+                    <div class="form-text text-danger"></div>
                 </div>
                 <div class="mb-3 col-10">
-                    <label for="address" class="form-label">寄送地址：</label>
+                    <label for="address" class="form-label">寄送地址</label>
                     <input type="text" class="form-control" id="address" name="address" value="">
-                    <div class="form-text d-none"></div>
+                    <div class="form-text text-danger"></div>
                 </div>
                 <input type="text" name="member_sid" class="o-d-none" value="${obj.sid}">
             </div>`;
         oPostPayDisplay.classList.add("ocd");
         oPostPayDisplay.classList.add("p");
         oPostPayDisplay.append(opp);
+        const oGetItemsForm = document.getElementById('oGetItemsForm');
+        const send = document.createElement('div');
+        send.innerHTML = `        
+        <div class="row px-4 pt-3 g-0">
+            
+                <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
+                <button type="submit" class="btn btn-warning mx-auto">成立訂單</button>
+            
+        </div>`;
+        oGetItemsForm.append(send);
 
+    }
+    //====選擇所有商品====
+    function selectAllProducts() {
+        // console.log('clicked');
+        const shopAllCheckbox = document.querySelector('input[name="shopAll"]');
+        // console.log(shopAllCheckbox);
+        const prodCheckboxes = document.querySelectorAll('input[name="prod[]"]');
+        // console.log(prodCheckboxes);
+        if (shopAllCheckbox.checked) {
+            prodCheckboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
+        } else {
+            prodCheckboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+        }
+    }
+    //====選擇所有活動====
+    function selectAllActs() {
+        console.log('clicked');
+        const actAllCheckbox = document.querySelector('input[name="actAll"]');
+        const actCheckboxes = document.querySelectorAll('input[name="act[]"]');
 
-        // document.querySelector('#oGetItemsForm')
-
+        if (actAllCheckbox.checked) {
+            actCheckboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
+        } else {
+            actCheckboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+        }
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
