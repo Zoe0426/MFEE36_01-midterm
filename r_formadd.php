@@ -317,6 +317,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 </div>
 
                 <div class="row">
+                    <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
                     <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">新增餐廳</button>
                 </div>
 
@@ -324,7 +325,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     function checkForm(event) {
-
+        const infoBar = document.querySelector('#infoBar');
         event.preventDefault();
         let isPass = true;
 

@@ -338,6 +338,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 </div>
 
                 <div class="row">
+                    <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
                     <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">更新資訊</button>
                 </div>
 
@@ -347,7 +348,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
     function checkForm(event) {
         event.preventDefault();
 
-        const nameField = document.querySelector('#name');
+
         const fields = document.querySelectorAll('form *[data-required="1"]');
         const infoBar = document.querySelector('#infoBar');
         let isPass = true;
@@ -358,8 +359,8 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
         // }
 
 
-        nameField.style.border = '1px solid #ccc';
-        nameField.nextElementSibling.innerHTML = '';
+        // nameField.style.border = '1px solid #ccc';
+        // nameField.nextElementSibling.innerHTML = '';
 
         // for (let f of fields) {
         //     if (!f.value) {
@@ -369,11 +370,11 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
         //     }
         // }
 
-        if (nameField.value.length < 2 || !nameField.value) {
-            isPass = false;
-            nameField.style.border = '1px solid red';
-            nameField.nextElementSibling.innerHTML = '請輸入至少三個字';
-        }
+        // if (nameField.value.length < 2 || !nameField.value) {
+        //     isPass = false;
+        //     nameField.style.border = '1px solid red';
+        //     nameField.nextElementSibling.innerHTML = '請輸入至少三個字';
+        // }
 
         if (isPass) {
             const fd = new FormData(document.form1); //沒有外觀只有資料
@@ -383,7 +384,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
 
             fetch('r_update_api.php', {
                     method: 'POST',
-                    body: fd, //寫這行可省略ContentType
+                    body: fd,
                 }).then(r => r.json())
                 .then(obj => {
                     if (obj.success) {
@@ -415,6 +416,6 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 })
         }
 
-    } <
-    /scrip>
-    <?php include './partsNOEDIT/html-foot.php' ?>
+    }
+</script>
+<?php include './partsNOEDIT/html-foot.php' ?>
