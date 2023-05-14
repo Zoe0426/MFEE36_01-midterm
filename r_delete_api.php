@@ -30,7 +30,11 @@ WHERE rest_sid = $delSid";
 
 $stm = $pdo->query($sql);
 
-# 待加： 確認刪除成功，更改success訊息
+$comeFrom = 'r_read.php';
+if (!empty($_SERVER['HTTP_REFERER'])) {
+    $comeFrom = $_SERVER['HTTP_REFERER'];
+}
 
-header('Content-Type: application/json');
-echo json_encode($output, JSON_UNESCAPED_UNICODE);
+
+header('Location: ' . $comeFrom);
+# 待加： 確認刪除成功，更改success訊息

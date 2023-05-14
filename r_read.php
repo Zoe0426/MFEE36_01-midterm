@@ -81,7 +81,7 @@ if ($totalRows) {
                     <th scope="col">早上開始時間</th>
                     <th scope="col">晚上結束時間</th>
                     <th scope="col">人數上限</th>
-                    <th scope="col">寵物上限</th>
+                    <th scope="col">詳細資訊</th>
                     <th scope="col">編輯</th>
                     <th scope="col">刪除</th>
                 </tr>
@@ -98,14 +98,17 @@ if ($totalRows) {
                         <td><?= $r['m_start'] ?></td>
                         <td><?= $r['n_end'] ?></td>
                         <td><?= $r['p_max'] ?></td>
-                        <td><?= $r['pt_max'] ?></td>
+                        <td><a href="#">
+                                <i class="fa-solid fa-circle-info text-primary"></i>
+                            </a></td>
                         <td><a href="#">
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
                         </td>
-                        <td><a href="#">
+                        <td><a href="javascript: delete_it(<?= $r['rest_sid'] ?>)">
                                 <i class="fa-solid fa-trash-can text-danger"></i>
                             </a></td>
+
                     </tr>
                 <?php endforeach; ?>
 
@@ -148,6 +151,10 @@ if ($totalRows) {
 </div>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-
+    function delete_it(sid) {
+        if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
+            location.href = 'r_delete_api.php?sid=' + sid;
+        }
+    }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

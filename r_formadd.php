@@ -26,9 +26,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
         /* 設計自己要放的照片框框 */
         border-radius: 6px;
         height: 280px;
-        border: 3px dotted lightgray;
-        background: #f5f5f5;
-
+        border: 2px dotted lightgray;
+        padding: 0;
     }
 
     #imginfo {
@@ -37,7 +36,6 @@ $ritems = $pdo->query($rsql)->fetchAll();
         height: 100%;
         object-fit: cover;
         display: none;
-        position: absolute;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -57,158 +55,159 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <h3 class="mb-4">基本資料</h3>
         <!-- 圖片區 -->
         <div class="row mb-4 px-3">
-            <div class="col-3" onclick="restImg()" id="finalImg">
+            <!-- <div class="col-3" onclick="restImg()" id="finalImg">
                 <img src="" alt="" id="imginfo">
 
             </div>
             <input type="text" name="pro_img" id="pro_img">
-        </div>
+        </div> -->
 
-        <!-- 資料區 -->
-        <div class="row mb-4">
-            <div class="col-6">
-                <label for="rest_name" class="form-label">餐廳名稱</label>
-                <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="" class="form-label">餐廳類別</label>
-                <select class="form-select" name="catg_sid">
-                    <option value="">--請選擇餐廳類別--</option>
-                    <?php foreach ($items as $i) : ?>
-                        <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="col-3">
+            <!-- 資料區 -->
+            <div class="row mb-4">
+                <div class="col-6">
+                    <label for="rest_name" class="form-label">餐廳名稱</label>
+                    <input type="text" class="form-control" id="rest_name" name="rest_name" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">餐廳類別</label>
+                    <select class="form-select" name="catg_sid">
+                        <option value="">--請選擇餐廳類別--</option>
+                        <?php foreach ($items as $i) : ?>
+                            <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <!-- <div class="col-3">
                 <label for="rest_menu" class="form-label">菜單上傳</label>
                 <div class="input-group mb-3">
                     <input type="file" class="form-control" id="inputGroupFile01" name="rest_menu">
                 </div>
+            </div> -->
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-6">
+                    <label for="rest_phone" class="form-label">餐廳電話</label>
+                    <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+
+                <div class="col-6">
+                    <label for="rest_address" class="form-label">餐廳地址</label>
+                    <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-6">
+                    <label for="rest_info" class="form-label">餐廳簡介</label>
+                    <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"></textarea>
+                    <div id="rest_info" class="form-text"></div>
+                </div>
+
+                <div class="col-6">
+                    <label for="rest_notice" class="form-label">注意事項</label>
+                    <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"></textarea>
+                    <div id="rest_notice" class="form-text"></div>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-6">
-                <label for="rest_phone" class="form-label">餐廳電話</label>
-                <input type="text" class="form-control" id="rest_phone" name="rest_phone" data-required="1">
-                <div class="form-text"></div>
-            </div>
-
-            <div class="col-6">
-                <label for="rest_address" class="form-label">餐廳地址</label>
-                <input type="text" class="form-control" id="rest_address" name="rest_address" data-required="1">
-                <div class="form-text"></div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-6">
-                <label for="rest_info" class="form-label">餐廳簡介</label>
-                <textarea class="form-control" id="rest_info" name="rest_info" placeholder="最多150字" data-required="1"></textarea>
-                <div id="rest_info" class="form-text"></div>
-            </div>
-
-            <div class="col-6">
-                <label for="rest_notice" class="form-label">注意事項</label>
-                <textarea class="form-control" id="rest_notice" name="rest_notice" placeholder="最多150字"></textarea>
-                <div id="rest_notice" class="form-text"></div>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-    <!-- 餐廳特色 -->
-    <div class="row px-3">
-        <div class="col-4">
+        <hr>
+        <!-- 餐廳特色 -->
+        <div class="row px-3">
+            <h3 class="mb-4">餐廳特色</h3>
+            <!-- <div class="col-4">
             <label for="f_pic" class="form-label">特色圖片</label>
             <div onclick="restImg()" id="finalImg">
                 <img src="" alt="" id="imginfo">
 
             </div>
             <input type="text" name="pro_img" id="pro_img">
-        </div>
-        <div class="col-8">
-            <div class="col mt-5 pt-4">
-                <label for="rest_f_title" class="form-label">特色標題</label>
-                <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col mt-4">
-                <label for="rest_f_ctnt" class="form-label">特色內容</label>
-                <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字"></textarea>
-                <div id="f_content" class="form-text"></div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <hr>
-    <!-- 營業設定 -->
-
-    <div class="px-3 mb-4">
-        <h3 class="mb-4">營業設定</h3>
-
-        <!-- 資料區 -->
-        <div class="row mb-4">
-            <div class="col-3">
-                <label for="date_start" class="form-label">開始日期</label>
-                <input type="date" class="form-control" id="date_start" name="date_start" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="date_end" class="form-label">結束日期</label>
-                <input type="date" class="form-control" id="date_end" name="date_end" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="p_max" class="form-label">人數上限</label>
-                <input type="text" class="form-control" id="p_max" name="p_max" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="pt_max" class="form-label">寵物上限</label>
-                <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1">
-                <div class="form-text"></div>
+        </div> -->
+            <div class="col-8">
+                <div class="col ">
+                    <label for="rest_f_title" class="form-label">特色標題</label>
+                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col mt-4">
+                    <label for="rest_f_ctnt" class="form-label">特色內容</label>
+                    <textarea class="form-control" id="rest_f_ctnt" name="rest_f_ctnt" placeholder="最多150字"></textarea>
+                    <div id="f_content" class="form-text"></div>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-3">
-                <label for="m_start" class="form-label">早上開始時間</label>
-                <input type="time" class="form-control" id="m_start" name="m_start" data-required="1">
-                <div class="form-text"></div>
+
+
+        <hr>
+        <!-- 營業設定 -->
+
+        <div class="px-3 mb-4">
+            <h3 class="mb-4">營業設定</h3>
+
+            <!-- 資料區 -->
+            <div class="row mb-4">
+                <div class="col-3">
+                    <label for="date_start" class="form-label">開始日期</label>
+                    <input type="date" class="form-control" id="date_start" name="date_start" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="date_end" class="form-label">結束日期</label>
+                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="p_max" class="form-label">人數上限</label>
+                    <input type="text" class="form-control" id="p_max" name="p_max" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="pt_max" class="form-label">寵物上限</label>
+                    <input type="text" class="form-control" id="pt_max" name="pt_max" data-required="1">
+                    <div class="form-text"></div>
+                </div>
             </div>
-            <div class="col-3">
-                <label for="m_end" class="form-label">早上結束時間</label>
-                <input type="time" class="form-control" id="m_end" name="m_end" data-required="1">
-                <div class="form-text"></div>
+
+            <div class="row mb-4">
+                <div class="col-3">
+                    <label for="m_start" class="form-label">早上開始時間</label>
+                    <input type="time" class="form-control" id="m_start" name="m_start" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="m_end" class="form-label">早上結束時間</label>
+                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="e_start" class="form-label">下午開始時間</label>
+                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="e_end" class="form-label">下午結束時間</label>
+                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1">
+                    <div class="form-text"></div>
+                </div>
             </div>
-            <div class="col-3">
-                <label for="e_start" class="form-label">下午開始時間</label>
-                <input type="time" class="form-control" id="e_start" name="e_start" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="e_end" class="form-label">下午結束時間</label>
-                <input type="time" class="form-control" id="e_end" name="e_end" data-required="1">
-                <div class="form-text"></div>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-3">
-                <label for="n_start" class="form-label">晚上開始時間</label>
-                <input type="time" class="form-control" id="n_start" name="n_start" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <div class="col-3">
-                <label for="n_end" class="form-label">晚上結束時間</label>
-                <input type="time" class="form-control" id="n_end" name="n_end" data-required="1">
-                <div class="form-text"></div>
-            </div>
-            <!-- 用餐時間 -->
-            <div class="col-6 ">
+            <div class="row mb-4">
+                <div class="col-3">
+                    <label for="n_start" class="form-label">晚上開始時間</label>
+                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <div class="col-3">
+                    <label for="n_end" class="form-label">晚上結束時間</label>
+                    <input type="time" class="form-control" id="n_end" name="n_end" data-required="1">
+                    <div class="form-text"></div>
+                </div>
+                <!-- 用餐時間 -->
+                <!-- <div class="col-6 ">
                 <label for="" class="form-label">用餐時間</label>
                 <div class="d-flex">
                     <div class=" form-check me-5">
@@ -231,9 +230,9 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 星期幾 -->
-        <div class="row mt-4">
+        </div> -->
+                <!-- 星期幾 -->
+                <!-- <div class="row mt-4">
             <label for="" class="form-label">星期幾</label>
             <div class="d-flex">
                 <div class="form-check me-5">
@@ -280,45 +279,46 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 </div>
             </div>
         </div>
-    </div>
-    <hr>
+    </div> -->
+                <!-- <hr> -->
 
-    <!-- 服務/規範 -->
-
-    <div class="mt-3 px-3 mb-4">
-        <label for="" class="form-label">
-            <h3>服務項目</h3>
-        </label>
-        <div class="d-flex ">
-            <?php foreach ($sitems as $k => $j) : ?>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc" id="rest_svc<?= $j['s_sid'] ?>">
-                    <label class="form-check-label" for="rest_service<?= $j['s_sid'] ?>">
-                        <?= $j['s_name'] ?>
+                <!-- 服務/規範 -->
+                <!-- 
+                <div class="mt-3 px-3 mb-4">
+                    <label for="" class="form-label">
+                        <h3>服務項目</h3>
                     </label>
+                    <div class="d-flex ">
+                        <?php foreach ($sitems as $k => $j) : ?>
+                            <div class="form-check me-5">
+                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc" id="rest_svc<?= $j['s_sid'] ?>">
+                                <label class="form-check-label" for="rest_service<?= $j['s_sid'] ?>">
+                                    <?= $j['s_name'] ?>
+                                </label>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
                 </div>
-            <?php endforeach ?>
-        </div>
-    </div>
 
-    <div class="mb-3 mt-3 px-3">
-        <label for="" class="form-label">
-            <h3>攜帶規則</h3>
-        </label>
-        <div class="d-flex ">
-            <?php foreach ($ritems as $k => $r) : ?>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule" id="rest_rule<?= $r['r_sid'] ?>">
-                    <label class="form-check-label" for="rest_rule<?= $r['r_sid'] ?>">
-                        <?= $r['r_name'] ?>
+                <div class="mb-3 mt-3 px-3">
+                    <label for="" class="form-label">
+                        <h3>攜帶規則</h3>
                     </label>
+                    <div class="d-flex ">
+                        <?php foreach ($ritems as $k => $r) : ?>
+                            <div class="form-check me-5">
+                                <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule" id="rest_rule<?= $r['r_sid'] ?>">
+                                <label class="form-check-label" for="rest_rule<?= $r['r_sid'] ?>">
+                                    <?= $r['r_name'] ?>
+                                </label>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div> -->
+
+                <div class="row">
+                    <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">新增餐廳</button>
                 </div>
-            <?php endforeach ?>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-4 mb-4">新增餐廳</button>
-
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>
@@ -352,31 +352,31 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
 
 
-    // const tempImg = document.querySelector("#tempImg");
+    const tempImg = document.querySelector("#tempImg");
 
-    // function restImg() {
-    //     //模擬點擊
-    //     tempImg.click();
-    // }
+    function restImg() {
+        //模擬點擊
+        tempImg.click();
+    }
 
-    // tempImg.addEventListener("change", () => {
-    //     const fd = new FormData(document.rest_pic);
-    //     fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
-    //             method: 'POST',
-    //             body: fd,
-    //         }).then(r => r.json())
-    //         .then(obj => {
-    //             if (obj.filename) {
-    //                 //這邊怪怪的
-    //                 const finalImg = document.querySelector('#finalImg');
-    //                 const pro_img = document.querySelector('#pro_img');
-    //                 finalImg.firstChild.src = `./imgs/${obj.filename}`;
-    //                 finalImg.firstChild.style.display = "block";
-    //                 pro_img.value = obj.filename;
-    //             }
-    //         }).catch(ex => {
-    //             console.log(ex)
-    //         })
-    // })
+    tempImg.addEventListener("change", () => {
+        const fd = new FormData(document.rest_pic);
+        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
+                method: 'POST',
+                body: fd,
+            }).then(r => r.json())
+            .then(obj => {
+                if (obj.filename) {
+                    const imginfo = document.querySelector('#imginfo');
+                    const imginfo_f = document.querySelector('#imginfo_f');
+                    const pro_img = document.querySelector('#pro_img');
+                    imginfo.src = `./imgs/${obj.filename}`;
+                    imginfo.style.display = "block";
+                    pro_img.value = obj.filename;
+                }
+            }).catch(ex => {
+                console.log(ex)
+            })
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
