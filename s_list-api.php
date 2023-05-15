@@ -22,7 +22,7 @@ if ($totalRows) {
     };
     $sql = sprintf('SELECT * FROM `shop_proDet` pd
     JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
+    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 ORDER BY p.`pro_update` DESC LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 };
 // header('Content-Type: application/json');
