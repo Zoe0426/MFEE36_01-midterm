@@ -33,6 +33,7 @@
             position: fixed;
             top: 72px;
             z-index: 99;
+            z-index: 99;
         }
 
         .content {
