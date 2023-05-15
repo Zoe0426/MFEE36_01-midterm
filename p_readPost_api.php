@@ -38,42 +38,79 @@ if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，
 // // 最終通過 echo 函數將 JSON 格式的數據字符串返回給前端網頁。
 ?>
 
+<!-- 下拉列表 -->
+<?php
+$sql_post = "SELECT * FROM `post_board`";
+$stmt = $pdo->query($sql_post);
+$r_post = $stmt->fetchAll();
+
+?>
+
 <?php include './partsNOEDIT/html-head.php' ?>
+<style>
+    .p_readHead {
+        display: flex;
+    }
+
+    .p_page {
+        margin: 10px;
+    }
+
+    .p_search {
+        margin: 10px;
+        margin-top: 15px;
+    }
+</style>
+
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container">
-    <div class="row">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=1">
-                        <i class="fa-solid fa-angles-left"></i>
-                    </a>
-                </li>
-                <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $page - 1 ?>">
-                        <i class="fa-solid fa-angle-left"></i>
-                    </a>
-                </li>
-                <?php for ($i = $page - 5; $i <= $page + 5; $i++) :
-                    if ($i >= 1 and $i <= $totalPages) :
-                ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                            <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                <?php endif;
-                endfor; ?>
-                <li class="page-item <?= $totalPages == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $page + 1 ?>">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </a>
-                </li>
-                <li class="page-item <?= $totalPages == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $totalPages ?>">
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <div class="p_readHead">
+        <div class="row p_page">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=1">
+                            <i class="fa-solid fa-angles-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <?php for ($i = $page - 5; $i <= $page + 5; $i++) :
+                        if ($i >= 1 and $i <= $totalPages) :
+                    ?>
+                            <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                    <?php endif;
+                    endfor; ?>
+                    <li class="page-item <?= $totalPages == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item <?= $totalPages == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $totalPages ?>">
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="p_search">
+            <!-- 搜尋篩選 -->
+            <label for="board_name">看板名稱：</label>
+            <select name="board_name" id="board_name" data-required="1">
+                <option selected value="--請選擇--">--請選擇--</option>
+                <?php foreach ($r_post as $r) : ?>
+                    <option value="<?= $r['board_sid'] ?>"><?= $r['board_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
     </div>
     <div class="row">
         <table class="table table-bordered table-striped">
