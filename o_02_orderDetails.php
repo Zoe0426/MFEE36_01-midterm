@@ -41,7 +41,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
     <div class="row">
         <div class="col-12 pt-3" id="oOrdersTable">
-            <table class="table table-striped ocd">
+            <!-- <table class="table table-striped ocd">
                 <thead>
                     <tr>
                         <th scope="col">訂單編號</th>
@@ -66,7 +66,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td><i class="fa-regular fa-pen-to-square"></i></td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
         </div>
 
     </div>
@@ -75,6 +75,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
+    const oOrdersTable = document.getElementById('oOrdersTable');
     // ====取得訂單資料====
     function getMemOrd(e) {
         e.preventDefault();
@@ -90,7 +91,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     body: fd,
                 }).then(r => r.json())
                 .then(obj => {
-                    if (obj.getby === 'orderSid') {
+                    console.log(obj.getBy);
+                    if (obj.getBy == 'orderSid') {
                         // console.log("getby Order");
                         tableByOrderSid(obj);
                     } else {
@@ -154,6 +156,50 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     // ====顯示指定訂單
     function tableByOrderSid(obj) {
+        console.log('display');
+        const orderSidTable = document.createElement('div');
+        let orderStatus = "";
+        let post_Status = "";
+        obj.order_status == 0 ? orderStatus = "未付款" : orderStatus = "已付款";
+
+        if (obj.postStatus == 0) {
+            post_Status = '已領取';
+        } else if (obj.postStatus == 1) {
+            post_Status = '備貨中';
+        } else if (obj.postStatus == 2) {
+            post_Status = '運送中';
+        } else if (obj.postStatus == 3) {
+            post_Status = '貨到超商';
+        } else if (obj.postStatus == 4) {
+            post_Status = '未領取';
+        }
+        orderSidTable.innerHTML = `<table class="table table-striped ocd">
+                <thead>
+                    <tr>
+                        <th scope="col">訂單編號</th>
+                        <th scope="col">會員編號</th>
+                        <th scope="col">訂單狀態</th>
+                        <th scope="col">優惠券編號</th>
+                        <th scope="col">寄送方式</th>
+                        <th scope="col">寄送狀態</th>
+                        <th scope="col">訂單成立時間</th>
+                        <th scope="col"><i class="fa-regular fa-pen-to-square"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">${obj.order_sid}</th>
+                        <td>${obj.sid}</td>
+                        <td>${obj.order_sid}</td>
+                        <td>${orderStatus}</td>
+                        <td>${obj.coupon_sid}</td>
+                        <td>${post_Status}</td>
+                        <td>${obj.createDt}</td>
+                        <td><i class="fa-regular fa-pen-to-square text-success"></i></td>
+                    </tr>
+                </tbody>
+            </table>`;
+        oOrdersTable.append(orderSidTable);
 
     }
     // ====顯示某員的所有訂單
