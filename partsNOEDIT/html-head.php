@@ -25,12 +25,15 @@
         .navbar {
             top: 0;
             width: 100%;
+            z-index: 99;
         }
 
         .sidebar {
             width: 250px;
             position: fixed;
             top: 72px;
+            z-index: 99;
+            z-index: 99;
         }
 
         .content {
