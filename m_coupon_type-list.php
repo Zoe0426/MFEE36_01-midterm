@@ -30,7 +30,7 @@ $rows = $pdo->query($sql)->fetchAll();
             <tbody>
                 <?php foreach ($rows as $r) : ?>
                     <tr>
-                        <td><a href="javascript: delete_it(<?= $r['coupon_sid'] ?>)">
+                        <td><a href="javascript: delete_it('<?= $r['coupon_sid'] ?>')">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
                         </td>
@@ -56,7 +56,7 @@ $rows = $pdo->query($sql)->fetchAll();
 <script>
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'delete.php?sid=' + sid;
+            location.href = 'm_coupon_type_delete.php?coupon_sid=' + sid;
         }
 
     }
@@ -65,10 +65,5 @@ $rows = $pdo->query($sql)->fetchAll();
     toCouponAdd_php.addEventListener("click", function() {
         location.href = 'm_coupon_type_add.php';
     })
-
-    // const toCouponEdit_php = document.querySelectorAll(".coupon_type_edit");
-    // toCouponEdit_php.addEventListener("click", function() {
-    //     location.href = 'm_coupon_type_update.php';
-    // })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

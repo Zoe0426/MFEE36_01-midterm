@@ -8,10 +8,7 @@ $stmt->bindValue(':sid', $sid, PDO::PARAM_STR);
 $stmt->execute();
 $r = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (empty($r)) {
-    header("Location: list.php");
-    exit;
-}
+
 
 ?>
 
