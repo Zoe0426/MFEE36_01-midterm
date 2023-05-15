@@ -38,6 +38,8 @@ $stmt = $pdo->prepare($sqlParent);
 $weeklyString = implode(',', $_POST['weekly']);
 
 
+$isPass = true;
+
 $stmt->execute([
     $_POST['rest_name'],
     $_POST['catg_sid'],
@@ -89,6 +91,7 @@ foreach ($data2 as $value) {
         $value,
     ]);
 }
+
 
 
 header('Content-Type: application/json');

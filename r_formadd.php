@@ -127,7 +127,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             <div class="col-8">
                 <div class="col ">
                     <label for="rest_f_title" class="form-label">特色標題</label>
-                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1">
+                    <input type="text" class="form-control" id="rest_f_title" name="rest_f_title">
                     <div class="form-text"></div>
                 </div>
                 <div class="col mt-4">
@@ -321,10 +321,25 @@ $ritems = $pdo->query($rsql)->fetchAll();
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
+    const name = querySelector('#rest_name');
+    const phone = querySelector('#rest_phone');
+    const address = querySelector('#rest_address');
+    const info = querySelector('#rest_info');
+    const date_start = querySelector('#date_start');
+    const date_end = querySelector('#date_end');
+    const p_max = querySelector('#p_max');
+    const pt_max = querySelector('#pt_max');
+    const m_start = querySelector('#m_start');
+    const n_end = querySelector('#n_end');
+
+
+
+
     function checkForm(event) {
         const infoBar = document.querySelector('#infoBar');
         event.preventDefault();
         let isPass = true;
+
 
 
         const fd = new FormData(document.rest_form);
@@ -334,6 +349,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             })
             .then(r => r.json())
             .then(obj => {
+
                 setTimeout(() => {
                     location.href = 'r_read.php';
                 }, 2000);

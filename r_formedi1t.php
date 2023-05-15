@@ -239,95 +239,95 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 </div>
             </div>
             <!-- 星期幾 -->
-            <!-- <div class="row mt-4">
+            <div class="row mt-4">
                 <label for="" class="form-label">星期幾</label>
                 <div class="d-flex">
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('0', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]" <?php if (in_array('0', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="sunday">
                             星期日
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="1" id="monday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('1', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="1" id="monday" name="weekly[]" <?php if (in_array('1', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="monday">
                             星期一
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('2', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]" <?php if (in_array('2', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="tuesday">
                             星期二
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('3', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]" <?php if (in_array('3', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="wendsday">
                             星期三
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('4', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]" <?php if (in_array('4', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="thursday">
                             星期四
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('5', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]" <?php if (in_array('5', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="friday">
                             星期五
                         </label>
                     </div>
                     <div class="form-check ">
-                        <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('6', $r['weekly'])) echo 'checked'; ?>>
+                        <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]" <?php if (in_array('6', $selectedArray)) echo 'checked'; ?>>
                         <label class="form-check-label" for="saturday">
                             星期六
                         </label>
                     </div>
                 </div>
             </div>
-        </div> -->
-            <!-- <hr> -->
+        </div>
+        <!-- <hr> -->
 
-            <!-- 服務/規範 -->
+        <!-- 服務/規範 -->
 
-            <div class="mt-5 pt-2 px-3 mb-4">
-                <label for="" class="form-label">
-                    <h3>服務項目</h3>
-                </label>
-                <div class="d-flex">
-                    <?php foreach ($sitems as $k => $j) : ?>
-                        <div class="form-check me-5">
-                            <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
-                            <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
-                                <?= $j['s_name'] ?>
-                            </label>
-                        </div>
-                    <?php endforeach ?>
-                </div>
-
+        <div class="mt-5 pt-2 px-3 mb-4">
+            <label for="" class="form-label">
+                <h3>服務項目</h3>
+            </label>
+            <div class="d-flex">
+                <?php foreach ($sitems as $k => $j) : ?>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
+                        <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
+                            <?= $j['s_name'] ?>
+                        </label>
+                    </div>
+                <?php endforeach ?>
             </div>
 
-            <div class="mb-3 mt-5 pt-2 px-3">
-                <label for="" class="form-label">
-                    <h3>攜帶規則</h3>
-                </label>
-                <div class="d-flex ">
-                    <?php foreach ($ritems as $k => $d) : ?>
-                        <div class="form-check me-5">
-                            <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
-                            <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
-                                <?= $d['r_name'] ?>
-                            </label>
-                        </div>
-                    <?php endforeach ?>
-                </div>
-            </div>
+        </div>
 
-            <div class="row">
-                <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
-                <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">更新資訊</button>
+        <div class="mb-3 mt-5 pt-2 px-3">
+            <label for="" class="form-label">
+                <h3>攜帶規則</h3>
+            </label>
+            <div class="d-flex ">
+                <?php foreach ($ritems as $k => $d) : ?>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
+                        <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
+                            <?= $d['r_name'] ?>
+                        </label>
+                    </div>
+                <?php endforeach ?>
             </div>
+        </div>
+
+        <div class="row">
+            <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
+            <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">更新資訊</button>
+        </div>
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>

@@ -56,7 +56,8 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
 
     $stmt = $pdo->prepare($sqlParent);
-    // $weeklyString = implode(',', $_POST['weekly']);
+    $weeklyString = implode(',', $_POST['weekly']);
+
 
     $stmt->execute([
         $_POST['rest_name'],
@@ -87,45 +88,36 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
         $_POST['rest_sid'],
     ]);
 
-    $output['parent'] = !!$stmt->rowCount();
 
-    $parentSid = $_POST['rest_sid'];
+    if (!empty($_POST['rest_sid'])) {
+        $delSid = $_POST['rest_sid'];
 
+        // 刪除資料庫中對應的項目
+        $rsqlDelete = "DELETE FROM rest_c_rr WHERE rest_sid = :restSid";
+        $rstmDelete = $pdo->prepare($rsqlDelete);
+        $rstmDelete->execute(['restSid' => $delSid]);
 
-    //更新第一個子表格
-    $data1 = $_POST['rest_svc'];
+        // 插入被勾選的項目
+        $restRule = $_POST['rest_rule'];
+        $rsqlInsert = "INSERT INTO rest_c_rr (rest_sid, r_sid) VALUES (:restSid, :rSid)";
+        $rstmInsert = $pdo->prepare($rsqlInsert);
+        foreach ($restRule as $rSid) {
+            $rstmInsert->execute(['restSid' => $delSid, 'rSid' => $rSid]);
+        }
 
-
-    $sqlChild1 = "UPDATE rest_c_rs SET 
-        `rest_sid`=?,
-        `s_sid`=?
-        WHERE `rest_sid`= ?";
-
-    $stm1 = $pdo->prepare($sqlChild1);
-    foreach ($data1 as $value) {
-        $stm1->execute([
-            $parentSid,
-            $value,
-            $parentSid
-        ]);
-    }
-
-    //更新第二個子表格
-    $data2 = $_POST['rest_rule'];
-
-    $sqlChild2 = "UPDATE rest_c_rr SET 
-        `rest_sid`=?,
-        `r_sid`=?
-        WHERE `rest_sid`= ?;";
+        $ssqlDelete = "DELETE FROM rest_c_rs WHERE rest_sid = :restSid";
+        $sstmDelete = $pdo->prepare($ssqlDelete);
+        $sstmDelete->execute(['restSid' => $delSid]);
 
 
-    $stm2 = $pdo->prepare($sqlChild2);
-    foreach ($data2 as $value) {
-        $stm2->execute([
-            $parentSid,
-            $value,
-            $parentSid
-        ]);
+        $restSvc = $_POST['rest_svc'];
+        $ssqlInsert = "INSERT INTO rest_c_rs (rest_sid, s_sid) VALUES (:restSid, :sSid)";
+        $sstmInsert = $pdo->prepare($ssqlInsert);
+        foreach ($restSvc as $sSid) {
+            $sstmInsert->execute(['restSid' => $delSid, 'sSid' => $sSid]);
+        }
+
+        $output['success'] = true;
     }
 }
 header('Content-Type: application/json');

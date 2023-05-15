@@ -31,7 +31,8 @@ $a = $pdo->query($sql2)->fetchAll(PDO::FETCH_COLUMN, 1);
 $sql3 = "SELECT * FROM `rest_c_rr` WHERE rest_sid = {$sid}";
 $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
 
-
+$selectedValues = $r['weekly'];
+$selectedArray = explode(',', $selectedValues);
 
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -225,115 +226,114 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     <div class="form-text"></div>
                 </div>
                 <!-- 用餐時間 -->
-                <!-- <div class="col-6 ">
-                <label for="" class="form-label">用餐時間</label>
+                <div class="col-6 ">
+                    <label for="" class="form-label">用餐時間</label>
+                    <div class="d-flex">
+                        <div class=" form-check me-5">
+                            <input class="form-check-input" type="radio" name="mltime" id="60min" value="60" <?php if ($r['ml_time'] == '60') echo 'checked'; ?> disabled>
+                            <label class="form-check-label" for="60min">
+                                60分鐘
+                            </label>
+                        </div>
+                        <div class="form-check me-5">
+                            <input class="form-check-input" type="radio" name="mltime" id="90min" value="90" <?php if ($r['ml_time'] == '90') echo 'checked'; ?> disabled>
+                            <label class="form-check-label" for="90min">
+                                90分鐘
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mltime" id="120min" value="120" <?php if ($r['ml_time'] == '120') echo 'checked'; ?> disabled>
+                            <label class="form-check-label" for="120min">
+                                120分鐘
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 星期幾 -->
+            <div class="row mt-4">
+                <label for="" class="form-label">星期幾</label>
                 <div class="d-flex">
-                    <div class=" form-check me-5">
-                        <input class="form-check-input" type="radio" name="mltime" id="60min" value="60">
-                        <label class="form-check-label" for="60min">
-                            60分鐘
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]" <?php if (in_array('0', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="sunday">
+                            星期日
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="radio" name="mltime" id="90min" value="90">
-                        <label class="form-check-label" for="90min">
-                            90分鐘
+                        <input class="form-check-input" type="checkbox" value="1" id="monday" name="weekly[]" <?php if (in_array('1', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="monday">
+                            星期一
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="mltime" id="120min" value="120">
-                        <label class="form-check-label" for="120min">
-                            120分鐘
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]" <?php if (in_array('2', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="tuesday">
+                            星期二
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]" <?php if (in_array('3', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="wendsday">
+                            星期三
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]" <?php if (in_array('4', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="thursday">
+                            星期四
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]" <?php if (in_array('5', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="friday">
+                            星期五
+                        </label>
+                    </div>
+                    <div class="form-check ">
+                        <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]" <?php if (in_array('6', $selectedArray)) echo 'checked'; ?> disabled>
+                        <label class="form-check-label" for="saturday">
+                            星期六
                         </label>
                     </div>
                 </div>
             </div>
-        </div> -->
-                <!-- 星期幾 -->
-                <!-- <div class="row mt-4">
-            <label for="" class="form-label">星期幾</label>
-            <div class="d-flex">
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]">
-                    <label class="form-check-label" for="sunday">
-                        星期日
-                    </label>
+            <!-- <hr> -->
+
+            <!-- 服務/規範 -->
+
+            <div class="mt-3 px-3 mb-4">
+                <label for="" class="form-label">
+                    <h3>服務項目</h3>
+                </label>
+                <div class="d-flex">
+                    <?php foreach ($sitems as $k => $j) : ?>
+                        <div class="form-check me-5">
+                            <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" disabled <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
+                            <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
+                                <?= $j['s_name'] ?>
+                            </label>
+                        </div>
+                    <?php endforeach ?>
                 </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="1" id="monday " name="weekly[]">
-                    <label class="form-check-label" for="monday">
-                        星期一
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]">
-                    <label class="form-check-label" for="tuesday">
-                        星期二
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]">
-                    <label class="form-check-label" for="wendsday">
-                        星期三
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]">
-                    <label class="form-check-label" for="thursday">
-                        星期四
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]">
-                    <label class="form-check-label" for="friday">
-                        星期五
-                    </label>
-                </div>
-                <div class="form-check ">
-                    <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]">
-                    <label class="form-check-label" for="saturday">
-                        星期六
-                    </label>
+
+            </div>
+
+            <div class="mb-3 mt-3 px-3">
+                <label for="" class="form-label">
+                    <h3>攜帶規則</h3>
+                </label>
+                <div class="d-flex ">
+                    <?php foreach ($ritems as $k => $d) : ?>
+                        <div class="form-check me-5">
+                            <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" disabled <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
+                            <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
+                                <?= $d['r_name'] ?>
+                            </label>
+                        </div>
+                    <?php endforeach ?>
                 </div>
             </div>
-        </div>
-    </div> -->
-                <!-- <hr> -->
-
-                <!-- 服務/規範 -->
-
-                <div class="mt-3 px-3 mb-4">
-                    <label for="" class="form-label">
-                        <h3>服務項目</h3>
-                    </label>
-                    <div class="d-flex">
-                        <?php foreach ($sitems as $k => $j) : ?>
-                            <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>" disabled <?php if ($a && in_array($j['s_sid'], $a)) echo "checked"; ?>>
-                                <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
-                                    <?= $j['s_name'] ?>
-                                </label>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-
-                </div>
-
-                <div class="mb-3 mt-3 px-3">
-                    <label for="" class="form-label">
-                        <h3>攜帶規則</h3>
-                    </label>
-                    <div class="d-flex ">
-                        <?php foreach ($ritems as $k => $d) : ?>
-                            <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $d['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $d['r_sid'] ?>" disabled <?php if ($b && in_array($d['r_sid'], $b)) echo "checked"; ?>>
-                                <label class="form-check-label" for="rest_rule[]<?= $d['r_sid'] ?>">
-                                    <?= $d['r_name'] ?>
-                                </label>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                </div>
 
 
 </form>
