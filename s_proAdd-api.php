@@ -104,7 +104,7 @@ if (!empty($_POST['pro_name'])) {
                         break;
                     }
                 }
-                $proDet_name[] = $proDet1 . $proDet2;
+                $proDet_name[] = $proDet1 . "+" . $proDet2;
             } else {
                 for ($k = 0, $cmax = count($stmt_spec); $k < $cmax; $k++) {
                     if ($spec_sid1[$i] == $stmt_spec[$k]['spec_sid'] && $specDet_sid1[$i] == $stmt_spec[$k]['specDet_sid']) {

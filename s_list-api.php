@@ -25,15 +25,21 @@ if ($totalRows) {
     JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 };
-
-
+// header('Content-Type: application/json');
+// print_r($rows);
+// exit;
 
 $filteredArray = array_map(function ($item) {
+
     return [
-        '產品編號' => $item['pro_sid'],
+        '商品編號' => $item['pro_sid'],
         '細項編號' => $item['proDet_sid'],
         '商品名稱' => $item['pro_name'],
-        'catDet_name' => $item['catDet_name']
+        '商品規格' => $item['proDet_name'],
+        '商品價格' => "NT$" . " " . number_format($item['proDet_price']),
+        '商品數量' => number_format($item['proDet_qty']),
+        '商品描述' => $item['pro_describe'],
+        '商品狀態' => $item['pro_status'] == 1 ? '上架中' : '下架中'
     ];
 }, $rows);
 

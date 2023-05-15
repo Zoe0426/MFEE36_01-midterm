@@ -1,6 +1,24 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
+$proDet_sid = isset($_GET['proDet_sid']) ? $_GET['proDet_sid'] : '';
+$pro_sid = isset($_GET['pro_sid']) ? $_GET['pro_sid'] : '';
+
+
+$sql_shopInfo = sprintf("SELECT * FROM `shop_prodet` pd 
+JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid`
+JOIN `shop_prospec` ps ON pd.`pro_sid`=ps.`prod_sid` AND pd.`proDet_sid`=ps.`prodDet_sid` WHERE pd.`pro_sid`='%s'", $pro_sid);
+
+
+// "SELECT * FROM `shop_prodet` pd 
+// JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid`
+// JOIN `shop_prospec` ps ON pd.`pro_sid`=ps.`pro_sid` AND pd.`proDet_sid`=ps.`proDet_sid` WHERE p.`pro_sid`='$pro_sid'";
+
+$r_shopInfo = $pdo->query($sql_shopInfo)->fetch();
+print_r($r_shopInfo);
+exit;
+
+
 //下拉的大類別列表
 $sql_shopCat = "SELECT distinct `cat_sid`, `cat_name` FROM `shop_cat` ORDER BY `cat_name`";
 $r_shopCat = $pdo->query($sql_shopCat)->fetchAll();

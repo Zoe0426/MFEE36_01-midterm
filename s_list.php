@@ -8,19 +8,49 @@ require './partsNOEDIT/connect-db.php' ?>
         <nav id="nav"></nav>
     </div>
     <div class="row">
-        <table id="form1" class="table table-bordered table-striped">
+        <table id="s_form1" class="table table-bordered table-striped">
     </div>
     </table>
 </div>
-<table id="form1">
-</table>
-
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    const form1 = document.querySelector('#form1');
+    const form1 = document.querySelector('#s_form1');
     const nav = document.querySelector('#nav');
     let docFrag = document.createDocumentFragment();
+
+
+    form1.addEventListener('click', (event) => {
+        let tar = event.target
+        if (tar.classList.contains('fa-circle-info')) {
+            const firstTd = tar.closest('tr').querySelector('td:first-child')
+            const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
+            let firstContent = firstTd.textContent;
+            let sendContent = sendTd.textContent;
+            console.log(firstContent)
+            console.log(sendContent)
+            location.href = `s_readonly-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
+        }
+        if (tar.classList.contains('fa-pen-to-square')) {
+            const firstTd = tar.closest('tr').querySelector('td:first-child')
+            const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
+            let firstContent = firstTd.textContent;
+            let sendContent = sendTd.textContent;
+            console.log(firstContent)
+            console.log(sendContent)
+            location.href = `s_edit-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
+        }
+        if (tar.classList.contains('fa-trash-can')) {
+            const firstTd = tar.closest('tr').querySelector('td:first-child')
+            const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
+            let firstContent = firstTd.textContent;
+            let sendContent = sendTd.textContent;
+            console.log(firstContent)
+            console.log(sendContent)
+            location.href = `s_del-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
+        }
+
+    })
 
     function create(perPage, page, totalRows, totalPages, rows) {
         while (nav.hasChildNodes()) {
@@ -35,15 +65,26 @@ require './partsNOEDIT/connect-db.php' ?>
         function createTH() {
             let firstRow = Object.keys(rows[0]);
             let theTHead = document.createElement('thead')
-            let theRow = document.createElement('tr')
+            let theRow = document.createElement('tr');
             for (let i of firstRow) {
                 let theTh = document.createElement('th');
                 theTh.setAttribute("scope", "col")
                 let theTxt = document.createTextNode(i);
                 theTh.append(theTxt);
-                docFrag.append(theTh);
+                theRow.append(theTh);
             }
-            theRow.append(docFrag)
+
+            let theDetTh = document.createElement('th');
+            theDetTh.setAttribute("scope", "col")
+            let theEditTh = document.createElement('th');
+            theEditTh.setAttribute("scope", "col")
+            let theDelTh = document.createElement('th');
+            theDelTh.setAttribute("scope", "col")
+            theDetTh.textContent = '詳細資訊';
+            theEditTh.textContent = '編輯';
+            theDelTh.textContent = '刪除';
+
+            theRow.append(theDetTh, theEditTh, theDelTh)
             theTHead.append(theRow);
             form1.append(theTHead);
         };
@@ -61,6 +102,22 @@ require './partsNOEDIT/connect-db.php' ?>
                     theTd.append(theTxt);
                     theTr.append(theTd);
                 }
+                let theDetTd = document.createElement('td');
+                let theDetTxt = createEl2('i', 'fa-solid', 'fa-circle-info')
+                theDetTd.append(theDetTxt)
+
+                let theEditTd = document.createElement('td');
+                let theEditTxt = createEl2('i', 'fa-regular', 'fa-pen-to-square')
+                theEditTd.append(theEditTxt)
+
+                let theDelTd = document.createElement('td');
+                let theDelTxt = createEl2('i', 'fa-regular', 'fa-trash-can')
+                theDelTd.append(theDelTxt)
+
+                theTr.append(theDetTd)
+                theTr.append(theEditTd)
+                theTr.append(theDelTd)
+
                 docFrag.append(theTr);
             }
             theTBody.append(docFrag)
@@ -186,9 +243,6 @@ require './partsNOEDIT/connect-db.php' ?>
                         }
                     })
                 }
-
-
-
             })
     }
     changePage(1);
