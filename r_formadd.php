@@ -68,7 +68,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 </div>
                 <div class="col-3">
                     <label for="" class="form-label">餐廳類別</label>
-                    <select class="form-select" name="catg_sid">
+                    <select class="form-select" name="catg_sid" id="catg_sid">
                         <option value="">--請選擇餐廳類別--</option>
                         <?php foreach ($items as $i) : ?>
                             <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
@@ -322,6 +322,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const name = querySelector('#rest_name');
+    const catg = querySelector('#catg_sid');
     const phone = querySelector('#rest_phone');
     const address = querySelector('#rest_address');
     const info = querySelector('#rest_info');
