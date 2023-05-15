@@ -7,20 +7,7 @@ $output = [
     'error' => [],
 ];
 
-// $rest_sid = isset($_POST['rest_sid']) ? intval($_POST['rest_sid']) : 0;
 
-
-
-/*  -- `rest_menu`=?,
-    -- `rest_f_img`=?,
-    -- `ml_time`=?,
-    -- `weekly`=?,*/
-
-/* // $_POST['rest_menu'],
-   // $_POST['rest_f_img'],
-   // $_POST['ml_time'],
-   // $_POST['weekly'],
-   */
 
 if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
