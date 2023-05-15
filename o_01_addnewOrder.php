@@ -81,7 +81,6 @@ require './partsNOEDIT/connect-db.php' ?>
     </div>`
 
 </div>
-
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
@@ -97,7 +96,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
         if (nameInput.value || mobileInput.value || memsidInput.value) {
             const fd = new FormData(document.getElementById('oGetmem'));
-            fetch('o_api01_getMemCart.php', {
+            fetch('o_api01_1_getMemCart.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())
