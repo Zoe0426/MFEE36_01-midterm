@@ -10,21 +10,20 @@ $output = [
 ];
 
 //父表格變數
-$admin_name=isset($_POST['admin_name']) ? $_POST['admin_name'] : " ";
-$board_sid=isset($_POST['board_name']) ? intval($_POST['board_name']) : 0;
-$post_title=isset($_POST['post_title']) ? $_POST["post_title"] : " ";
-$post_content=isset($_POST['post_content']) ? $_POST["post_content"] : " ";
+$admin_name = isset($_POST['admin_name']) ? $_POST['admin_name'] : " ";
+$board_sid = isset($_POST['board_name']) ? intval($_POST['board_name']) : 0;
+$post_title = isset($_POST['post_title']) ? $_POST["post_title"] : " ";
+$post_content = isset($_POST['post_content']) ? $_POST["post_content"] : " ";
 
 
 //子表格變數
 //$file=isset($_POST['file']) ? intval($_POST['file']) : "";//現在因為我要試試看讓他放子資料進來才先這樣用
 
 #file其實應該要這樣，但因為json檔不能讀取file，所以要另外用（再研究看看囉：）））
-$file=isset($_POST['file']) ? $_POST['file']: "";
+$file = isset($_POST['file']) ? $_POST['file'] : "";
 
-echo "$admin_name,$board_sid,$post_title,$post_content";
 
-$sql="INSERT INTO `post_list_admin`
+$sql = "INSERT INTO `post_list_admin`
 (`admin_name`, `board_sid`, `post_title`, 
 `post_content`, `post_date`, `update_date`) 
 VALUES (?,?,?,?,now(),now())";
@@ -32,74 +31,69 @@ VALUES (?,?,?,?,now(),now())";
 
 // echo $sql;
 
-$stmt=$pdo->prepare($sql);
+$stmt = $pdo->prepare($sql);
 
-$stmt -> execute([
+$stmt->execute([
     $admin_name,
     $board_sid,
     $post_title,
     $post_content,
 ]);
 
-if(!! $stmt->rowCount()){ //如果表格新增成功，會是true，如果沒成功會是false
-    $output['success'] = true; 
-    $output['message']="父表格新增成功";
+if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
+    // $output['success'] = true; 
+    $output['message'] = "父表格新增成功";
 }
 
 
 
 
 
-$fatherLastSid = $pdo -> lastInsertId();//先用一個變數是抓取父表格輸入的最新一筆資料
+$fatherLastSid = $pdo->lastInsertId(); //先用一個變數是抓取父表格輸入的最新一筆資料
 
 
-    // $sql2="INSERT INTO `post_file`
-    // (`post_sid`, `file_type`, `file`) VALUES (?,?,?)";
+// $sql2="INSERT INTO `post_file`
+// (`post_sid`, `file_type`, `file`) VALUES (?,?,?)";
 
 
-    // $stmt=$pdo->prepare($sql2);
+// $stmt=$pdo->prepare($sql2);
 
-    // $stmt -> execute([
-    //     $fatherLastSid,
-    //     "F01",
-    //     $file
-    // ]);
-    // echo $stmt;
-    // if(!! $stmt->rowCount()){ //如果表格新增成功，會是true，如果沒成功會是false
-    //     $output['success'] = true; 
-    //     $output['message2']="子表格新增成功";
-    // }
+// $stmt -> execute([
+//     $fatherLastSid,
+//     "F01",
+//     $file
+// ]);
+// echo $stmt;
+// if(!! $stmt->rowCount()){ //如果表格新增成功，會是true，如果沒成功會是false
+//     $output['success'] = true; 
+//     $output['message2']="子表格新增成功";
+// }
 
-    #file檔案讀取，原本應該要用這個，但再研究看看
-if(! empty($_FILES['file'])){
-    $filename = sha1($_FILES['file']['name']. uniqid()). '.jpg'; //先把file名字編碼過
+#file檔案讀取，原本應該要用這個，但再研究看看
+if (!empty($_FILES['file'])) {
+    $filename = sha1($_FILES['file']['name'] . uniqid()) . '.jpg'; //先把file名字編碼過
     move_uploaded_file($_FILES['file']['tmp_name'], "./postImg/{$filename}"); //把圖片存到img檔案裡
 
-    $sql2="INSERT INTO `post_file`
+    $sql2 = "INSERT INTO `post_file`
     (`post_sid`, `file_type`, `file`) VALUES (?,?,?)";
 
 
-    $stmt=$pdo->prepare($sql2);
+    $stmt = $pdo->prepare($sql2);
 
-    $stmt -> execute([
+    $stmt->execute([
         $fatherLastSid,
         "F01",
         $file
     ]);
 
-    if(!! $stmt->rowCount()){ //如果表格新增成功，會是true，如果沒成功會是false
-        $output['success'] = true; 
-        $output['message2']="子表格新增成功";
+    if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
+        $output['success'] = true;
+        $output['message2'] = "子表格新增成功";
     }
 };
-   
+
 
 
 
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);
-
-
-
-
-?>
