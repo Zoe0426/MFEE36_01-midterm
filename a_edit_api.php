@@ -61,7 +61,7 @@ if (!empty($_POST['act_name']) and !empty($_POST['act_sid'])) {
         $_POST['price_adult'],
         $_POST['price_kid'],
         $_POST['ppl_max'],
-        $_POST['group_sid'],
+        $parentSid
     ]);
 
     if ($stmtParent->rowCount() > 0 && $stmtChild->rowCount() > 0) {
