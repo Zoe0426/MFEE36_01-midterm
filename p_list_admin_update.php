@@ -41,8 +41,8 @@ $r_post = $stmt->fetchAll();
                   <option value="Jenny">Jenny</option>
                   <option value="Gabrielle">Gabrielle</option>
                   <option value="Lily">Lily</option>
-                  <option value="">Jill</option>
-                  <option value="">Shu yi</option>
+                  <option value="Jill">Jill</option>
+                  <option value="Shu yi">Shu yi</option>
                 </select>
               </div>
               <!-- <div class="mb-3">
@@ -143,6 +143,7 @@ $r_post = $stmt->fetchAll();
           .then((obj) => {
             console.log(obj);
 
+            //跳轉頁面回去read
             location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
           });
       }

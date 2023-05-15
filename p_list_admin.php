@@ -29,8 +29,8 @@ $r_post = $stmt->fetchAll();
                   <option value="Jenny">Jenny</option>
                   <option value="Gabrielle">Gabrielle</option>
                   <option value="Lily">Lily</option>
-                  <option value="">Jill</option>
-                  <option value="">Shu yi</option>
+                  <option value="Jill">Jill</option>
+                  <option value="Shu yi">Shu yi</option>
                 </select>
               </div>
               <!-- <div class="mb-3">
