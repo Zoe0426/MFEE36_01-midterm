@@ -180,7 +180,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td>${post_type}</td>
                         <td>${post_Status}</td>
                         <td>${obj.createDt}</td>
-                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails(${obj.order_sid})"></i></td>
+                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails('${obj.order_sid}',this)"></i></td>
+                    </tr> 
+                    <tr style="display:none;">
+                       
                     </tr>
                 </tbody>
             </table>`;
@@ -223,7 +226,7 @@ require './partsNOEDIT/connect-db.php' ?>
             } else {
                 console.log('postStatus unknown');
             }
-            items += `<tr>
+            items += `<tr">
                         <th scope="row">${displayItems[i].order_sid}</th>
                         <td>${displayItems[i].member_sid}</td>
                         <td>${orderStatus}</td>
@@ -231,7 +234,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td>${post_type}</td>
                         <td>${post_Status}</td>
                         <td>${displayItems[i].createDt}</td>
-                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails(${displayItems[i].order_sid})"></i></td>
+                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails(${displayItems[i].order_sid}, this)"></i></td>
                     </tr>`;
 
         }
@@ -256,7 +259,56 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.append(mixTable);
     }
     // ====顯示訂單明細====
-    function showDetails(ord) {
+    function showDetails(ord, x) {
+        console.log('clicked');
+        console.log(ord);
+
+        let detailsRow = x.parentElement.parentElement.nextElementSibling;
+        console.log(detailsRow);
+        if (detailsRow.style.display === 'none') {
+            detailsRow.style.display = 'table-row';
+        } else {
+            detailsRow.style.display = 'none';
+        }
+        `<td colspan="8">
+            <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">明細來源</th>
+                            <th scope="col">產品編號</th>
+                            <th scope="col">品項編號</th>
+                            <th scope="col">產品名稱</th>
+                            <th scope="col">規格/期別</th>
+                            <th scope="col">單價(商城)</th>
+                            <th scope="col">數量</th>
+                            <th scope="col">成人單價</th>
+                            <th scope="col">人數(ad)</th>
+                            <th scope="col">兒童單價</th>
+                            <th scope="col">人數(kid)</th>
+                            <th scope="col">小計</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>`
+
+
+
 
     }
 </script>
