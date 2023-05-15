@@ -24,6 +24,9 @@ $output = [
 
 if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
+
+
+
     $isPass = true;
     $sqlParent = "UPDATE `rest_info` 
     SET 
@@ -57,7 +60,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
 
     $stmt = $pdo->prepare($sqlParent);
-    $weeklyString = implode(',', $_POST['weekly']);
+    // $weeklyString = implode(',', $_POST['weekly']);
 
 
     $stmt->execute([

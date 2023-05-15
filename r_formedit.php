@@ -218,19 +218,19 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     <label for="" class="form-label">用餐時間</label>
                     <div class="d-flex">
                         <div class=" form-check me-5">
-                            <input class="form-check-input" type="radio" name="mltime" id="60min" value="60" <?php if ($r['ml_time'] == '60') echo 'checked'; ?>>
+                            <input class="form-check-input" type="radio" name="ml_time" id="60min" value="60" <?php if ($r['ml_time'] == '60') echo 'checked'; ?>>
                             <label class="form-check-label" for="60min">
                                 60分鐘
                             </label>
                         </div>
                         <div class="form-check me-5">
-                            <input class="form-check-input" type="radio" name="mltime" id="90min" value="90" <?php if ($r['ml_time'] == '90') echo 'checked'; ?>>
+                            <input class="form-check-input" type="radio" name="ml_time" id="90min" value="90" <?php if ($r['ml_time'] == '90') echo 'checked'; ?>>
                             <label class="form-check-label" for="90min">
                                 90分鐘
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mltime" id="120min" value="120" <?php if ($r['ml_time'] == '120') echo 'checked'; ?>>
+                            <input class="form-check-input" type="radio" name="ml_time" id="120min" value="120" <?php if ($r['ml_time'] == '120') echo 'checked'; ?>>
                             <label class="form-check-label" for="120min">
                                 120分鐘
                             </label>

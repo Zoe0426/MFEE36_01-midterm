@@ -7,6 +7,10 @@ $output = [
     'error' => [],
 ];
 
+$dateEnd =  $_POST['date_end'];
+if (empty($dateEnd)) {
+    $dateEnd = NULL;
+}
 
 $sqlParent = "INSERT INTO `rest_info` (     
         `rest_name`,
@@ -52,7 +56,7 @@ $stmt->execute([
     $_POST['rest_f_ctnt'],
     // $_POST['rest_f_img'],
     $_POST['date_start'],
-    $_POST['date_end'],
+    $dateEnd,
     $_POST['m_start'],
     $_POST['m_end'],
     $_POST['e_start'],
