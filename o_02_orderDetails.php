@@ -42,7 +42,9 @@ require './partsNOEDIT/connect-db.php' ?>
         <div class="col-12 pt-3" id="oOrdersTable">
         </div>
     </div>
-    <div class="row"></div>
+    <div class="row">
+
+    </div>
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -63,6 +65,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     body: fd,
                 }).then(r => r.json())
                 .then(obj => {
+                    showMemInfo(obj);
                     console.log(obj.getBy);
                     if (obj.getBy == 'orderSid') {
                         tableByOrderSid(obj);
@@ -104,6 +107,17 @@ require './partsNOEDIT/connect-db.php' ?>
     //====顯示會員資料====
     function showMemInfo(obj) {
         let oMemTb = document.querySelector(".o-mem-table");
+        let oMemDetails = '';
+        if (obj.getBy == "memName") {
+            oMemDetails = obj.name_orders[0];
+        } else if (obj.getBy == "memMobile") {
+            oMemDetails = obj.mobile_orders[0];
+        } else if (obj.getBy == "memSid") {
+            oMemDetails = obj.sid_orders[0];
+        } else if (obj.getBy == 'orderSid') {
+            oMemDetails = obj;
+        }
+
         oMemTb.innerHTML = `
                 <table class="table">
                         <thead>
@@ -116,15 +130,15 @@ require './partsNOEDIT/connect-db.php' ?>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">${obj.sid}</th>
-                                <td>${obj.name}</td>
-                                <td>${obj.mobile}</td>
-                                <td>${obj.birth}</td>
+                                <th scope="row">${oMemDetails.sid}</th>
+                                <td>${oMemDetails.name}</td>
+                                <td>${oMemDetails.mobile}</td>
+                                <td>${oMemDetails.birth}</td>
                             </tr>
                         </tbody>
                     </table>`;
     }
-    // ====顯示指定訂單
+    // ====顯示指定訂單====
     function tableByOrderSid(obj) {
         const orderSidTable = document.createElement('div');
         let orderStatus = "";
@@ -160,7 +174,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 <tbody>
                     <tr>
                         <th scope="row">${obj.order_sid}</th>
-                        <td>${obj.member_sid}</td>
+                        <td>${obj.sid}</td>
                         <td>${orderStatus}</td>
                         <td>${obj.coupon_sid}</td>
                         <td>${post_type}</td>
@@ -173,9 +187,10 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.append(orderSidTable);
 
     }
-    // ====顯示某員的所有訂單
+    // ====顯示某員的所有訂單====
     function tableByMemInfo(obj) {
         const mixTable = document.createElement('div');
+        mixTable.classList.add('test');
         let displayItems;
         if (obj.getBy == "memName") {
             displayItems = obj.name_orders;
@@ -188,9 +203,11 @@ require './partsNOEDIT/connect-db.php' ?>
         let orderStatus = "";
         let post_Status = "";
         let post_type = "";
-        let items;
+        let items = "";
 
         for (let i = 0, len = displayItems.length; i < len; i++) {
+            //console.log(displayItems[i]);
+
             displayItems[i].order_status == 0 ? orderStatus = "未付款" : orderStatus = "已付款";
             displayItems[i].postType == 1 ? post_type = "寄送到府" : post_type = "超市領取";
             if (displayItems[i].postStatus == 0) {
@@ -203,6 +220,8 @@ require './partsNOEDIT/connect-db.php' ?>
                 post_Status = '貨到超商';
             } else if (displayItems[i].postStatus == 4) {
                 post_Status = '未領取';
+            } else {
+                console.log('postStatus unknown');
             }
             items += `<tr>
                         <th scope="row">${displayItems[i].order_sid}</th>
@@ -213,8 +232,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td>${post_Status}</td>
                         <td>${displayItems[i].createDt}</td>
                         <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails(${displayItems[i].order_sid})"></i></td>
-                    </tr>`
+                    </tr>`;
+
         }
+
         mixTable.innerHTML = `<table class="table table-striped ocd">
                 <thead>
                     <tr>
@@ -234,8 +255,8 @@ require './partsNOEDIT/connect-db.php' ?>
             </table>`;
         oOrdersTable.append(mixTable);
     }
-    //顯示訂單明細
-    function showDetails() {
+    // ====顯示訂單明細====
+    function showDetails(ord) {
 
     }
 </script>

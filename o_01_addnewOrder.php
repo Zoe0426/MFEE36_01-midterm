@@ -78,7 +78,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
             </div>
         </div>
-    </div>`
+    </div>
 
 </div>
 <?php include './partsNOEDIT/script.php' ?>
