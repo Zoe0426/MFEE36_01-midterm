@@ -2,7 +2,7 @@
 require './partsNOEDIT/connect-db.php';
 
 $output = [
-    'success' => false, #新增資料成功或失敗的結果（MUST）
+    'orderSuccess' => false, #新增資料成功或失敗的結果（MUST）
     'postData' => $_POST, # 除錯用的
     'code' => 0,
     'error' => [],
@@ -183,8 +183,9 @@ if ($output['createNewOrderDetails'] == true) {
     $sqlDelCoupon = "UPDATE `mem_coupon_send` SET `coupon_status`=1 WHERE couponSend_sid =?;";
     $stm5 = $pdo->prepare($sqlDelCoupon);
     $stm5->execute([$couponSendSid]);
+    $output['orderSuccess'] = true;
 }
 //
-$output['success'] = true;
+
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

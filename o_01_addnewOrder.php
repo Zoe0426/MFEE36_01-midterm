@@ -60,25 +60,6 @@ require './partsNOEDIT/connect-db.php' ?>
             </div>
         </div>
     </form>
-    <!-- Modal Msg for client -->
-    <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="oCMsgLabel">溫馨提醒會員</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    訂單成立後，匯款資訊將寄至會員信箱。<br>
-                    請提醒會員於24小時內完成匯款。
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">退回編輯</button>
-                    <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#oConfirmNewOrder">送出訂單</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal Send New Order -->
     <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
@@ -104,9 +85,8 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
-    console.log(oCartDisplay);
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
-    console.log(oPostPayDisplay);
+    const send = document.createElement('div');
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -149,8 +129,8 @@ require './partsNOEDIT/connect-db.php' ?>
         e.preventDefault();
         let isPass = true;
         const InfoBar = document.querySelector("#oInfoBar");
+        const oMemTable = document.querySelector(".o-mem-table");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
-
         //沒有選任何商品就報錯
         let prods = newodfd.getAll("prod[]").length;
         let acts = newodfd.getAll("act[]").length;
@@ -188,9 +168,11 @@ require './partsNOEDIT/connect-db.php' ?>
                 }).then(r => r.json())
                 .then(obj => {
                     console.log(obj);
-                    if (obj.success == true) {
+                    if (obj.orderSuccess == true) {
                         oCartDisplay.innerHTML = '';
                         oPostPayDisplay.innerHTML = '';
+                        oMemTable.innerHTML = '';
+                        oGetItemsForm.remove(send);
                     }
                 })
                 .catch(ex => {
@@ -377,13 +359,31 @@ require './partsNOEDIT/connect-db.php' ?>
         console.log(oPostPayDisplay);
         oPostPayDisplay.append(opp);
         const oGetItemsForm = document.getElementById('oGetItemsForm');
-        const send = document.createElement('div');
         send.innerHTML = `        
         <div class="row pt-3 g-0">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
                 <button type="button" class="btn btn-warning mx-auto" data-bs-toggle="modal" data-bs-target="#oMsgToClient">成立訂單</button>
             
-        </div>`;
+        </div>    
+        <!-- Modal Msg for client -->
+    <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="oCMsgLabel">溫馨提醒會員</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    訂單成立後，匯款資訊將寄至會員信箱。<br>
+                    請提醒會員於24小時內完成匯款。
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">退回編輯</button>
+                    <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#oConfirmNewOrder">送出訂單</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
         oGetItemsForm.append(send);
 
     }
