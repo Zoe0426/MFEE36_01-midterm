@@ -41,7 +41,7 @@ $stmt->execute([
 ]);
 
 if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
-    // $output['success'] = true; 
+    $output['success'] = true;
     $output['message'] = "父表格新增成功";
 }
 

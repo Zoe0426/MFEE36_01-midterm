@@ -41,10 +41,6 @@ $r_post = $stmt->fetchAll();
                 </select>
                 <div class="form-text"></div>
               </div>
-              <!-- <div class="mb-3">
-                  <label for="board_sid" class="form-label">看板編號：</label>
-                  <input type="text" name="board_sid" id="board_sid" />
-                </div> -->
               <div class="mb-3">
                 <label for="board_name">看板：</label>
                 <select name="board_name" id="board_name" data-required="1">
@@ -149,9 +145,9 @@ $r_post = $stmt->fetchAll();
             method: "POST",
             body: fd, // Content-Type 省略, multipart/form-data
           })
-          .then((r) => {
-            console.log(r.json());
-          })
+          .then((r) =>
+            r.json()
+          )
           .then((obj) => {
             // console.log(obj);
             if (obj.success) {
