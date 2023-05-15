@@ -46,6 +46,7 @@ $groupList = $pdo->query($sql3)->fetch();
             <div class="card-body">
                 <h2>新增活動</h2>
                 <form name="form1" onsubmit="checkForm(event)">
+                    <input type="hidden" name="act_sid" value="<?= $r['act_sid'] ?>">
                     <div class="mb-3">
                         <div class="mb-3">
                             <label for="act_name" class="form-label">活動標題</label>
@@ -121,7 +122,7 @@ $groupList = $pdo->query($sql3)->fetch();
                     </div>
                     <div class="mb-3">
                         <label for="act_policy" class="form-label">活動規範</label>
-                        <textarea class="form-control" id="act_content" name="act_content" data-required="1"><?= $r['act_policy'] ?></textarea>
+                        <textarea class="form-control" id="act_policy" name="act_policy" data-required="1"><?= $r['act_policy'] ?></textarea>
                         <div class="form-text"></div>
                     </div>
 
@@ -164,7 +165,7 @@ $groupList = $pdo->query($sql3)->fetch();
         event.preventDefault();
 
         for (let f of fields) {
-            f.style.border = '1px solid blue';
+            f.style.border = '1px solid #ccc';
             f.nextElementSibling.innerHTML = '';
         }
 
@@ -255,10 +256,10 @@ $groupList = $pdo->query($sql3)->fetch();
                 })
                 .catch(ex => {
                     console.log(ex);
-                    infoBar.classList.remove('alert-success');
-                    infoBar.classList.add('alert-danger');
-                    infoBar.innerHTML = '新增發生錯誤';
-                    infoBar.style.display = 'block';
+                    // infoBar.classList.remove('alert-success');
+                    // infoBar.classList.add('alert-danger');
+                    // infoBar.innerHTML = '新增發生錯誤';
+                    // infoBar.style.display = 'block';
                     // setTimeout(() => {
                     //     infoBar.style.display = 'none';
                     // }, 2000);
