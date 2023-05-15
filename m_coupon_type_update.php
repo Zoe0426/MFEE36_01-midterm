@@ -19,6 +19,7 @@ if (empty($r)) {
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container">
     <form name="m_coupon_update" onsubmit="coupon_update_form(event)">
+        <input type="hidden" class="form-control" id="coupon_sid" aria-describedby="emailHelp" name="coupon_sid" value="<?= $r['coupon_sid'] ?>">
         <div class="mb-3">
             <label for="coupon_code" class="form-label">代碼</label>
             <input type="text" class="form-control" id="coupon_code" aria-describedby="emailHelp" name="coupon_code" value="<?= $r['coupon_code'] ?>">
@@ -55,7 +56,7 @@ if (empty($r)) {
         event.preventDefault();
 
         const fd = new FormData(document.m_coupon_update);
-        fetch('m_coupon_type_update-api.php', {
+        fetch('m_couon_type_update-api.php', {
                 method: 'POST',
                 body: fd,
             }).then(r => r.json())
