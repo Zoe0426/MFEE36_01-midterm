@@ -48,8 +48,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
     .s_Form1,
     #s_proImg,
-    .s_proDetImg {
-        display: none;
+    .s_proDetImg,
+    #s_proDetTepImgBox,
+    .s_proDetNum,
+    #infoBar {
+        /* display: none; */
+        color: pink
     }
 
     #s_imginfo {
@@ -76,7 +80,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         </form>
         <div id="s_proDetTepImgBox"></div>
 
-        <form class="pt-4" name="s_Form3" return flase>
+        <form class="pt-4" name="s_Form3" onsubmit="checkForm(event)">
             <h2>新增商品</h2>
             <div class="row pb-3 border-bottom">
                 <div class="col-5">
@@ -144,9 +148,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             </div>
             <div class="row pb-3 border-bottom mt-4" id="s_proDetBox">
                 <div class="col-3 mb-3">
+                    <div class="mb-3 s_proDetNum">
+                        <input type="text" class="form-control " name="proDet_sid[]" value="1">
+                    </div>
                     <div class="mb-3">
                         <div class="s_ImgBox s_proDetImgBox"><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img[]" class="s_proDetImg">
+                        <input type="text" name="pro_img1[]" class="s_proDetImg">
                     </div>
                     <div class="mb-3 s_spec">
                         <label class="form-label">規格一</label>
@@ -204,9 +211,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <button type="button" class="btn btn-danger s_del d-none">-</button>
                 </div>
             </div>
-
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="alert alert-danger" id="infoBar" role="alert"></div>
+            <button type="submit" class="btn btn-primary">新增商品</button>
         </form>
 
 
@@ -219,16 +225,58 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <script>
     const theDocFrag = document.createDocumentFragment();
 
+    function checkForm(event) {
+        event.preventDefault()
+        let isPass = true;
+        const fd = new FormData(document.s_Form3);
+        fetch('s_proAdd-api.php', {
+                method: 'POST',
+                body: fd,
+            }).then(r => r.json())
+            .then(obj => {
+                if (obj.success) {
+                    infoBar.innerText = '新增成功';
+                    infoBar.classList.remove('alert-danger');
+                    infoBar.classList.add('alert-success');
+                    infoBar.style.display = 'block'
+                } else {
+                    infoBar.innerText = '新增失敗';
+                    infoBar.classList.add('alert-danger');
+                    infoBar.classList.remove('alert-success');
+                    infoBar.style.display = 'block'
+                }
+                setTimeout(() => {
+                    infoBar.style.display = 'none'
+                }, 2000)
+                console.log(obj);
+            }).catch(ex => {
+                console.log(ex); //除錯使用
+                infoBar.innerText = '新增發生錯誤，請通知後端人員';
+                infoBar.classList.add('alert-danger');
+                infoBar.classList.remove('alert-success');
+                infoBar.style.display = 'block'
+                setTimeout(() => {
+                    infoBar.style.display = 'none'
+                }, 2000)
+            })
+    }
+
+
     //==================  +/-的事件監聽==================
     const theProDetBox = document.querySelector('#s_proDetBox')
     theProDetBox.addEventListener('click', (event) => {
         const target = event.target
         //console.log(event)
         if (target.classList.contains('s_add')) {
+            const parentCol = event.target.parentNode;
+            const index = Array.from(parentCol.parentNode.children).indexOf(parentCol);
             const theCopy = `<div class="col-3 mb-3">
+            <div class="mb-3 s_proDetNum">
+                        <input type="text" class="form-control" name="proDet_sid[]" value="${index+2}">
+                    </div>
                     <div class="mb-3">
                         <div class="s_ImgBox s_proDetImgBox" ><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img[]" class="s_proDetImg">
+                        <input type="text" name="pro_img1[]" class="s_proDetImg">
                     </div>
                     <div class="mb-3 s_spec">
                         <label class="form-label">規格一</label>
@@ -286,8 +334,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <button type="button" class="btn btn-danger s_del">-</button>
                 </div>`
             theProDetBox.insertAdjacentHTML("beforeend", theCopy)
-            const parentCol = event.target.parentNode;
-            const index = Array.from(parentCol.parentNode.children).indexOf(parentCol);
+
+
             createProDetBox()
             createproDetImgBox(index + 1)
         }
@@ -296,7 +344,6 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         }
 
 
-        //這邊要改
         if (target.classList.contains('s_proDetImgBox')) {
             const clickedItem = event.target.parentNode.parentNode.parentNode;
             const index = Array.from(clickedItem.children).indexOf(event.target.parentNode.parentNode);
