@@ -1,7 +1,7 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
-$perPage = 25; # 每頁最多幾筆
+$perPage = 15; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
 
 if ($page < 1) {
@@ -36,8 +36,8 @@ if ($totalRows) {
 
 
 
-<div class="container">
-    <div class="row">
+<div class="container m-5">
+    <div class="row col-2">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
