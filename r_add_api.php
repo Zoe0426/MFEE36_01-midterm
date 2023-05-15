@@ -12,6 +12,26 @@ if (empty($dateEnd)) {
     $dateEnd = NULL;
 }
 
+$m_end =  $_POST['m_end'];
+if (empty($m_end)) {
+    $m_end = NULL;
+}
+
+$e_start = $_POST['e_start'];
+if (empty($e_start)) {
+    $e_start = NULL;
+}
+
+$e_end = $_POST['e_end'];
+if (empty($e_end)) {
+    $e_end = NULL;
+}
+
+$n_start = $_POST['n_start'];
+if (empty($n_start)) {
+    $n_start = NULL;
+}
+
 $sqlParent = "INSERT INTO `rest_info` (     
         `rest_name`,
         `catg_sid`,
@@ -58,10 +78,10 @@ $stmt->execute([
     $_POST['date_start'],
     $dateEnd,
     $_POST['m_start'],
-    $_POST['m_end'],
-    $_POST['e_start'],
-    $_POST['e_end'],
-    $_POST['n_start'],
+    $m_end,
+    $e_start,
+    $e_end,
+    $n_start,
     $_POST['n_end'],
     $_POST['p_max'],
     $_POST['pt_max'],
