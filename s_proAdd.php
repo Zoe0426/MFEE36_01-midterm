@@ -52,8 +52,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     #s_proDetTepImgBox,
     .s_proDetNum,
     #infoBar {
-        /* display: none; */
-        color: pink
+        display: none;
     }
 
     #s_imginfo {
@@ -90,7 +89,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 <div class="col-7">
                     <div class="mb-3">
                         <label class="form-label" for="pro_name">產品名稱</label>
-                        <input type="text" class="form-control" id="pro_name" name="pro_name">
+                        <input type="text" class="form-control" id="pro_name" name="pro_name" data-required="1">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
@@ -141,7 +140,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     </div>
                     <div class="mb-3">
                         <label for="pro_describe" class="form-label">產品描述</label>
-                        <textarea name="pro_describe" id="pro_describe" class="form-control"></textarea>
+                        <textarea name="pro_describe" id="pro_describe" class="form-control" data-required="1"></textarea>
                         <div class="form-text"></div>
                     </div>
                 </div>
@@ -186,12 +185,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="s_proDet_price">價格</label>
-                        <input type="number" class="form-control" name="proDet_price[]">
+                        <input type="number" class="form-control" name="proDet_price[]" data-required="1">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="s_proDet_qty">數量</label>
-                        <input type="number" class="form-control" name="proDet_qty[]">
+                        <input type="number" class="form-control" name="proDet_qty[]" data-required="1">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
@@ -225,40 +224,64 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <script>
     const theDocFrag = document.createDocumentFragment();
 
+
+
+
+
     function checkForm(event) {
         event.preventDefault()
+        const filedType = document.querySelectorAll('form [data-required="1"]')
+
         let isPass = true;
-        const fd = new FormData(document.s_Form3);
-        fetch('s_proAdd-api.php', {
-                method: 'POST',
-                body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                if (obj.success) {
-                    infoBar.innerText = '新增成功';
-                    infoBar.classList.remove('alert-danger');
-                    infoBar.classList.add('alert-success');
-                    infoBar.style.display = 'block'
-                } else {
-                    infoBar.innerText = '新增失敗';
+
+        //恢復所有欄位的外觀
+        for (let f of filedType) {
+            f.style.border = '1px solid #CCC';
+            f.nextElementSibling.innerText = '';
+        }
+
+        //部分欄位皆必填
+        for (let f of filedType) {
+            if (!f.value) {
+                isPass = false;
+                f.style.border = '1px solid red';
+                f.nextElementSibling.innerText = '請輸入資料';
+            }
+        }
+
+        if (isPass) {
+            const fd = new FormData(document.s_Form3);
+            fetch('s_proAdd-api.php', {
+                    method: 'POST',
+                    body: fd,
+                }).then(r => r.json())
+                .then(obj => {
+                    if (obj.success) {
+                        infoBar.innerText = '新增成功';
+                        infoBar.classList.remove('alert-danger');
+                        infoBar.classList.add('alert-success');
+                        infoBar.style.display = 'block'
+                    } else {
+                        infoBar.innerText = '新增失敗';
+                        infoBar.classList.add('alert-danger');
+                        infoBar.classList.remove('alert-success');
+                        infoBar.style.display = 'block'
+                    }
+                    setTimeout(() => {
+                        infoBar.style.display = 'none'
+                    }, 2000)
+                    console.log(obj);
+                }).catch(ex => {
+                    console.log(ex); //除錯使用
+                    infoBar.innerText = '新增發生錯誤，請通知後端人員';
                     infoBar.classList.add('alert-danger');
                     infoBar.classList.remove('alert-success');
                     infoBar.style.display = 'block'
-                }
-                setTimeout(() => {
-                    infoBar.style.display = 'none'
-                }, 2000)
-                console.log(obj);
-            }).catch(ex => {
-                console.log(ex); //除錯使用
-                infoBar.innerText = '新增發生錯誤，請通知後端人員';
-                infoBar.classList.add('alert-danger');
-                infoBar.classList.remove('alert-success');
-                infoBar.style.display = 'block'
-                setTimeout(() => {
-                    infoBar.style.display = 'none'
-                }, 2000)
-            })
+                    setTimeout(() => {
+                        infoBar.style.display = 'none'
+                    }, 2000)
+                })
+        }
     }
 
 
@@ -309,12 +332,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="s_proDet_price">價格</label>
-                        <input type="number" class="form-control" name="proDet_price[]">
+                        <input type="number" class="form-control" name="proDet_price[]" data-required="1">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="s_proDet_qty">數量</label>
-                        <input type="number" class="form-control" name="proDet_qty[]">
+                        <input type="number" class="form-control" name="proDet_qty[]" data-required="1">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
