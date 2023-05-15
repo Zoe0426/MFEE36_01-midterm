@@ -54,7 +54,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
 <!-- 填表單的區域 -->
 
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
-    <input type="hidden" name="rest_sid" value="<?= $r['rest_sid'] ?>">
+    <input type="hidden" name="sid" value="<?= $r['rest_sid'] ?>">
     <!-- 分頁 -->
     <div class="px-3 pt-4">
 
@@ -239,7 +239,54 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 </div>
             </div>
             <!-- 星期幾 -->
-
+            <!-- <div class="row mt-4">
+                <label for="" class="form-label">星期幾</label>
+                <div class="d-flex">
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('0', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="sunday">
+                            星期日
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="1" id="monday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('1', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="monday">
+                            星期一
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('2', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="tuesday">
+                            星期二
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('3', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="wendsday">
+                            星期三
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('4', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="thursday">
+                            星期四
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('5', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="friday">
+                            星期五
+                        </label>
+                    </div>
+                    <div class="form-check ">
+                        <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]" <?php if (isset($r['weekly']) && in_array('6', $r['weekly'])) echo 'checked'; ?>>
+                        <label class="form-check-label" for="saturday">
+                            星期六
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div> -->
             <!-- <hr> -->
 
             <!-- 服務/規範 -->

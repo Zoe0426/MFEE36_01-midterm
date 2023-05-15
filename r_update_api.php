@@ -7,66 +7,89 @@ $output = [
     'error' => [],
 ];
 
+// $rest_sid = isset($_POST['rest_sid']) ? intval($_POST['rest_sid']) : 0;
+
+
+
+/*  -- `rest_menu`=?,
+    -- `rest_f_img`=?,
+    -- `ml_time`=?,
+    -- `weekly`=?,*/
+
+/* // $_POST['rest_menu'],
+   // $_POST['rest_f_img'],
+   // $_POST['ml_time'],
+   // $_POST['weekly'],
+   */
 
 if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
     $isPass = true;
-
-
     $sqlParent = "UPDATE `rest_info` 
     SET 
     `rest_name`=?,
     `catg_sid`=?,
     `rest_phone`=?,
+
     `rest_address`=?,
     `rest_info`=?,
     `rest_notice`=?,
-    -- `rest_menu`=?,
+
     `rest_f_title`=?,
     `rest_f_ctnt`=?,
-    -- `rest_f_img`=?,
     `date_start`=?,
+
     `date_end`=?,
     `m_start`=?,
     `m_end`=?,
+
     `e_start`=?,
     `e_end`=?,
     `n_start`=?,
+
     `n_end`=?,
     `p_max`=?,
     `pt_max`=?
-    -- `ml_time`=?,
-    -- `weekly`=?,
-    WHERE `rest_sid`= ? "; #(你的sql)
+
+ 
+    WHERE rest_sid= ? ";
+
 
     $stmt = $pdo->prepare($sqlParent);
+    // $weeklyString = implode(',', $_POST['weekly']);
 
     $stmt->execute([
         $_POST['rest_name'],
         $_POST['catg_sid'],
         $_POST['rest_phone'],
+
         $_POST['rest_address'],
         $_POST['rest_info'],
         $_POST['rest_notice'],
-        // $_POST['rest_menu'],
+
         $_POST['rest_f_title'],
         $_POST['rest_f_ctnt'],
-        // $_POST['rest_f_img'],
         $_POST['date_start'],
+
         $_POST['date_end'],
         $_POST['m_start'],
         $_POST['m_end'],
+
         $_POST['e_start'],
         $_POST['e_end'],
         $_POST['n_start'],
+
         $_POST['n_end'],
         $_POST['p_max'],
         $_POST['pt_max'],
-        // $_POST['ml_time'],
-        // $_POST['weekly'],
+
+
+        $_POST['rest_sid'],
     ]);
 
-    $parentSid = $pdo->lastInsertId();
+    $output['parent'] = !!$stmt->rowCount();
+
+    $parentSid = $_POST['rest_sid'];
 
 
     //更新第一個子表格
@@ -83,6 +106,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
         $stm1->execute([
             $parentSid,
             $value,
+            $parentSid
         ]);
     }
 
@@ -100,6 +124,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
         $stm2->execute([
             $parentSid,
             $value,
+            $parentSid
         ]);
     }
 }

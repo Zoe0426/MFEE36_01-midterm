@@ -3,6 +3,7 @@ require './partsNOEDIT/connect-db.php';
 $output = [
     'success' => false,
     'postData' => $_POST,
+    'code' => 0,
     'error' => [],
 ];
 
@@ -28,12 +29,14 @@ $sqlParent = "INSERT INTO `rest_info` (
         `n_end`,
         `p_max`,
         `pt_max`,
-        -- `ml_time`,
-        -- `weekly`,
-        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
+        `ml_time`,
+        `weekly`,
+        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 
 
 $stmt = $pdo->prepare($sqlParent);
+$weeklyString = implode(',', $_POST['weekly']);
+
 
 $stmt->execute([
     $_POST['rest_name'],
@@ -56,8 +59,8 @@ $stmt->execute([
     $_POST['n_end'],
     $_POST['p_max'],
     $_POST['pt_max'],
-    // $_POST['ml_time'],
-    // $_POST['weekly'],
+    $_POST['ml_time'],
+    $weeklyString,
 ]);
 
 $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 //echo $lastsid;

@@ -13,11 +13,13 @@ if ($page < 1) {
 
 
 $t_sql = "SELECT COUNT(1) FROM rest_info";
-
-
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
+
+$sql = "SELECT `catg_sid`, `catg_name` FROM `rest_catg`";
+$items = $pdo->query($sql)->fetchAll();
+
 
 if ($totalRows) {
     if ($page > $totalPages) {

@@ -16,14 +16,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
-    #rest_pic,
+    /* #rest_pic,
     #pro_img {
-        /* form1表單與回傳照片名稱隱藏*/
         display: none;
     }
 
     #finalImg {
-        /* 設計自己要放的照片框框 */
         border-radius: 6px;
         height: 280px;
         border: 2px dotted lightgray;
@@ -31,19 +29,18 @@ $ritems = $pdo->query($rsql)->fetchAll();
     }
 
     #imginfo {
-        /* 為了不讓div內的img超出，故要記得做下列設定 */
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: none;
-    }
+    } */
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 
 <!-- 這個需要隱藏，這是上傳圖片用的form -->
-<form name="rest_pic" id="rest_pic">
+<!-- <form name="rest_pic" id="rest_pic">
     <input type="file" name="tempImg" accept="image/jpeg" id="tempImg">
-</form>
+</form> -->
 
 <!-- 填表單的區域 -->
 
@@ -207,119 +204,119 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     <div class="form-text"></div>
                 </div>
                 <!-- 用餐時間 -->
-                <!-- <div class="col-6 ">
-                <label for="" class="form-label">用餐時間</label>
+                <div class="col-6 ">
+                    <label for="" class="form-label">用餐時間</label>
+                    <div class="d-flex">
+                        <div class=" form-check me-5">
+                            <input class="form-check-input" type="radio" name="ml_time" id="60min" value="60">
+                            <label class="form-check-label" for="60min">
+                                60分鐘
+                            </label>
+                        </div>
+                        <div class="form-check me-5">
+                            <input class="form-check-input" type="radio" name="ml_time" id="90min" value="90">
+                            <label class="form-check-label" for="90min">
+                                90分鐘
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ml_time" id="120min" value="120">
+                            <label class="form-check-label" for="120min">
+                                120分鐘
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 星期幾 -->
+            <div class="row mt-4">
+                <label for="" class="form-label">星期幾</label>
                 <div class="d-flex">
-                    <div class=" form-check me-5">
-                        <input class="form-check-input" type="radio" name="mltime" id="60min" value="60">
-                        <label class="form-check-label" for="60min">
-                            60分鐘
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]">
+                        <label class="form-check-label" for="sunday">
+                            星期日
                         </label>
                     </div>
                     <div class="form-check me-5">
-                        <input class="form-check-input" type="radio" name="mltime" id="90min" value="90">
-                        <label class="form-check-label" for="90min">
-                            90分鐘
+                        <input class="form-check-input" type="checkbox" value="1" id="monday " name="weekly[]">
+                        <label class="form-check-label" for="monday">
+                            星期一
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="mltime" id="120min" value="120">
-                        <label class="form-check-label" for="120min">
-                            120分鐘
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]">
+                        <label class="form-check-label" for="tuesday">
+                            星期二
                         </label>
                     </div>
-                </div>
-            </div>
-        </div> -->
-                <!-- 星期幾 -->
-                <!-- <div class="row mt-4">
-            <label for="" class="form-label">星期幾</label>
-            <div class="d-flex">
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]">
-                    <label class="form-check-label" for="sunday">
-                        星期日
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="1" id="monday " name="weekly[]">
-                    <label class="form-check-label" for="monday">
-                        星期一
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="2" id="tuesday" name="weekly[]">
-                    <label class="form-check-label" for="tuesday">
-                        星期二
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]">
-                    <label class="form-check-label" for="wendsday">
-                        星期三
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]">
-                    <label class="form-check-label" for="thursday">
-                        星期四
-                    </label>
-                </div>
-                <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]">
-                    <label class="form-check-label" for="friday">
-                        星期五
-                    </label>
-                </div>
-                <div class="form-check ">
-                    <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]">
-                    <label class="form-check-label" for="saturday">
-                        星期六
-                    </label>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="3" id="wendsday" name="weekly[]">
+                        <label class="form-check-label" for="wendsday">
+                            星期三
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="4" id="thursday" name="weekly[]">
+                        <label class="form-check-label" for="thursday">
+                            星期四
+                        </label>
+                    </div>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="5" id="friday" name="weekly[]">
+                        <label class="form-check-label" for="friday">
+                            星期五
+                        </label>
+                    </div>
+                    <div class="form-check ">
+                        <input class="form-check-input" type="checkbox" value="6" id="saturday" name="weekly[]">
+                        <label class="form-check-label" for="saturday">
+                            星期六
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div> -->
-                <!-- <hr> -->
+        <!-- <hr> -->
 
-                <!-- 服務/規範 -->
+        <!-- 服務/規範 -->
 
-                <div class="mt-3 px-3 mb-4">
-                    <label for="" class="form-label">
-                        <h3>服務項目</h3>
-                    </label>
-                    <div class="d-flex ">
-                        <?php foreach ($sitems as $k => $j) : ?>
-                            <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>">
-                                <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
-                                    <?= $j['s_name'] ?>
-                                </label>
-                            </div>
-                        <?php endforeach ?>
+        <div class="mt-5 pt-2 px-3 mb-4">
+            <label for="" class="form-label">
+                <h3>服務項目</h3>
+            </label>
+            <div class="d-flex ">
+                <?php foreach ($sitems as $k => $j) : ?>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="<?= $j['s_sid'] ?>" name="rest_svc[]" id="rest_svc[]<?= $j['s_sid'] ?>">
+                        <label class="form-check-label" for="rest_svc[]<?= $j['s_sid'] ?>">
+                            <?= $j['s_name'] ?>
+                        </label>
                     </div>
-                </div>
+                <?php endforeach ?>
+            </div>
+        </div>
 
-                <div class="mb-3 mt-3 px-3">
-                    <label for="" class="form-label">
-                        <h3>攜帶規則</h3>
-                    </label>
-                    <div class="d-flex ">
-                        <?php foreach ($ritems as $k => $r) : ?>
-                            <div class="form-check me-5">
-                                <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $r['r_sid'] ?>">
-                                <label class="form-check-label" for="rest_rule[]<?= $r['r_sid'] ?>">
-                                    <?= $r['r_name'] ?>
-                                </label>
-                            </div>
-                        <?php endforeach ?>
+        <div class="mb-3 mt-5 pt-2 px-3">
+            <label for="" class="form-label">
+                <h3>攜帶規則</h3>
+            </label>
+            <div class="d-flex ">
+                <?php foreach ($ritems as $k => $r) : ?>
+                    <div class="form-check me-5">
+                        <input class="form-check-input" type="checkbox" value="<?= $r['r_sid'] ?>" name="rest_rule[]" id="rest_rule[]<?= $r['r_sid'] ?>">
+                        <label class="form-check-label" for="rest_rule[]<?= $r['r_sid'] ?>">
+                            <?= $r['r_name'] ?>
+                        </label>
                     </div>
-                </div>
+                <?php endforeach ?>
+            </div>
+        </div>
 
-                <div class="row">
-                    <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
-                    <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">新增餐廳</button>
-                </div>
+        <div class="row">
+            <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
+            <button type="submit" class="col-3 btn btn-primary mt-4 mb-4">新增餐廳</button>
+        </div>
 
 </form>
 <?php include './partsNOEDIT/script.php' ?>
@@ -329,56 +326,57 @@ $ritems = $pdo->query($rsql)->fetchAll();
         event.preventDefault();
         let isPass = true;
 
-        if (isPass) { //格式完全正確，呼叫api
-            const fd = new FormData(document.rest_form);
-            fetch('r_add_api.php', {
-                    method: 'POST',
-                    body: fd,
-                })
-                .then(r => r.json())
-                .then(obj => {
-                    console.log(obj);
-                    setTimeout(() => {
-                        location.href = 'r_read.php';
-                    }, 2000);
-                })
-                .catch(ex => {
-                    console.log(ex);
-                })
 
-        } else {
-            // 沒通過檢查
-        }
-    }
-
-
-
-
-    const tempImg = document.querySelector("#tempImg");
-
-    function restImg() {
-        //模擬點擊
-        tempImg.click();
-    }
-
-    tempImg.addEventListener("change", () => {
-        const fd = new FormData(document.rest_pic);
-        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
+        const fd = new FormData(document.rest_form);
+        fetch('r_add_api.php', {
                 method: 'POST',
                 body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                if (obj.filename) {
-                    const imginfo = document.querySelector('#imginfo');
-                    const imginfo_f = document.querySelector('#imginfo_f');
-                    const pro_img = document.querySelector('#pro_img');
-                    imginfo.src = `./imgs/${obj.filename}`;
-                    imginfo.style.display = "block";
-                    pro_img.value = obj.filename;
-                }
-            }).catch(ex => {
-                console.log(ex)
             })
-    })
+            .then(r => r.json())
+            .then(obj => {
+                setTimeout(() => {
+                    location.href = 'r_read.php';
+                }, 2000);
+
+                console.log(obj);
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
+
+        // } else {
+        // 沒通過檢查
+    }
+
+
+
+
+
+    // const tempImg = document.querySelector("#tempImg");
+
+    // function restImg() {
+    //     //模擬點擊
+    //     tempImg.click();
+    // }
+
+    // tempImg.addEventListener("change", () => {
+    //     const fd = new FormData(document.rest_pic);
+    //     fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
+    //             method: 'POST',
+    //             body: fd,
+    //         }).then(r => r.json())
+    //         .then(obj => {
+    //             if (obj.filename) {
+    //                 const imginfo = document.querySelector('#imginfo');
+    //                 const imginfo_f = document.querySelector('#imginfo_f');
+    //                 const pro_img = document.querySelector('#pro_img');
+    //                 imginfo.src = `./imgs/${obj.filename}`;
+    //                 imginfo.style.display = "block";
+    //                 pro_img.value = obj.filename;
+    //             }
+    //         }).catch(ex => {
+    //             console.log(ex)
+    //         })
+    // })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

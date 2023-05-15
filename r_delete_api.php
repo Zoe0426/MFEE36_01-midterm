@@ -11,17 +11,6 @@ if (!empty($_GET['rest_sid'])) {
     $delSid = $_GET['rest_sid'] ? intval($_GET['rest_sid']) : '';
 }
 
-
-
-// 父表格+子表格
-// $sql = "DELETE rest_info , rest_c_rr , rest_c_rs
-// FROM rest_info
-// LEFT JOIN `rest_c_rr` ON rest_c_rr.rest_sid = rest_info.rest_sid
-// LEFT JOIN `rest_c_rs` ON rest_c_rs.rest_sid = rest_info.rest_sid
-// WHERE rest_sid = $delSid";
-
-
-
 $sql1 = "DELETE FROM rest_info WHERE rest_sid = $delSid";
 $stm1 = $pdo->query($sql1);
 
@@ -31,12 +20,10 @@ $stm2 = $pdo->query($sql2);
 $sql3 = "DELETE FROM rest_c_rs WHERE rest_sid = $delSid";
 $stm3 = $pdo->query($sql3);
 
-
 $comeFrom = 'r_read.php';
 if (!empty($_SERVER['HTTP_REFERER'])) {
     $comeFrom = $_SERVER['HTTP_REFERER'];
 }
-
 
 header('Location: ' . $comeFrom);
 # 待加： 確認刪除成功，更改success訊息
