@@ -32,7 +32,7 @@ $r_post = $stmt->fetchAll();
         <div class="card">
           <div class="card-body">
 
-            <h5 class="card-title">新增資料</h5>
+            <h5 class="card-title">編輯文章公告</h5>
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
                 <label for="admin_name">管理者名稱：</label>
@@ -79,7 +79,7 @@ $r_post = $stmt->fetchAll();
 
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
 
-              <button type="submit" class="btn btn-primary">新增</button>
+              <button type="submit" class="btn btn-primary">儲存</button>
             </form>
             <!-- 要顯示在頁面中，送資料給api的form -->
             <form name="form2" onsubmit="checkForm(event)">
