@@ -26,11 +26,26 @@ if ($totalRows) {
     $rows = $pdo->query($sql)->fetchAll();
 };
 
+
+
+$filteredArray = array_map(function ($item) {
+    return [
+        '產品編號' => $item['pro_sid'],
+        '細項編號' => $item['proDet_sid'],
+        '商品名稱' => $item['pro_name'],
+        'catDet_name' => $item['catDet_name']
+    ];
+}, $rows);
+
+// echo json_encode($filteredArray);
+
+
+
 header('Content-Type: application/json');
 echo json_encode([
     'perPage' => $perPage,
     'page' => $page,
     'totalRows' => $totalRows,
     'totalPages' => $totalPages,
-    'rows' => $rows
+    'rows' => $filteredArray
 ], JSON_UNESCAPED_UNICODE);
