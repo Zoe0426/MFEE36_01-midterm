@@ -25,6 +25,11 @@ $groupList = $pdo->query($sql3)->fetch();
 
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
+<style>
+    .form-text {
+        color: red;
+    }
+</style>
 <?php include './partsNOEDIT/navbar.php' ?>
 <style>
     .form-text {
@@ -76,6 +81,7 @@ $groupList = $pdo->query($sql3)->fetch();
                     <div class="mb-3">
                         <label for="group_date" class="form-label">梯次</label>
                         <input type="date" class="form-control" id="group_date" name="group_date" data-required="1" value="<?= $r['group_date'] ?? date('Y-m-d') ?>" min="<?= date('Y-m-d') ?>">
+                        <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="group_time" class="form-label">時段</label>
@@ -110,12 +116,12 @@ $groupList = $pdo->query($sql3)->fetch();
     </div> -->
                     <div class="mb-3">
                         <label for="act_content" class="form-label">活動內容</label>
-                        <textarea class="form-control" id="act_content" name="act_content" data-required="1" value="<?= $r['act_content'] ?>"></textarea>
+                        <textarea class="form-control" id="act_content" name="act_content" data-required="1"><?= $r['act_content'] ?></textarea>
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="act_policy" class="form-label">活動規範</label>
-                        <textarea class="form-control" id="act_policy" name="act_policy" data-required="1" value="<?= $r['act_policy'] ?>"></textarea>
+                        <textarea class="form-control" id="act_content" name="act_content" data-required="1"><?= $r['act_policy'] ?></textarea>
                         <div class="form-text"></div>
                     </div>
 
@@ -204,7 +210,8 @@ $groupList = $pdo->query($sql3)->fetch();
             type.nextElementSibling.innerHTML = '請選擇'
         }
 
-        if (date.value === "") {
+        //日期無法成功
+        if (date.value === "Y-m-d") {
             date.style.border = '1px solid red';
             date.nextElementSibling.innerHTML = '請選擇'
         }
