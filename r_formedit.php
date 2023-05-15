@@ -376,17 +376,18 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                     if (obj.success) {
                         infoBar.classList.remove('alert-danger');
                         infoBar.classList.add('alert-success');
-                        infoBar.innerHTML = "編輯成功";
+                        infoBar.innerHTML = "資料更新成功!";
                         infoBar.style.display = 'block';
 
                     } else {
                         infoBar.classList.remove('alert-success');
                         infoBar.classList.add('alert-danger');
-                        infoBar.innerHTML = "編輯失敗";
+                        infoBar.innerHTML = "資料更新失敗";
                         infoBar.style.display = 'block';
                     }
                     setTimeout(() => {
                         infoBar.style.display = 'none';
+                        location.href = 'r_read.php';
                     }, 2000);
 
                     console.log(obj);

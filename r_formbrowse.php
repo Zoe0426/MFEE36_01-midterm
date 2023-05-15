@@ -71,7 +71,11 @@ $selectedArray = explode(',', $selectedValues);
 <form name="rest_form" class="px-3 pt-2 " onsubmit="checkForm(event)">
     <!-- 分頁 -->
     <div class="px-3 pt-4">
-        <h3 class="mb-4 px-3">基本資料</h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="px-3">基本資料</h3>
+            <a class="btn btn-success text-align-center" href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+        </div>
+
         <!-- 圖片區 -->
         <div class="row mb-4 px-3">
             <!-- <div class="col-3" onclick="restImg()" id="finalImg">

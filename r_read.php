@@ -55,6 +55,9 @@ if ($totalRows) {
                 <?php endforeach ?>
             </select>
         </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-warning">搜尋</button>
+        </div>
 
         <div class="col-3  hstack">
             <div class="dropdown pe-3">

@@ -51,6 +51,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
     `p_max`=?,
     `pt_max`=?
 
+
  
     WHERE rest_sid= ? ";
 
@@ -83,6 +84,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
         $_POST['n_end'],
         $_POST['p_max'],
         $_POST['pt_max'],
+
 
 
         $_POST['rest_sid'],

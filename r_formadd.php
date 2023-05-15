@@ -349,8 +349,20 @@ $ritems = $pdo->query($rsql)->fetchAll();
             })
             .then(r => r.json())
             .then(obj => {
+                if (obj.success) {
+                    infoBar.classList.remove('alert-danger');
+                    infoBar.classList.add('alert-success');
+                    infoBar.innerHTML = "資料更新成功!";
+                    infoBar.style.display = 'block';
 
+                } else {
+                    infoBar.classList.remove('alert-success');
+                    infoBar.classList.add('alert-danger');
+                    infoBar.innerHTML = "資料更新失敗";
+                    infoBar.style.display = 'block';
+                }
                 setTimeout(() => {
+                    infoBar.style.display = 'none';
                     location.href = 'r_read.php';
                 }, 2000);
 
@@ -358,6 +370,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
             })
             .catch(ex => {
                 console.log(ex);
+                infoBar.classList.remove('alert-success');
+                infoBar.classList.add('alert-danger');
+                infoBar.innerHTML = "發生錯誤";
+                setTimeout(() => {
+                    infoBar.style.display = 'none';
+                }, 2000);
             })
 
         // } else {
