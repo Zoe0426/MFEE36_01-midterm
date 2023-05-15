@@ -3,10 +3,16 @@
         <a class="navbar-brand text-dark" href="#">
             <i class="fa-brands fa-github-alt me-3"></i>第一女子軍團</a>
         <div class="dropdown p-2 ">
+
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://images.pexels.com/photos/4597758/pexels-photo-4597758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" width="40" height="40" class="rounded-circle me-2">
-                <strong>管理員</strong>
+                <?php if (isset($_SESSION['admin'])) : ?>
+                    <div><?= $_SESSION['admin']['admin_name'] ?></div>
+                <?php else : ?>
+                    <div>管理員</div>
+                <?php endif; ?>
             </a>
+
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow " aria-labelledby="dropdownUser1">
                 <li><a class="dropdown-item" href="#">設定</a></li>
                 <li><a class="dropdown-item" href="#">個人資料</a></li>
