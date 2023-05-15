@@ -12,7 +12,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
-<div class="container">
+<div class="container pt-4">
     <!-- =====選擇會員===== -->
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
@@ -40,9 +40,36 @@ require './partsNOEDIT/connect-db.php' ?>
     </form>
 
     <div class="row">
-        <div class="col">
+        <div class="col-12 pt-3">
+            <table class="table table-striped ocd">
+                <thead>
+                    <tr>
+                        <th scope="col">訂單編號</th>
+                        <th scope="col">會員編號</th>
+                        <th scope="col">訂單狀態</th>
+                        <th scope="col">優惠券編號</th>
+                        <th scope="col">寄送方式</th>
+                        <th scope="col">寄送狀態</th>
+                        <th scope="col">訂單成立時間</th>
+                        <th scope="col"><i class="fa-regular fa-pen-to-square"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td><i class="fa-regular fa-pen-to-square"></i></td>
+                    </tr>
 
+                </tbody>
+            </table>
         </div>
+
     </div>
     <div class="row"></div>
 </div>

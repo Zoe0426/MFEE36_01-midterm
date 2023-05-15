@@ -3,8 +3,9 @@
 require './partsNOEDIT/connect-db.php';
 
 $output = [
-    'getMemberSuccess' => false,
-    'getCouponSuccess' => false,
+    'getByOrderSidSuccess' => false,
+    'getOrdByMemberSuccess' => false,
+    'getOrdByMobileSuccess' => false,
 ];
 $searchBy = isset($_POST['searchBy']) ? intval($_POST['searchBy']) : 0;
 //有資料再查尋
@@ -15,17 +16,26 @@ if (!empty($_POST['searchBy'])) {
     $sbname = isset($_POST['sbname']) ? $_POST['sbname'] : null;
 
     if ($searchBy == 1) {
-        $sqlorder = "SELECT oo.`order_sid`, oo.`member_sid`, oo.postType, oo.coupon_sid, oo.postStatus, oo.createDt, mm.member_name, mm.member_mobile, mm.member_birth FROM `ord_order` oo JOIN mem_member mm ON oo.member_sid = mm.member_sid WHERE `order_sid`=?";
+        $sqlorder =
+            "SELECT oo.`order_sid`, oo.`member_sid`, oo.postType, 
+                oo.coupon_sid, oo.postStatus, oo.order_status,
+                oo.createDt, mm.member_name, mm.member_mobile, 
+                mm.member_birth 
+            FROM `ord_order` oo 
+                JOIN mem_member mm 
+                ON oo.member_sid = mm.member_sid 
+            WHERE oo.`order_sid`=?";
         $stm = $pdo->prepare($sqlorder);
         $stm->execute([$sbOrder]);
         $data = $stm->fetch();
 
-        $output['getMemberSuccess'] = true;
+        $output['getByOrderSidSuccess'] = true;
         $output['sid'] = $data['member_sid'];
         $output['name'] = $data['member_name'];
         $output['mobile'] = $data['member_mobile'];
         $output['birth'] = $data['member_birth'];
         $output['order_sid'] = $data['order_sid'];
+        $output['order_status'] = $data['order_status'];
         $output['coupon_sid'] = $data['coupon_sid'];
         $output['postType'] = $data['postType'];
         $output['postStatus'] = $data['postStatus'];
@@ -34,50 +44,58 @@ if (!empty($_POST['searchBy'])) {
 
     if ($searchBy == 2) {
         $sqlname =
-            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
-        FROM `mem_member` WHERE `member_name` = ? ";
+            "SELECT oo.`order_sid`, oo.`member_sid`, oo.postType, 
+                oo.coupon_sid, oo.postStatus, oo.order_status, 
+                oo.createDt, mm.member_name, mm.member_mobile, 
+                mm.member_birth 
+            FROM `ord_order` oo 
+                JOIN mem_member mm 
+                ON oo.member_sid = mm.member_sid 
+            WHERE mm.`member_name`=?";
         $stm = $pdo->prepare($sqlname);
         $stm->execute([$sbname]);
-        $data = $stm->fetch();
+        $data = $stm->fetchAll();
 
-        $output['getMemberSuccess'] = true;
-        $output['sid'] = $data['member_sid'];
-        $output['name'] = $data['member_name'];
-        $output['mobile'] = $data['member_mobile'];
-        $output['birth'] = $data['member_birth'];
+        $output['getOrdByMemNameSuccess'] = true;
+        $output['name_orders'] = $data;
     }
 
     if ($searchBy == 3) {
         $sqlmobile =
-            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
-        FROM `mem_member` WHERE `member_mobile` = ? ";
+            "SELECT oo.`order_sid`, oo.`member_sid`, oo.postType, 
+                oo.coupon_sid, oo.postStatus, oo.order_status, 
+                oo.createDt, mm.member_name, mm.member_mobile, 
+                mm.member_birth 
+            FROM `ord_order` oo 
+                JOIN mem_member mm 
+                ON oo.member_sid = mm.member_sid 
+            WHERE mm.`member_mobile`=?";
         $stm = $pdo->prepare($sqlmobile);
         $stm->execute([$sbmobile]);
-        $data = $stm->fetch();
+        $data = $stm->fetchAll();
 
-        $output['getMemberSuccess'] = true;
-        $output['sid'] = $data['member_sid'];
-        $output['name'] = $data['member_name'];
-        $output['mobile'] = $data['member_mobile'];
-        $output['birth'] = $data['member_birth'];
+        $output['getOrdByMobileSuccess'] = true;
+        $output['mobile_orders'] = $data;
     }
 
     if ($searchBy == 4) {
         $sqlmem =
-            "SELECT `member_sid`, `member_name`, `member_mobile`, `member_birth` 
-        FROM `mem_member` WHERE `member_sid` = ? ";
+            "SELECT oo.`order_sid`, oo.`member_sid`, oo.postType, 
+            oo.coupon_sid, oo.postStatus, oo.order_status, 
+            oo.createDt, mm.member_name, mm.member_mobile, 
+            mm.member_birth 
+        FROM `ord_order` oo 
+            JOIN mem_member mm 
+            ON oo.member_sid = mm.member_sid 
+        WHERE mm.`member_sid`=?";
         $stm = $pdo->prepare($sqlmem);
         $stm->execute([$sbmemsid]);
-        $data = $stm->fetch();
-
-        $output['getMemberSuccess'] = true;
-        $output['sid'] = $data['member_sid'];
-        $output['name'] = $data['member_name'];
-        $output['mobile'] = $data['member_mobile'];
-        $output['birth'] = $data['member_birth'];
+        $data = $stm->fetchAll();
+        $output['getOrdByMemSidSuccess'] = true;
+        $output['sid_orders'] = $data;
     }
 }
-$mem = $data['member_sid'];
+// $mem = $data['member_sid'];
 
 //有找到Member，拿購物車,coupon資料
 // if ($mem) {
