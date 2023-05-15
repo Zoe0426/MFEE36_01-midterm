@@ -53,69 +53,96 @@ require './partsNOEDIT/connect-db.php' ?>
                 <div class="col-10">
                     <div id="oCartDisplay">
                     </div>
-                    <div id="oPostPayDisplay" class="container-fluid">
+                    <div id="oPostPayDisplay" class="container-fluid px-0">
                     </div>
                 </div>
                 <div class="priceInfo col-2 ocd o-d-none"></div>
             </div>
         </div>
     </form>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal Msg for client -->
+    <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="oCMsgLabel">溫馨提醒會員</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    訂單成立後，匯款資訊將寄至會員信箱。<br>
+                    請提醒會員於24小時內完成匯款。
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">退回編輯</button>
+                    <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#oConfirmNewOrder">送出訂單</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Send New Order -->
+    <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="oCnewOdLabel">訂單成立</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    前往訂單列表？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
+                    <button type="button" class="btn btn-warning">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>`
 
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
-    const oPostPayDisplay = document.getElementById('oPostPayDisplay');
-
+    console.log(oCartDisplay);
+    const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
+    console.log(oPostPayDisplay);
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
-        const fd = new FormData(document.getElementById('oGetmem'));
-        fetch('o_api01_getMemCart.php', {
-                method: 'POST',
-                body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                console.log(obj);
-                showMemInfo(obj);
-                if (obj.shoplist !== 'noShopItems') {
-                    showShopList(obj);
-                }
-                if (obj.actlist !== 'noActItems') {
-                    showActList(obj);
-                }
-                if (obj.coupons !== 'noCoupons') {
-                    showCoupon(obj);
-                }
-                showPostnPay(obj);
-            })
-            .catch(ex => {
-                console.log(ex);
-            })
+
+        const nameInput = document.getElementById('sbname');
+        const mobileInput = document.getElementById('sbmobile');
+        const memsidInput = document.getElementById('sbmemsid');
+
+        if (nameInput.value || mobileInput.value || memsidInput.value) {
+            const fd = new FormData(document.getElementById('oGetmem'));
+            fetch('o_api01_getMemCart.php', {
+                    method: 'POST',
+                    body: fd,
+                }).then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    showMemInfo(obj);
+                    if (obj.shoplist !== 'noShopItems') {
+                        showShopList(obj);
+                    }
+                    if (obj.actlist !== 'noActItems') {
+                        showActList(obj);
+                    }
+                    if (obj.coupons !== 'noCoupons') {
+                        showCoupon(obj);
+                    }
+                    showPostnPay(obj);
+                })
+                .catch(ex => {
+                    console.log(ex);
+                })
+        } else {
+            //有空加訊息
+            console.log('None of the inputs have a value');
+        }
+
     }
     // ====CREATE ORDER====
     function createOrder(e) {
@@ -323,8 +350,10 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示地址及付款方式
     function showPostnPay(obj) {
-        const oPostPayDisplay = document.querySelector("#oPostPayDisplay");
+        console.log("pp");
         const opp = document.createElement('div');
+        opp.classList.add('ocd');
+        opp.classList.add('px-3');
         opp.innerHTML =
             `<div class="postInfo row g-0 pt-3">
                 <h5 class="text-secondary mb-3">寄送資訊:</h5>
@@ -345,15 +374,14 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
                 <input type="text" name="member_sid" class="o-d-none" value="${obj.sid}">
             </div>`;
-        oPostPayDisplay.classList.add("ocd");
-        oPostPayDisplay.classList.add("p");
+        console.log(oPostPayDisplay);
         oPostPayDisplay.append(opp);
         const oGetItemsForm = document.getElementById('oGetItemsForm');
         const send = document.createElement('div');
         send.innerHTML = `        
         <div class="row pt-3 g-0">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
-                <button type="submit" class="btn btn-warning mx-auto">成立訂單</button>
+                <button type="button" class="btn btn-warning mx-auto" data-bs-toggle="modal" data-bs-target="#oMsgToClient">成立訂單</button>
             
         </div>`;
         oGetItemsForm.append(send);
