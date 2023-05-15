@@ -40,7 +40,7 @@ require './partsNOEDIT/connect-db.php' ?>
     </form>
 
     <div class="row">
-        <div class="col-12 pt-3">
+        <div class="col-12 pt-3" id="oOrdersTable">
             <table class="table table-striped ocd">
                 <thead>
                     <tr>
@@ -65,7 +65,6 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td>@mdo</td>
                         <td><i class="fa-regular fa-pen-to-square"></i></td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
@@ -76,7 +75,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    // ====取得某會員的訂單
+    // ====取得訂單資料====
     function getMemOrd(e) {
         e.preventDefault();
         const orderSidInput = document.getElementById('sbOrder');
@@ -85,17 +84,19 @@ require './partsNOEDIT/connect-db.php' ?>
         const memsidInput = document.getElementById('sbmemsid');
 
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
-            console.log(nameInput.value);
-            console.log(mobileInput.value);
-            console.log(memsidInput.value);
-            console.log(orderSidInput);
-
             const fd = new FormData(document.getElementById('oGetmem'));
             fetch('o-api02_1_getMemOrders.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())
                 .then(obj => {
+                    if (obj.getby === 'orderSid') {
+                        // console.log("getby Order");
+                        tableByOrderSid(obj);
+                    } else {
+                        // console.log('getby other');
+                        tableByMemInfo(obj);
+                    }
                     console.log(obj);
                 })
                 .catch(ex => {
@@ -150,6 +151,14 @@ require './partsNOEDIT/connect-db.php' ?>
                             </tr>
                         </tbody>
                     </table>`;
+    }
+    // ====顯示指定訂單
+    function tableByOrderSid(obj) {
+
+    }
+    // ====顯示某員的所有訂單
+    function tableByMemInfo(obj) {
+
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

@@ -3,9 +3,11 @@
 require './partsNOEDIT/connect-db.php';
 
 $output = [
+    'getBy' => '',
     'getByOrderSidSuccess' => false,
     'getOrdByMemberSuccess' => false,
     'getOrdByMobileSuccess' => false,
+    'getOrdByMemSidSuccess' => false,
 ];
 $searchBy = isset($_POST['searchBy']) ? intval($_POST['searchBy']) : 0;
 //有資料再查尋
@@ -30,6 +32,7 @@ if (!empty($_POST['searchBy'])) {
         $data = $stm->fetch();
 
         $output['getByOrderSidSuccess'] = true;
+        $output['getBy'] = 'orderSid';
         $output['sid'] = $data['member_sid'];
         $output['name'] = $data['member_name'];
         $output['mobile'] = $data['member_mobile'];
@@ -57,6 +60,7 @@ if (!empty($_POST['searchBy'])) {
         $data = $stm->fetchAll();
 
         $output['getOrdByMemNameSuccess'] = true;
+        $output['getBy'] = 'memName';
         $output['name_orders'] = $data;
     }
 
@@ -75,6 +79,7 @@ if (!empty($_POST['searchBy'])) {
         $data = $stm->fetchAll();
 
         $output['getOrdByMobileSuccess'] = true;
+        $output['getBy'] = 'memMobile';
         $output['mobile_orders'] = $data;
     }
 
@@ -92,6 +97,7 @@ if (!empty($_POST['searchBy'])) {
         $stm->execute([$sbmemsid]);
         $data = $stm->fetchAll();
         $output['getOrdByMemSidSuccess'] = true;
+        $output['getBy'] = 'memSid';
         $output['sid_orders'] = $data;
     }
 }
