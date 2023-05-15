@@ -30,6 +30,7 @@ if ($totalRows) {
 
 
 
+
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -96,7 +97,15 @@ if ($totalRows) {
                         <td><?= $r['act_name'] ?></td>
                         <td><?= $r['act_content'] ?></td>
                         <td><?= $r['group_date'] ?></td>
-                        <td><?= $r['group_time'] ?></td>
+                        <td>
+                            <?php if ($r['group_time'] == 0) : ?>
+                                上午
+                            <?php elseif ($r['group_time'] == 1) : ?>
+                                下午
+                            <?php elseif ($r['group_time'] == 2) : ?>
+                                全天
+                            <?php endif; ?>
+                        </td>
                         <td><?= $r['ppl_max'] ?></td>
                         <td><?= $r['act_post_date'] ?></td>
                         <td><a href="a_edit.php?act_sid=<?= $r['act_sid'] ?>">
