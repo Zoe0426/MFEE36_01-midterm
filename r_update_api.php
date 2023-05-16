@@ -11,7 +11,7 @@ $output = [
 
 if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
-
+    $isPass = true;
     // 用餐時間更新
     $selectedValue = $_POST['ml_time'];
     $sid = $_POST['rest_sid'];

@@ -155,7 +155,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 </div>
                 <div class="col-3">
                     <label for="date_end" class="form-label">結束日期</label>
-                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1">
+                    <input type="date" class="form-control" id="date_end" name="date_end">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
@@ -178,24 +178,24 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 </div>
                 <div class="col-3">
                     <label for="m_end" class="form-label">早上結束時間</label>
-                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1">
+                    <input type="time" class="form-control" id="m_end" name="m_end">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_start" class="form-label">下午開始時間</label>
-                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1">
+                    <input type="time" class="form-control" id="e_start" name="e_start">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_end" class="form-label">下午結束時間</label>
-                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1">
+                    <input type="time" class="form-control" id="e_end" name="e_end">
                     <div class="form-text"></div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="n_start" class="form-label">晚上開始時間</label>
-                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1">
+                    <input type="time" class="form-control" id="n_start" name="n_start">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
@@ -321,64 +321,103 @@ $ritems = $pdo->query($rsql)->fetchAll();
 </form>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-    const name = querySelector('#rest_name');
-    const catg = querySelector('#catg_sid');
-    const phone = querySelector('#rest_phone');
-    const address = querySelector('#rest_address');
-    const info = querySelector('#rest_info');
-    const date_start = querySelector('#date_start');
-    const date_end = querySelector('#date_end');
-    const p_max = querySelector('#p_max');
-    const pt_max = querySelector('#pt_max');
-    const m_start = querySelector('#m_start');
-    const n_end = querySelector('#n_end');
-
-
-
-
     function checkForm(event) {
-        const infoBar = document.querySelector('#infoBar');
         event.preventDefault();
+
+
+        const fields = document.querySelectorAll('form *[data-required="1"]');
+        const name = document.querySelector('#rest_name');
+        const catg = document.querySelector('#catg_sid');
+        const phone = document.querySelector('#rest_phone');
+        const address = document.querySelector('#rest_address');
+        const info = document.querySelector('#rest_info');
+        const date_start = document.querySelector('#date_start');
+        const date_end = document.querySelector('#date_end');
+        const p_max = document.querySelector('#p_max');
+        const pt_max = document.querySelector('#pt_max');
+        const m_start = document.querySelector('#m_start');
+        const n_end = document.querySelector('#n_end');
+        const infoBar = document.querySelector('#infoBar');
+
+        const regex_number = /^[0-9]*$/;
+
         let isPass = true;
+        name.style.border = '1px solid #ccc';
+        name.nextElementSibling.innerHTML = '';
+
+        //如果完全沒有輸入的情況
+        for (let f of fields) {
+            if (!f.value) {
+                isPass = false;
+                f.style.border = '1px solid red';
+                f.nextElementSibling.innerHTML = '請輸入資料!';
+                f.nextElementSibling.style.color = 'red';
+                f.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+            }
+        }
+
+        // 餐廳名稱格式
+        if (name.value.length < 2) {
+            isPass = false;
+            name.style.border = '1px solid red';
+            name.nextElementSibling.innerHTML = '請輸入至少三個字!';
+            name.nextElementSibling.style.color = 'red';
+            name.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
 
 
+        //輸入內容長度限制
+        if (info.value.length > 150) {
+            isPass = false;
+            name.style.border = '1px solid red';
+            name.nextElementSibling.innerHTML = '字數超過!';
+            name.nextElementSibling.style.color = 'red';
+        }
 
-        const fd = new FormData(document.rest_form);
-        fetch('r_add_api.php', {
-                method: 'POST',
-                body: fd,
-            })
-            .then(r => r.json())
-            .then(obj => {
-                if (obj.success) {
-                    infoBar.classList.remove('alert-danger');
-                    infoBar.classList.add('alert-success');
-                    infoBar.innerHTML = "資料更新成功!";
-                    infoBar.style.display = 'block';
+        if (isPass) {
+            const fd = new FormData(document.rest_form);
+            fetch('r_add_api.php', {
+                    method: 'POST',
+                    body: fd,
+                })
+                .then(r => r.json())
+                .then(obj => {
+                    if (obj.success) {
+                        infoBar.classList.remove('alert-danger');
+                        infoBar.classList.add('alert-success');
+                        infoBar.innerHTML = "資料更新成功!";
+                        infoBar.style.display = 'block';
 
-                } else {
+                    } else {
+                        infoBar.classList.remove('alert-success');
+                        infoBar.classList.add('alert-danger');
+                        infoBar.innerHTML = "資料更新失敗";
+                        infoBar.style.display = 'block';
+                    }
+                    setTimeout(() => {
+                        infoBar.style.display = 'none';
+                        location.href = 'r_read.php';
+                    }, 2000);
+
+                    console.log(obj);
+                })
+                .catch(ex => {
+                    console.log(ex);
                     infoBar.classList.remove('alert-success');
                     infoBar.classList.add('alert-danger');
-                    infoBar.innerHTML = "資料更新失敗";
-                    infoBar.style.display = 'block';
-                }
-                setTimeout(() => {
-                    infoBar.style.display = 'none';
-                    location.href = 'r_read.php';
-                }, 2000);
-
-                console.log(obj);
-            })
-            .catch(ex => {
-                console.log(ex);
-                infoBar.classList.remove('alert-success');
-                infoBar.classList.add('alert-danger');
-                infoBar.innerHTML = "發生錯誤";
-                setTimeout(() => {
-                    infoBar.style.display = 'none';
-                }, 2000);
-            })
-
+                    infoBar.innerHTML = "發生錯誤";
+                    setTimeout(() => {
+                        infoBar.style.display = 'none';
+                    }, 2000);
+                })
+        }
         // } else {
         // 沒通過檢查
     }

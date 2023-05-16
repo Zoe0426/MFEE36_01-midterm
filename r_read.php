@@ -82,13 +82,14 @@ if ($totalRows) {
                     <th scope="col">餐廳名稱</th>
                     <th scope="col">餐廳類別</th>
                     <th scope="col">餐廳電話</th>
-                    <th scope="col">餐廳地址</th>
                     <th scope="col">早上開始時間</th>
                     <th scope="col">晚上結束時間</th>
+                    <th scope="col">用餐時間</th>
+                    <th scope="col">星期</th>
                     <th scope="col">人數上限</th>
-                    <th scope="col">詳細資訊</th>
-                    <th scope="col">編輯</th>
-                    <th scope="col">刪除</th>
+                    <th scope="col" class="text-center">詳細資訊</th>
+                    <th scope="col" class="text-center">編輯</th>
+                    <th scope="col" class="text-center">刪除</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,18 +100,19 @@ if ($totalRows) {
                         <td><?= $r['rest_name'] ?></td>
                         <td><?= $r['catg_name'] ?></td>
                         <td><?= $r['rest_phone'] ?></td>
-                        <td><?= $r['rest_address'] ?></td>
                         <td><?= $r['m_start'] ?></td>
                         <td><?= $r['n_end'] ?></td>
+                        <td><?= $r['ml_time'] ?></td>
+                        <td><?= $r['weekly'] ?></td>
                         <td><?= $r['p_max'] ?></td>
-                        <td><a href="r_formbrowse.php?rest_sid=<?= $r['rest_sid'] ?>">
+                        <td class="text-center"><a href="r_formbrowse.php?rest_sid=<?= $r['rest_sid'] ?>">
                                 <i class="fa-solid fa-circle-info text-primary"></i>
                             </a></td>
-                        <td><a href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>">
+                        <td class="text-center"><a href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>">
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
                         </td>
-                        <td><a href="javascript: delete_it(<?= $r['rest_sid'] ?>)">
+                        <td class="text-center"><a href="javascript: delete_it(<?= $r['rest_sid'] ?>)">
                                 <i class="fa-solid fa-trash-can text-danger"></i>
                             </a></td>
 

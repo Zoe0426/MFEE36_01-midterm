@@ -165,7 +165,7 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 </div>
                 <div class="col-3">
                     <label for="date_end" class="form-label">結束日期</label>
-                    <input type="date" class="form-control" id="date_end" name="date_end" data-required="1" value="<?= $r['date_end'] ?>">
+                    <input type="date" class="form-control" id="date_end" name="date_end" value="<?= $r['date_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
@@ -188,24 +188,24 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
                 </div>
                 <div class="col-3">
                     <label for="m_end" class="form-label">早上結束時間</label>
-                    <input type="time" class="form-control" id="m_end" name="m_end" data-required="1" value="<?= $r['m_end'] ?>">
+                    <input type="time" class="form-control" id="m_end" name="m_end" value="<?= $r['m_end'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_start" class="form-label">下午開始時間</label>
-                    <input type="time" class="form-control" id="e_start" name="e_start" data-required="1" value="<?= $r['e_start'] ?>">
+                    <input type="time" class="form-control" id="e_start" name="e_start" value="<?= $r['e_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
                     <label for="e_end" class="form-label">下午結束時間</label>
-                    <input type="time" class="form-control" id="e_end" name="e_end" data-required="1" value="<?= $r['e_end'] ?>">
+                    <input type="time" class="form-control" id="e_end" name="e_end" value="<?= $r['e_end'] ?>">
                     <div class="form-text"></div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-3">
                     <label for="n_start" class="form-label">晚上開始時間</label>
-                    <input type="time" class="form-control" id="n_start" name="n_start" data-required="1" value="<?= $r['n_start'] ?>">
+                    <input type="time" class="form-control" id="n_start" name="n_start" value="<?= $r['n_start'] ?>">
                     <div class="form-text"></div>
                 </div>
                 <div class="col-3">
@@ -334,33 +334,49 @@ $b = $pdo->query($sql3)->fetchAll(PDO::FETCH_COLUMN, 1);
     function checkForm(event) {
         event.preventDefault();
 
-
+        const name = document.querySelector('#rest_name');
+        const catg = document.querySelector('#catg_sid');
+        const phone = document.querySelector('#rest_phone');
+        const address = document.querySelector('#rest_address');
+        const info = document.querySelector('#rest_info');
+        const date_start = document.querySelector('#date_start');
+        const date_end = document.querySelector('#date_end');
+        const p_max = document.querySelector('#p_max');
+        const pt_max = document.querySelector('#pt_max');
+        const m_start = document.querySelector('#m_start');
+        const n_end = document.querySelector('#n_end');
         const fields = document.querySelectorAll('form *[data-required="1"]');
         const infoBar = document.querySelector('#infoBar');
         let isPass = true;
 
-        // for (let f of fields) {
-        //     f.style.border = '1px solid #ccc';
-        //     f.nextElementSibling.innerHTML = '';
-        // }
 
+        //如果完全沒有輸入的情況
+        for (let f of fields) {
+            if (!f.value) {
+                isPass = false;
+                f.style.border = '1px solid red';
+                f.nextElementSibling.innerHTML = '請輸入資料!';
+                f.nextElementSibling.style.color = 'red';
+                f.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
 
-        // nameField.style.border = '1px solid #ccc';
-        // nameField.nextElementSibling.innerHTML = '';
+            }
+        }
 
-        // for (let f of fields) {
-        //     if (!f.value) {
-        //         isPass = false;
-        //         f.style.border = '1px solid red';
-        //         f.nextElementSibling.innerHTML = '請輸入資料';
-        //     }
-        // }
+        // 餐廳名稱格式
+        if (name.value.length < 2) {
+            isPass = false;
+            name.style.border = '1px solid red';
+            name.nextElementSibling.innerHTML = '請輸入至少三個字!';
+            name.nextElementSibling.style.color = 'red';
+            name.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
 
-        // if (nameField.value.length < 2 || !nameField.value) {
-        //     isPass = false;
-        //     nameField.style.border = '1px solid red';
-        //     nameField.nextElementSibling.innerHTML = '請輸入至少三個字';
-        // }
 
         if (isPass) {
             const fd = new FormData(document.rest_form); //沒有外觀只有資料
