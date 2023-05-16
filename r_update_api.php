@@ -159,6 +159,24 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
             $sstmInsert->execute(['restSid' => $delSid, 'sSid' => $sSid]);
         }
 
+        // $isqlDelete = "DELETE FROM rest_img WHERE rest_sid = :restSid";
+        // $istmDelete = $pdo->prepare($isqlDelete);
+        // $istmDelete->execute(['restSid' => $delSid]);
+
+        // $restImg = $_POST['pro_img'];
+        // $isqlInsert = "INSERT INTO rest_img (`rest_sid`,`img_name`) VALUES (:restSid, ?)";
+        // $istmInsert = $pdo->prepare($isqlInsert);
+        // $istmInsert->execute();
+
+
+
+        // $sqlChild3 = "INSERT INTO  `rest_img` (`rest_sid`,`img_name` ) VALUES (?,?)";
+        // $stmt3 = $pdo->prepare($sqlChild3);
+        // $stmt3->execute([
+        //     $parentSid,
+        //     $_POST['pro_img'],
+        // ]);
+
         $output['success'] = true;
     }
 }

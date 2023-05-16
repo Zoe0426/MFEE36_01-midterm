@@ -118,6 +118,15 @@ if (!empty($_POST['rest_name'])) {
             $value,
         ]);
     }
+
+    // 加入圖片名稱
+    $sqlChild3 = "INSERT INTO  `rest_img` (`rest_sid`,`img_name` ) VALUES (?,?)";
+    $stmt3 = $pdo->prepare($sqlChild3);
+    $stmt3->execute([
+        $parentSid,
+        $_POST['pro_img'],
+    ]);
+
     $output['success'] = true;
 }
 
