@@ -21,7 +21,7 @@ if (!empty($_POST['rest_name'])) {
         -- `rest_menu`,
         `rest_f_title`,
         `rest_f_ctnt`,
-        -- `rest_f_img`,
+        `rest_f_img`,
         `date_start`,
         `date_end`,
         `m_start`,
@@ -34,7 +34,7 @@ if (!empty($_POST['rest_name'])) {
         `pt_max`,
         `ml_time`,
         `weekly`,
-        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
+        `created_at` ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 
 
     $stmt = $pdo->prepare($sqlParent);
@@ -77,7 +77,7 @@ if (!empty($_POST['rest_name'])) {
         // $_POST['rest_menu'],
         $_POST['rest_f_title'],
         $_POST['rest_f_ctnt'],
-        // $_POST['rest_f_img'],
+        $_POST['rest_f_img'],
         $_POST['date_start'],
         $dateEnd,
         $_POST['m_start'],

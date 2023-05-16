@@ -17,6 +17,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
     #rest_pic,
+    #f_pic,
+    #rest_f_img,
     #pro_img {
         display: none;
     }
@@ -28,7 +30,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
         padding: 0;
     }
 
-    #imginfo {
+    #imginfo,
+    #f_imginfo {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -37,9 +40,14 @@ $ritems = $pdo->query($rsql)->fetchAll();
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 
-<!-- 這個需要隱藏，這是上傳圖片用的form -->
+<!-- 隱藏餐廳圖片 -->
 <form name="rest_pic" id="rest_pic">
     <input type="file" name="tempImg" accept="image/jpeg" id="tempImg">
+</form>
+
+<!-- 隱藏特色餐廳圖片 -->
+<form name="f_pic" id="f_pic">
+    <input type="file" name="tempImg" accept="image/jpeg" id="tempImg_f">
 </form>
 
 <!-- 填表單的區域 -->
@@ -117,13 +125,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
     <div class="row px-3 pt-4">
         <h3 class="mb-4">餐廳特色</h3>
 
-        <!-- <div class="col-4">
+        <div class="col-4">
             <label for="f_pic" class="form-label">特色圖片</label>
-            <div onclick="restImg()" id="finalImg">
-                <img src="" alt="" id="imginfo">
+            <div onclick="restImg_f()" id="finalImg">
+                <img src="" alt="" id="f_imginfo">
             </div>
-            <input type="text" name="f_pro_img" id="f_pro_img">
-        </div> -->
+            <input type="text" name="rest_f_img" id="rest_f_img">
+        </div>
 
 
         <div class="col-8">
@@ -340,20 +348,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
         const m_start = document.querySelector('#m_start');
         const n_end = document.querySelector('#n_end');
         const infoBar = document.querySelector('#infoBar');
-        const mitime = document.querySelector('#ml_time');
-        const weekly = document.querySelector('#weekly');
 
-        const selected = false;
-        for (var i = 0; i < mealTimeInputs.length; i++) {
-            if (mealTimeInputs[i].checked) {
-                selected = true;
-                break;
-            }
-        }
 
-        if (!selected) {
-            alert('請選擇用餐時間！');
-        }
 
         let isPass = true;
 
@@ -450,14 +446,14 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
 
 
-    const tempImg = document.querySelector("#tempImg");
+    const r_tempImg = document.querySelector("#tempImg");
 
     function restImg() {
         //模擬點擊
-        tempImg.click();
+        r_tempImg.click();
     }
 
-    tempImg.addEventListener("change", () => {
+    r_tempImg.addEventListener("change", () => {
         const fd = new FormData(document.rest_pic);
         fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
                 method: 'POST',
@@ -466,11 +462,38 @@ $ritems = $pdo->query($rsql)->fetchAll();
             .then(obj => {
                 if (obj.filename) {
                     const imginfo = document.querySelector('#imginfo');
-                    const imginfo_f = document.querySelector('#imginfo_f');
                     const pro_img = document.querySelector('#pro_img');
                     imginfo.src = `./r_img/${obj.filename}`;
                     imginfo.style.display = "block";
                     pro_img.value = obj.filename;
+                }
+            }).catch(ex => {
+                console.log(ex)
+            })
+    })
+
+
+
+    const tempImg_f = document.querySelector("#tempImg_f");
+
+    function restImg_f() {
+        //模擬點擊
+        tempImg_f.click();
+    }
+
+    tempImg_f.addEventListener("change", () => {
+        const fd = new FormData(document.f_pic);
+        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
+                method: 'POST',
+                body: fd,
+            }).then(r => r.json())
+            .then(obj => {
+                if (obj.filename) {
+                    const f_imginfo = document.querySelector('#f_imginfo');
+                    const rest_f_img = document.querySelector('#rest_f_img');
+                    f_imginfo.src = `./r_img/${obj.filename}`;
+                    f_imginfo.style.display = "block";
+                    rest_f_img.value = obj.filename;
                 }
             }).catch(ex => {
                 console.log(ex)

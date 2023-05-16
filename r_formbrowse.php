@@ -44,21 +44,21 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
     #rest_pic,
+    #f_pic,
+    #rest_f_img,
     #pro_img {
-        /* form1表單與回傳照片名稱隱藏*/
         display: none;
     }
 
     #finalImg {
-        /* 設計自己要放的照片框框 */
         border-radius: 6px;
         height: 280px;
         border: 2px dotted lightgray;
         padding: 0;
     }
 
-    #imginfo {
-        /* 為了不讓div內的img超出，故要記得做下列設定 */
+    #imginfo,
+    #f_imginfo {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -148,14 +148,13 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
     <!-- 餐廳特色 -->
     <div class="row px-3 pt-4">
         <h3 class="mb-4">餐廳特色</h3>
-        <!-- <div class="col-4">
+        <div class="col-4">
             <label for="f_pic" class="form-label">特色圖片</label>
-            <div onclick="restImg()" id="finalImg">
-                <img src="" alt="" id="imginfo">
-
+            <div onclick="restImg_f()" id="finalImg">
+                <img src="./r_img/<?= $r['rest_f_img'] ?>" alt="" id="f_imginfo">
             </div>
-            <input type="text" name="pro_img" id="pro_img">
-        </div> -->
+            <input type="text" name="rest_f_img" id="rest_f_img" value="<?= $r['rest_f_img'] ?>">
+        </div>
         <div class="col-8">
             <div class="col ">
                 <label for="rest_f_title" class="form-label">特色標題</label>
