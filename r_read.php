@@ -58,7 +58,7 @@ if ($totalRows) {
             <div class="pe-2">
                 <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="餐廳名稱搜尋">
             </div>
-            <!-- <button type="submit" class="search btn btn-warning">搜尋</button> -->
+            <button type="submit" class="search btn btn-warning">搜尋</button>
         </div>
 
 
@@ -166,19 +166,16 @@ if ($totalRows) {
 <script>
     // 獲取下拉選單元素
     const selectElement = document.querySelector('select[name="catg"]');
-
-    // 獲取表格行元素
     const tableRows = document.querySelectorAll('tbody tr');
 
-    // 監聽下拉選單值的變化
     selectElement.addEventListener('change', function() {
-        const selectedValue = this.value; // 獲取選擇的值
+        const selectedValue = this.value;
 
-        // 顯示或隱藏表格行
+
         tableRows.forEach(function(row) {
-            const catgName = row.querySelector('td:nth-child(3)').textContent; // 獲取每行的類別名稱
+            const catgName = row.querySelector('td:nth-child(3)').textContent;
 
-            // 如果選擇的值為空或者與該行的類別名稱相同，顯示該行；否則隱藏該行
+
             if (selectedValue === '' || selectedValue === catgName) {
                 row.style.display = 'table-row';
             } else {
@@ -187,31 +184,7 @@ if ($totalRows) {
         });
     });
 
-    // 獲取輸入框元素
-    const inputElement = document.querySelector('input[name="keyword"]');
 
-    // 獲取表格行元素
-    const tableRows2 = document.querySelectorAll('tbody tr');
-
-    // 原始表格行的顯示狀態陣列
-    const originalDisplay = Array.from(tableRows2).map(row => row.style.display);
-
-    // 監聽輸入框的輸入事件
-    inputElement.addEventListener('input', function() {
-        const keyword = this.value.trim().toLowerCase(); // 獲取輸入的關鍵字，並轉為小寫
-
-        // 顯示或隱藏表格行
-        tableRows.forEach(function(row, index) {
-            const restName = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // 獲取每行的餐廳名稱，並轉為小寫
-
-            // 如果輸入的關鍵字為空或者與該行的餐廳名稱相符，顯示該行；否則隱藏該行
-            if (keyword === '' || restName.includes(keyword)) {
-                row.style.display = originalDisplay[index];
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
 
 
     function delete_it(sid) {
@@ -220,7 +193,30 @@ if ($totalRows) {
         }
     }
 
+    // 獲取輸入框元素
+    const inputElement = document.querySelector('input[name="keyword"]');
+    const tableRows1 = document.querySelectorAll('tbody tr');
 
+    // 原始表格行的顯示狀態陣列
+    const originalDisplay = Array.from(tableRows1).map(row => row.style.display);
+
+    const searchButton = document.querySelector('.search');
+
+
+    searchButton.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const keyword = inputElement.value.trim().toLowerCase();
+        tableRows.forEach(function(row, index) {
+            const restName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+            if (keyword === '' || restName.includes(keyword)) {
+                row.style.display = originalDisplay[index];
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
     // function checkForm(event) {
     //     // event.preventDefault();
     //     // const fd = new FormData(document.keyword1);
