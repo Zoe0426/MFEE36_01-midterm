@@ -17,12 +17,15 @@ $rows = [];
 if ($t_rows) {
 
 
-    $sql = sprintf("SELECT * FROM mem_coupon_send ORDER BY `mem_coupon_send`.`couponSend_sid` DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT cs.*,ct.`coupon_name`,`coupon_price` FROM `mem_coupon_send` AS cs JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid`ORDER BY cs.couponSend_sid DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 }
 
 ?>
+<!-- SELECT cs.*,ct.`coupon_name`,`coupon_price` FROM `mem_coupon_send` cs JOIN `mem_coupon_type` ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid`; 
+ORDER BY `mem_coupon_send`.`couponSend_sid`
 
+-->
 
 
 
@@ -30,6 +33,7 @@ if ($t_rows) {
 <?php include './partsNOEDIT/html-head.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container">
+    <button id="toCouponSend_chart_php">看分析</button>
     <div class="row">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
@@ -71,30 +75,29 @@ if ($t_rows) {
                     <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
                     <th scope="col">#</th>
                     <th scope="col">優惠券編號</th>
+                    <th scope="col">優惠券名稱</th>
+                    <th scope="col">優惠券金額</th>
                     <th scope="col">會員編號</th>
                     <th scope="col">使用狀況</th>
                     <th scope="col">更新時間</th>
                     <th scope="col">新增時間</th>
-                    <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($rows as $r) : ?>
                     <tr>
-                        <td><a href="javascript: delete_it('<?= $r['coupon_sid'] ?>')">
+                        <td><a href="javascript: delete_it('<?= $r['couponSend_sid'] ?>')">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
                         </td>
                         <td><?= $r['couponSend_sid'] ?></td>
                         <td><?= $r['coupon_sid'] ?></td>
+                        <td><?= $r['coupon_name'] ?></td>
+                        <td><?= $r['coupon_price'] ?></td>
                         <td><?= $r['member_sid'] ?></td>
                         <td><?= $r['coupon_status'] ?></td>
                         <td><?= $r['update_time'] ?></td>
                         <td><?= $r['create_time'] ?></td>
-                        <td><a href="m_coupon_type_update.php?coupon_sid=<?= $r['coupon_sid'] ?>">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -107,14 +110,19 @@ if ($t_rows) {
 <script>
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'm_coupon_type_delete.php?coupon_sid=' + sid;
+            location.href = 'm_coupon_send_delete.php?couponSend_sid=' + sid;
         }
 
     }
 
     const toCouponSend_php = document.querySelector("#toCouponSend_php");
     toCouponSend_php.addEventListener("click", function() {
-        location.href = 'm_coupon_send_info.php';
+        location.href = 'm_coupon_send_choose.php';
+    })
+
+    const toCouponSend_chart = document.querySelector("#toCouponSend_chart_php");
+    toCouponSend_chart.addEventListener("click", function() {
+        location.href = 'm_coupon_send_chart.php';
     })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
