@@ -420,8 +420,14 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====更新商品庫存
     function sChangeStock(e, x) {
-        console.log(e.target.value);
-        console.log(x.nextElementSibling.nextElementSibling);
+        let qtyParent = x.closest('tr');
+        let sQty = qtyParent.querySelector('td:last-child');
+        sQty.innerHTML = parseInt(sQty.innerHTML) - (e.target.value);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
