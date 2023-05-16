@@ -78,6 +78,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
     `rest_f_title`=?,
     `rest_f_ctnt`=?,
+    `rest_f_img`=?,
     `date_start`=?,
 
     `date_end`=?,
@@ -111,6 +112,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
         $_POST['rest_f_title'],
         $_POST['rest_f_ctnt'],
+        $_POST['rest_f_img'],
         $_POST['date_start'],
 
         $dateEnd,

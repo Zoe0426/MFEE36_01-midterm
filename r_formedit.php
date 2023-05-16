@@ -72,10 +72,16 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 
-<!-- 這個需要隱藏，這是上傳圖片用的form -->
+<!-- 隱藏餐廳圖片 -->
 <form name="rest_pic" id="rest_pic">
     <input type="file" name="tempImg" accept="image/jpeg" id="tempImg">
 </form>
+
+<!-- 隱藏特色餐廳圖片 -->
+<form name="f_pic" id="f_pic">
+    <input type="file" name="tempImg" accept="image/jpeg" id="tempImg_f">
+</form>
+
 
 <!-- 填表單的區域 -->
 
@@ -160,8 +166,8 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
         </div>
 
         <div class="col-8">
-            <div class="col ">
-                <label for="rest_f_title" class="form-label">特色標題</label>
+            <div class="col mt-5">
+                <label for="rest_f_title" class="form-label mt-2">特色標題</label>
                 <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" value="<?= $r['rest_f_title'] ?>">
                 <div class="form-text"></div>
             </div>
@@ -241,7 +247,7 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
             <!-- 用餐時間 -->
             <div class="col-6 ">
                 <label for="" class="form-label">用餐時間</label>
-                <div class="d-flex">
+                <div class="d-flex pt-2">
                     <div class=" form-check me-5">
                         <input class="form-check-input" type="radio" name="ml_time" id="60min" value="60" <?php if ($r['ml_time'] == '60') echo 'checked'; ?>>
                         <label class="form-check-label" for="60min">
@@ -468,6 +474,31 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
                     imginfo.src = `./r_img/${obj.filename}`;
                     imginfo.style.display = "block";
                     pro_img.value = obj.filename;
+                }
+            }).catch(ex => {
+                console.log(ex)
+            })
+    })
+
+    const tempImg_f = document.querySelector("#tempImg_f");
+
+    function restImg_f() {
+        tempImg_f.click();
+    }
+
+    tempImg_f.addEventListener("change", () => {
+        const fd = new FormData(document.f_pic);
+        fetch('r_file_api.php', { //這邊請填入自己要連結的api名稱
+                method: 'POST',
+                body: fd,
+            }).then(r => r.json())
+            .then(obj => {
+                if (obj.filename) {
+                    const f_imginfo = document.querySelector('#f_imginfo');
+                    const rest_f_img = document.querySelector('#rest_f_img');
+                    f_imginfo.src = `./r_img/${obj.filename}`;
+                    f_imginfo.style.display = "block";
+                    rest_f_img.value = obj.filename;
                 }
             }).catch(ex => {
                 console.log(ex)

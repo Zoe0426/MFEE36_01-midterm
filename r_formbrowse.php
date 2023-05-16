@@ -156,8 +156,8 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
             <input type="text" name="rest_f_img" id="rest_f_img" value="<?= $r['rest_f_img'] ?>">
         </div>
         <div class="col-8">
-            <div class="col ">
-                <label for="rest_f_title" class="form-label">特色標題</label>
+            <div class="col mt-5">
+                <label for="rest_f_title" class="form-label mt-2">特色標題</label>
                 <input type="text" class="form-control" id="rest_f_title" name="rest_f_title" data-required="1" value="<?= $r['rest_f_title'] ?> " disabled>
                 <div class="form-text"></div>
             </div>
@@ -237,7 +237,7 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
             <!-- 用餐時間 -->
             <div class="col-6 ">
                 <label for="" class="form-label">用餐時間</label>
-                <div class="d-flex">
+                <div class="d-flex pt-2">
                     <div class=" form-check me-5">
                         <input class="form-check-input" type="radio" name="mltime" id="60min" value="60" <?php if ($r['ml_time'] == '60') echo 'checked'; ?> disabled>
                         <label class="form-check-label" for="60min">
