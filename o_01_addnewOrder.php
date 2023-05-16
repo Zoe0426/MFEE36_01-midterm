@@ -233,7 +233,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].proDet_name}</td>
                     <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
-                    <td totalStock="${sData[i].proDet_qty}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
+                    <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -419,13 +419,19 @@ require './partsNOEDIT/connect-db.php' ?>
     function toOrderDetailsPage() {
         window.location.href = "o_02_orderDetails.php";
     }
-    //====更新商品庫存
+    //====更新商品庫存====
     function sChangeStock(e, x) {
         console.log('change');
         let qtyParent = x.closest('tr');
         let sQty = qtyParent.querySelector('td:last-child');
         let stock = parseInt(sQty.getAttribute('totalStock'));
-        sQty.innerHTML = stock - (e.target.value);
+        let proSid = sQty.getAttribute('proSid');
+        let proDet = sQty.getAttribute('proDet');
+        let updatedQty = e.target.value;
+        sQty.innerHTML = stock - updatedQty; //更改頁面庫存量
+        fetch(`o_api01_3_updateProductQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&prodQty=${updatedQty}`)
+            .then(r => r.json())
+
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
