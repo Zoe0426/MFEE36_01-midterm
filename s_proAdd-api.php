@@ -134,16 +134,16 @@ if (!empty($_POST['pro_name'])) {
         #添加至產品+規格關係表
         foreach ($proNewArr['proDet_sid'] as $k => $v) {
             $stmt_proSpec->execute([
-                sprintf('%02d', $v),
                 $newProSid,
+                sprintf('%02d', $v),
                 $_POST['spec_sid1'][$k],
                 $_POST['specDet_sid1'][$k]
             ]);
         }
         foreach ($proNewArr['proDet_sid'] as $k => $v) {
             $stmt_proSpec->execute([
-                sprintf('%02d', $v),
                 $newProSid,
+                sprintf('%02d', $v),
                 $_POST['spec_sid2'][$k],
                 $_POST['specDet_sid2'][$k]
             ]);

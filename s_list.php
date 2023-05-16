@@ -1,9 +1,14 @@
 <?php
 require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/html-head.php' ?>
+<style>
+    .s_proDetTh {
+        text-align: center;
+    }
+</style>
 <?php include './partsNOEDIT/navbar.php' ?>
 
-<div class="container">
+<div class="container p-3 mt-5">
     <div class="row">
         <nav id="nav"></nav>
     </div>
@@ -69,6 +74,7 @@ require './partsNOEDIT/connect-db.php' ?>
             for (let i of firstRow) {
                 let theTh = document.createElement('th');
                 theTh.setAttribute("scope", "col")
+                theTh.classList.add("s_proDetTh")
                 let theTxt = document.createTextNode(i);
                 theTh.append(theTxt);
                 theRow.append(theTh);
@@ -76,10 +82,13 @@ require './partsNOEDIT/connect-db.php' ?>
 
             let theDetTh = document.createElement('th');
             theDetTh.setAttribute("scope", "col")
+            theDetTh.classList.add("s_proDetTh")
             let theEditTh = document.createElement('th');
             theEditTh.setAttribute("scope", "col")
+            theEditTh.classList.add("s_proDetTh")
             let theDelTh = document.createElement('th');
             theDelTh.setAttribute("scope", "col")
+            theDelTh.classList.add("s_proDetTh")
             theDetTh.textContent = '詳細資訊';
             theEditTh.textContent = '編輯';
             theDelTh.textContent = '刪除';
@@ -98,20 +107,27 @@ require './partsNOEDIT/connect-db.php' ?>
                 let theTr = document.createElement('tr')
                 for (let k of turnToArr) {
                     let theTd = document.createElement('td');
+                    theTd.classList.add("s_proDetTh")
                     let theTxt = document.createTextNode(k);
                     theTd.append(theTxt);
                     theTr.append(theTd);
                 }
                 let theDetTd = document.createElement('td');
                 let theDetTxt = createEl2('i', 'fa-solid', 'fa-circle-info')
+                theDetTd.classList.add("s_proDetTh")
+                theDetTd.style.color = "#3B71CA"
                 theDetTd.append(theDetTxt)
 
                 let theEditTd = document.createElement('td');
                 let theEditTxt = createEl2('i', 'fa-regular', 'fa-pen-to-square')
+                theEditTd.classList.add("s_proDetTh")
+                theEditTd.style.color = "#14A44D"
                 theEditTd.append(theEditTxt)
 
                 let theDelTd = document.createElement('td');
                 let theDelTxt = createEl2('i', 'fa-regular', 'fa-trash-can')
+                theDelTd.classList.add("s_proDetTh")
+                theDelTd.style.color = "#DC4C64"
                 theDelTd.append(theDelTxt)
 
                 theTr.append(theDetTd)
