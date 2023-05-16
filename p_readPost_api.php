@@ -195,6 +195,54 @@ $r_post = $stmt->fetchAll();
 
             window.location.href = 'p-b1.php';
         }
+        if (boardSid == 2) {
+
+            window.location.href = 'p-b2.php';
+        }
+        if (boardSid == 3) {
+
+            window.location.href = 'p-b3.php';
+        }
+        if (boardSid == 4) {
+
+            window.location.href = 'p-b4.php';
+        }
+        if (boardSid == 5) {
+
+            window.location.href = 'p-b5.php';
+        }
+        if (boardSid == 6) {
+
+            window.location.href = 'p-b6.php';
+        }
+        if (boardSid == 7) {
+
+            window.location.href = 'p-b7.php';
+        }
+        if (boardSid == 8) {
+
+            window.location.href = 'p-b8.php';
+        }
+        if (boardSid == 9) {
+
+            window.location.href = 'p-b9.php';
+        }
+        if (boardSid == 10) {
+
+            window.location.href = 'p-b10.php';
+        }
+        if (boardSid == 11) {
+
+            window.location.href = 'p-b11.php';
+        }
+        if (boardSid == 12) {
+
+            window.location.href = 'p-b12.php';
+        }
+        if (boardSid == 13) {
+
+            window.location.href = 'p-b13.php';
+        }
     });
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

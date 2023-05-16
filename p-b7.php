@@ -8,14 +8,14 @@ if ($page < 1) {
     header('Location: ?page=1');
     exit;
 }
-$p_sql = "SELECT COUNT(1) FROM post_list_admin WHERE board_sid = 1";
+$p_sql = "SELECT COUNT(1) FROM post_list_admin WHERE board_sid = 7";
 $totalRows = $pdo->query($p_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
 
 $totalPages = ceil($totalRows / $perPage); #總頁數
 $rows = [];
 
 
-$sql = "SELECT * FROM post_list_admin WHERE board_sid = 1";
+$sql = "SELECT * FROM post_list_admin WHERE board_sid = 7";
 $stmt = $pdo->query($sql);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -25,7 +25,7 @@ if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，
         header("Location: ?page=$totalPages"); //判斷當前頁碼 $page 是否大於總頁數 $totalPages，如果大於則進行重定向，使頁碼指向最後一頁，然後終止程式。
         exit;
     }
-    $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_board`.`board_sid` = 1 LIMIT %s, %s", ($page - 1) * $perPage, $perPage); //使用 sprintf 函數生成一條 SQL 查詢語句，按照 $perPage 條記錄每次分頁查詢數據。其中 %s 是占位符，($page - 1) * $perPage 和 $perPage 是要填入的具體值。
+    $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_board`.`board_sid` = 7 LIMIT %s, %s", ($page - 1) * $perPage, $perPage); //使用 sprintf 函數生成一條 SQL 查詢語句，按照 $perPage 條記錄每次分頁查詢數據。其中 %s 是占位符，($page - 1) * $perPage 和 $perPage 是要填入的具體值。
     $rows = $pdo->query($sql)->fetchAll(); //執行 SQL 查詢語句，使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢，然後調用 fetchAll 方法將查詢結果轉化為一個二維數組 $rows。
 }
 
@@ -132,7 +132,6 @@ $r_post = $stmt->fetchAll();
                     <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
                     <th scope="col">#</th>
                     <th scope="col">管理者名稱</th>
-                    <!-- <th scope="col">看板編號</th> -->
                     <th scope="col">看板名稱</th>
                     <th scope="col">文章標題</th>
                     <th scope="col">文章內容</th>
@@ -149,7 +148,6 @@ $r_post = $stmt->fetchAll();
                             </a></td>
                         <td><?= $r['post_sid'] ?></td>
                         <td><?= $r['admin_name'] ?></td>
-                        <!-- <td><?= $r['board_sid'] ?></td> -->
                         <td><?= $r['board_name'] ?></td>
                         <td><?= $r['post_title'] ?></td>
                         <td><?= $r['post_content'] ?></td>
