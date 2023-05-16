@@ -189,7 +189,7 @@ $r_post = $stmt->fetchAll();
         const boardSid = boardSelect.value;
 
         // 清空文章列表
-        postList.innerHTML = '';
+        // postList.innerHTML = '';
 
         // 檢查是否選擇了板塊
         if (boardSid == 1) {

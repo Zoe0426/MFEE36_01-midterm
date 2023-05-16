@@ -68,7 +68,7 @@ $r_post = $stmt->fetchAll();
               <!-- 這個需要隱藏，這是上傳圖片用的form -->
               <div class="mb-3">
                 <label for="file" class="form-label">檔案：</label>
-                <input type="file" name="tempImg" accept="image/jpeg" id="tempImg">
+                <input type="file" name="file" accept="image/jpeg" id="file">
               </div>
 
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
@@ -76,12 +76,12 @@ $r_post = $stmt->fetchAll();
               <button type="submit" class="btn btn-primary">新增</button>
             </form>
             <!-- 要顯示在頁面中，送資料給api的form -->
-            <form name="form2" onsubmit="checkForm(event)">
+            <!-- <form name="form2" onsubmit="checkForm(event)">
               <div class="w-25 me-3" onclick="postAddImg()" id="postImg">
                 <img src="" alt="" id="imginfo">按此新增照片/選完照片後，圖片會顯示在此
               </div>
               <input type="text" name="post_img" id="post_img">
-            </form>
+            </form> -->
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ $r_post = $stmt->fetchAll();
     const fields = document.querySelectorAll('form *[data-required="1"]');
 
     function checkForm(event) {
-      event.preventDefault();
+      event.preventDefault(); //避免submit就先送出
 
       for (let f of fields) {
         f.style.border = '1px solid blue';
@@ -144,14 +144,14 @@ $r_post = $stmt->fetchAll();
 
         //infobar的東西
         fetch("p_addPost-api.php", {
-            method: "POST",
+            method: "POST", //資料傳遞的方式
             body: fd, // Content-Type 省略, multipart/form-data
           })
           .then((r) =>
             r.json()
           )
           .then((obj) => {
-            // console.log(obj);
+            console.log(obj);
             if (obj.success) {
               infoBar.classList.remove("alert-danger");
               infoBar.classList.add("alert-success");
@@ -168,7 +168,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            //location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);

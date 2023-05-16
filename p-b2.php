@@ -189,8 +189,8 @@ $r_post = $stmt->fetchAll();
     boardSelect.addEventListener('change', function() {
         const boardSid = boardSelect.value;
 
-        // 清空文章列表
-        postList.innerHTML = '';
+        // // 清空文章列表
+        // postList.innerHTML = '';
 
         // 檢查是否選擇了板塊
         if (boardSid == 1) {
