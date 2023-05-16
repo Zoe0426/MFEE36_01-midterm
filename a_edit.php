@@ -239,15 +239,15 @@ $groupList = $pdo->query($sql3)->fetch();
                     console.log(obj);
                     if (obj.success) {
 
-                        infoBar.classList.remove('alert-success')
-                        infoBar.classList.add('alert-danger')
-                        infoBar.innerHTML = '修改失敗'
-                        infoBar.style.display = 'block';
-
-                    } else {
                         infoBar.classList.remove('alert-danger')
                         infoBar.classList.add('alert-success')
                         infoBar.innerHTML = '修改成功'
+                        infoBar.style.display = 'block';
+
+                    } else {
+                        infoBar.classList.remove('alert-success')
+                        infoBar.classList.add('alert-danger')
+                        infoBar.innerHTML = '修改失敗'
                         infoBar.style.display = 'block';
                     }
                     // setTimeout(() => {
