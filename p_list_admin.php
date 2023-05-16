@@ -128,11 +128,13 @@ $r_post = $stmt->fetchAll();
 
       //沒有選到下拉式選單時 跳出提示
       if (adminName.value === "--請選擇--") {
+        isPass = false;
         adminName.style.border = '1px solid red';
         adminName.nextElementSibling.innerHTML = '請選擇';
       }
 
       if (boardName.value === "--請選擇--") {
+        isPass = false;
         boardName.style.border = '1px solid red';
         boardName.nextElementSibling.innerHTML = '請選擇';
       }
