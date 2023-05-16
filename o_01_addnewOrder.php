@@ -24,9 +24,11 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container pt-4">
     <!-- =====選擇會員===== -->
+
     <form id="oGetmem" onsubmit="getMemCart(event)">
         <div class="container-fluid">
             <div class="row g-0">
+                <p class="fs-5 fw-bold">購物車系統</p>
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">姓名</option>
@@ -74,7 +76,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
-                    <button type="button" class="btn btn-warning">確認</button>
+                    <button type="button" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
                 </div>
             </div>
         </div>
@@ -418,6 +420,10 @@ require './partsNOEDIT/connect-db.php' ?>
                 checkbox.checked = false;
             });
         }
+    }
+
+    function toOrderDetailsPage() {
+        window.location.href = "o_02_orderDetails.php";
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

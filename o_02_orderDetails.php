@@ -17,6 +17,7 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
             <div class="row g-0">
+                <p class="fs-5 fw-bold">訂單管理系統</p>
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">訂單編號</option>
@@ -39,12 +40,9 @@ require './partsNOEDIT/connect-db.php' ?>
         </div>
     </form>
     <!-- =====顯示訂單/明細===== -->
-    <!-- <div class="row"> -->
     <div class="col-12 pt-3" id="oOrdersTable">
     </div>
-    <!-- </div> -->
-    <!-- <div class="row"> -->
-    <!-- </div> -->
+
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -66,13 +64,13 @@ require './partsNOEDIT/connect-db.php' ?>
                 }).then(r => r.json())
                 .then(obj => {
                     showMemInfo(obj);
-                    console.log(obj.getBy);
+
                     if (obj.getBy == 'orderSid') {
                         tableByOrderSid(obj);
                     } else {
                         tableByMemInfo(obj);
                     }
-                    console.log(obj);
+
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -130,10 +128,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">${oMemDetails.sid}</th>
-                                <td>${oMemDetails.name}</td>
-                                <td>${oMemDetails.mobile}</td>
-                                <td>${oMemDetails.birth}</td>
+                                <th scope="row">${oMemDetails.member_sid}</th>
+                                <td>${oMemDetails.member_name}</td>
+                                <td>${oMemDetails.member_mobile}</td>
+                                <td>${oMemDetails.member_birth}</td>
                             </tr>
                         </tbody>
                     </table>`;
@@ -144,8 +142,10 @@ require './partsNOEDIT/connect-db.php' ?>
         let orderStatus = "";
         let post_Status = "";
         let post_type = "";
+
         obj.order_status == 0 ? orderStatus = "未付款" : orderStatus = "已付款";
         obj.postType == 1 ? post_type = "寄送到府" : post_type = "超市領取";
+
         if (obj.postStatus == 0) {
             post_Status = '已領取';
         } else if (obj.postStatus == 1) {
@@ -174,7 +174,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 <tbody>
                     <tr>
                         <th scope="row">${obj.order_sid}</th>
-                        <td>${obj.sid}</td>
+                        <td>${obj.member_sid}</td>
                         <td>${orderStatus}</td>
                         <td>${obj.coupon_sid}</td>
                         <td>${post_type}</td>
@@ -193,8 +193,8 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====顯示某員的所有訂單====
     function tableByMemInfo(obj) {
         const mixTable = document.createElement('div');
-        mixTable.classList.add('test');
-        let displayItems;
+        // mixTable.classList.add('test');
+        let displayItems; //所有訂單的容(父)
         if (obj.getBy == "memName") {
             displayItems = obj.name_orders;
         } else if (obj.getBy == "memMobile") {
@@ -207,9 +207,8 @@ require './partsNOEDIT/connect-db.php' ?>
         let post_Status = "";
         let post_type = "";
         let items = "";
-
+        //show all orders(parent)
         for (let i = 0, len = displayItems.length; i < len; i++) {
-            //console.log(displayItems[i]);
 
             displayItems[i].order_status == 0 ? orderStatus = "未付款" : orderStatus = "已付款";
             displayItems[i].postType == 1 ? post_type = "寄送到府" : post_type = "超市領取";
@@ -234,11 +233,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         <td>${post_type}</td>
                         <td>${post_Status}</td>
                         <td>${displayItems[i].createDt}</td>
-                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails(${displayItems[i].order_sid}, this)"></i></td>
-                    </tr>`;
-
+                        <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails('${displayItems[i].order_sid}', this)"></i></td>
+                    </tr>
+                    <tr style="display:none;"></tr>`;
         }
-
         mixTable.innerHTML = `<table class="table table-striped ocd">
                 <thead>
                     <tr>
@@ -254,6 +252,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 </thead>
                 <tbody>
                     ${items}
+                
                 </tbody>
             </table>`;
         oOrdersTable.append(mixTable);
@@ -265,9 +264,16 @@ require './partsNOEDIT/connect-db.php' ?>
             .then(objectD => {
                 let objArray = objectD.order_details;
                 let detailsRow = x.parentElement.parentElement.nextElementSibling;
-                let dRows = ""
+
+                if (detailsRow.innerHTML !== "") {
+                    detailsRow.innerHTML = "";
+                }
+                console.log('detailsRow:');
+                console.log(detailsRow);
+
+
+                let dRowsTd = ""
                 for (let obj of objArray) {
-                    console.log('obj:' + obj);
                     let rel_type = "";
                     let pAmount = "";
                     let qty = "";
@@ -283,7 +289,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     obj.adultQty == null ? adQty = 0 : adQty = obj.adultQty;
                     obj.childAmount == null ? kidAmount = 0 : kidAmount = obj.childAmount;
                     obj.childQty == null ? kidQty = 0 : kidQty = obj.childQty;
-                    dRows += `<tr>
+                    dRowsTd += `<tr>
                             <td>${rel_type}</td>
                             <td>${obj.rel_sid}</td>
                             <td>${obj.rel_seq_sid}</td>
@@ -299,7 +305,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tr>`
                 }
                 detailsRow.innerHTML += `<td colspan="8">
-                        <table class="table table-striped border border-info-subtle">
+                        <table class="table table-bordered table-light">
                                 <thead>
                                     <tr>
                                         <th scope="col">明細來源</th>
@@ -317,10 +323,11 @@ require './partsNOEDIT/connect-db.php' ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   ${dRows}
+                                   ${dRowsTd}
                                 </tbody>
                             </table>
                         </td>`;
+
                 if (detailsRow.style.display === 'none') {
                     detailsRow.style.display = 'table-row';
                 } else {
