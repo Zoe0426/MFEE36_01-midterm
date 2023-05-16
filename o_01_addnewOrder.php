@@ -222,6 +222,7 @@ require './partsNOEDIT/connect-db.php' ?>
     function showShopList(obj) {
         let ost = document.createElement("div");
         let sData = obj.shoplist;
+
         let shopContent = "";
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
@@ -232,7 +233,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].proDet_name}</td>
                     <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
-                    <td id="oSstock${i}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
+                    <td totalStock="${sData[i].proDet_qty}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -420,14 +421,11 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====更新商品庫存
     function sChangeStock(e, x) {
+        console.log('change');
         let qtyParent = x.closest('tr');
         let sQty = qtyParent.querySelector('td:last-child');
-        sQty.innerHTML = parseInt(sQty.innerHTML) - (e.target.value);
+        let stock = parseInt(sQty.getAttribute('totalStock'));
+        sQty.innerHTML = stock - (e.target.value);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
-<tr>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>

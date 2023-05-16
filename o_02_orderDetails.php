@@ -283,7 +283,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     let lrelType = (obj.relType).toLowerCase();
                     if (lrelType == 'prod') {
                         rel_type = "商城"
-                    } else if (lrelType == 'event') {
+                    } else {
                         rel_type = "活動";
                     }
                     obj.prodAmount == null ? pAmount = 0 : pAmount = obj.prodAmount;
