@@ -40,7 +40,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <input type="text" class="form-control mx-2 o-d-none" id="sbmobile" name="sbmobile">
                     <input type="text" class="form-control mx-2 o-d-none" id="sbmemsid" name="sbmemsid">
                 </div>
-                <div class="col-2">
+                <div class="col-2 ms-3">
                     <button type="submit" class="btn btn-warning ">搜尋</button>
                 </div>
             </div>
@@ -234,6 +234,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td><input type="number" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
                     <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" class="text-secondary">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
+                    <td class="text-end"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -246,6 +247,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         <th scope="col">數量</th>
                         <th scope="col">單價</th>
                         <th scope="col">庫存</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>  
@@ -276,6 +278,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
                     <td>${aData[i].price_kid}</td>
                     <td totalStock="${aData[i].ppl_max}" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" class="text-secondary">${astock}</td>
+                    <td class="text-end"><i class="fa-solid fa-trash-can text-body-tertiary" ></i></td>
                 </tr>`;
         }
 
@@ -292,6 +295,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         <th scope="col">人數(小孩)</th>
                         <th scope="col">單價(小孩)</th>
                         <th scope="col">剩餘名額</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
