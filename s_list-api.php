@@ -30,13 +30,58 @@ if ($totalRows) {
 // exit;
 
 $filteredArray = array_map(function ($item) {
-
+    $catDetName = "";
+    $proFor = '';
+    switch ($item['catDet_sid']) {
+        case "FE":
+            $catDetName = "飼料";
+            break;
+        case "CA":
+            $catDetName = "罐頭";
+            break;
+        case "SN":
+            $catDetName = "零食";
+            break;
+        case "HE":
+            $catDetName = "保健";
+            break;
+        case "DR":
+            $catDetName = "服飾";
+            break;
+        case "EA":
+            $catDetName = "餐具";
+            break;
+        case "OD":
+            $catDetName = "戶外用品";
+            break;
+        case "TO":
+            $catDetName = "玩具";
+            break;
+        case "CL":
+            $catDetName = "清潔";
+            break;
+        case "OT":
+            $catDetName = "其他";
+            break;
+    }
+    switch ($item['pro_for']) {
+        case "D":
+            $proFor = "狗狗";
+            break;
+        case "C":
+            $proFor = "貓咪";
+            break;
+        case "B":
+            $proFor = "皆可";
+            break;
+    }
     return [
         '商品編號' => $item['pro_sid'],
         '細項編號' => $item['proDet_sid'],
+        '商品類別' => $catDetName,
+        '適用對象' => $proFor,
         '商品名稱' => $item['pro_name'],
-        '商品規格' => $item['proDet_name'],
-        '商品價格' => "NT$" . " " . number_format($item['proDet_price']),
+        '商品價格' => number_format($item['proDet_price']),
         '商品數量' => number_format($item['proDet_qty']),
         '商品描述' => $item['pro_describe'],
         '商品狀態' => $item['pro_status'] == 1 ? '上架中' : '下架中',

@@ -1,5 +1,12 @@
 <?php
-require './partsNOEDIT/connect-db.php' ?>
+require './partsNOEDIT/connect-db.php';
+
+$sql_shopCatDet = "SELECT * FROM `shop_cat` ORDER BY `catDet_num` ";
+$r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
+// header('Content-Type: application/json');
+// print_r($r_shopCatDet);
+
+?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
     .s_proDetTh,
@@ -11,31 +18,66 @@ require './partsNOEDIT/connect-db.php' ?>
         background-color: #e0e0e0;
     }
 
-    .s_proDetTd:nth-child(3),
-    .s_proDetTd:nth-child(4),
     .s_proDetTd:nth-child(5),
-    .s_proDetTd:nth-child(6),
-    .s_proDetTd:nth-child(7) {
+    .s_proDetTd:nth-child(8) {
         text-align: left;
     }
 
+    .s_proDetTd:nth-child(6),
     .s_proDetTd:nth-child(7) {
+        text-align: right;
+    }
+
+    .s_proDetTd:nth-child(8) {
         max-width: 100px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    #s_searchway {
+        width: 100px;
+    }
+
+    #s_search_sid {
+        width: 200px
+    }
+
+    #s_searchBar {
+        width: 200px
+    }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 
 <div class="container p-3 mt-5">
+    <div class="d-flex my-3 px-0">
+
+        <form action="" class="me-auto">
+            <div class="hstack align-items-end">
+                <label class="form-label s_label" for="pro_name" id="s_searchway"> 商品搜尋：</label>
+                <select class="form-select me-3" name="search_sid" id="s_search_sid">
+                    <option value="" selected disabled>--請選擇--</option>
+                    <option value="1">依關鍵字</option>
+                    <option value="2">商品類別</option>
+                    <option value="3">適用對象</option>
+                    <option value="4">適用年齡</option>
+                </select>
+                <div id="s_searchBar"> </div>
+            </div>
+
+
+            <!-- <input type="text" class="form-control" id="pro_name" name="pro_name" data-required="1" disabled placeholder="請輸入關鍵字"> -->
+        </form>
+        <button type="button" class="btn btn-primary" onclick="createItem()">新增商品</button>
+    </div>
+
+    <div class="row">
+        <table id="s_form1" class="table table-bordered table-striped"> </table>
+    </div>
+
     <div class="row">
         <nav id="nav"></nav>
     </div>
-    <div class="row">
-        <table id="s_form1" class="table table-bordered table-striped">
-    </div>
-    </table>
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -45,6 +87,105 @@ require './partsNOEDIT/connect-db.php' ?>
     let docFrag = document.createDocumentFragment();
 
 
+    const searchID = document.querySelector('#s_search_sid')
+    searchID.addEventListener('change', () => {
+        const searchSel = searchID.value;
+        const searchBar = document.querySelector('#s_searchBar')
+        while (searchBar.hasChildNodes()) {
+            searchBar.removeChild(searchBar.lastChild)
+        }
+        switch (searchSel) {
+            case '1':
+                docFrag = createInp()
+                break;
+            case '2':
+                docFrag = createOpC()
+                break;
+            case '3':
+                docFrag = createOpF()
+                break;
+            case '4':
+                docFrag = createOpA()
+                break;
+        }
+        searchBar.append(docFrag);
+    })
+
+
+    function createInp() {
+        const theFragDoc = document.createDocumentFragment()
+        const theInput = document.createElement('input')
+        theInput.setAttribute('type', 'text')
+        theInput.setAttribute('name', 'search_word')
+        theInput.setAttribute('data-required', '1')
+        theInput.setAttribute('placeholder', '請輸入關鍵字')
+        theInput.classList.add("form-control")
+        theFragDoc.append(theInput)
+        return theFragDoc
+    }
+
+    function createOpC() {
+        const theFragDoc = document.createDocumentFragment()
+        const datas = <?= json_encode($r_shopCatDet, JSON_UNESCAPED_SLASHES) ?>;
+        const theSel = document.createElement('select')
+        theSel.classList.add("form-select")
+        theSel.setAttribute('name', 'search_word')
+        for (let d of datas) {
+            const theOp = document.createElement('option');
+            theOp.setAttribute("value", d.catDet_sid)
+            const theTxt = document.createTextNode(d.catDet_name)
+            theOp.append(theTxt)
+            theSel.append(theOp)
+        }
+        theFragDoc.append(theSel)
+        return theFragDoc
+    }
+
+    function createOpF() {
+        const theFragDoc = document.createDocumentFragment()
+        const theSel = document.createElement('select')
+        theSel.classList.add("form-select")
+        theSel.setAttribute('name', 'search_word')
+        const theOp1 = document.createElement('option');
+        theOp1.setAttribute("value", "D")
+        const theTxt1 = document.createTextNode("狗")
+        theOp1.append(theTxt1)
+        const theOp2 = document.createElement('option');
+        theOp2.setAttribute("value", "C")
+        const theTxt2 = document.createTextNode("貓")
+        theOp2.append(theTxt2)
+        theSel.append(theOp1, theOp2)
+        theFragDoc.append(theSel)
+        return theFragDoc
+    }
+
+    function createOpA() {
+        const theFragDoc = document.createDocumentFragment()
+        const theSel = document.createElement('select')
+        theSel.classList.add("form-select")
+        theSel.setAttribute('name', 'search_word')
+        const theOp1 = document.createElement('option');
+        theOp1.setAttribute("value", 1)
+        const theTxt1 = document.createTextNode("幼年")
+        theOp1.append(theTxt1)
+        const theOp2 = document.createElement('option');
+        theOp2.setAttribute("value", 2)
+        const theTxt2 = document.createTextNode("成年")
+        theOp2.append(theTxt2)
+        const theOp3 = document.createElement('option');
+        theOp3.setAttribute("value", 3)
+        const theTxt3 = document.createTextNode("高齡")
+        theOp3.append(theTxt3)
+        theSel.append(theOp1, theOp2, theOp3)
+        theFragDoc.append(theSel)
+        return theFragDoc
+    }
+
+
+    function createItem() {
+        location.href = 's_proAdd.php'
+    }
+
     form1.addEventListener('click', (event) => {
         let tar = event.target
         if (tar.classList.contains('fa-circle-info')) {
@@ -52,8 +193,8 @@ require './partsNOEDIT/connect-db.php' ?>
             const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
             let firstContent = firstTd.textContent;
             let sendContent = sendTd.textContent;
-            console.log(firstContent)
-            console.log(sendContent)
+            //console.log(firstContent)
+            //console.log(sendContent)
             location.href = `s_readonly-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
         }
         if (tar.classList.contains('fa-pen-to-square')) {
@@ -61,8 +202,8 @@ require './partsNOEDIT/connect-db.php' ?>
             const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
             let firstContent = firstTd.textContent;
             let sendContent = sendTd.textContent;
-            console.log(firstContent)
-            console.log(sendContent)
+            //console.log(firstContent)
+            //console.log(sendContent)
             location.href = `s_edit.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
         }
         // if (tar.classList.contains('fa-trash-can')) {
@@ -180,7 +321,7 @@ require './partsNOEDIT/connect-db.php' ?>
         //新增分頁
         function createPage() {
             let theUl = document.createElement('ul')
-            theUl.classList.add('pagination', 'justify-content-end')
+            theUl.classList.add('pagination', 'justify-content-center')
             //第一頁
             let theLi = createEl('li', 'page-item')
             theA = createEl('a', 'page-link')

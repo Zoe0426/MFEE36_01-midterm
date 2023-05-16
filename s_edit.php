@@ -327,10 +327,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">請再次確認</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">請確認是否真的要刪除全部資料</div>
+                    <div class="modal-body">是否刪除此項商品的全部資料?</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                         <button type="button" id="s_alldel" class="btn btn-primary">確認</button>
