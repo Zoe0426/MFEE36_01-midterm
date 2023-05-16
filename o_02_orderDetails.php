@@ -263,10 +263,11 @@ require './partsNOEDIT/connect-db.php' ?>
         fetch(`o-api02_2_getOrderDetails.php?orderSid=${ord}`)
             .then(r => r.json())
             .then(objectD => {
-                console.log(objectD);
+                let objArray = objectD.order_details;
                 let detailsRow = x.parentElement.parentElement.nextElementSibling;
-                for (let obj in objectD) {
-                    // console.log(detailsRow);
+                let dRows = ""
+                for (let obj of objArray) {
+                    console.log('obj:' + obj);
                     let rel_type = "";
                     let pAmount = "";
                     let qty = "";
@@ -275,17 +276,30 @@ require './partsNOEDIT/connect-db.php' ?>
                     let kidAmount = "";
                     let kidQty = "";
 
-                    obj.relType == 'prod' ? rel_type = "商城" : "活動";
+                    obj.relType == 'prod' ? rel_type = "商城" : rel_type = "活動";
                     obj.prodAmount == null ? pAmount = 0 : pAmount = obj.prodAmount;
                     obj.prodQty == null ? qty = 0 : qty = obj.prodQty;
                     obj.adultAmount == null ? adAmount = 0 : adAmount = obj.adultAmount;
                     obj.adultQty == null ? adQty = 0 : adQty = obj.adultQty;
                     obj.childAmount == null ? kidAmount = 0 : kidAmount = obj.childAmount;
                     obj.childQty == null ? kidQty = 0 : kidQty = obj.childQty;
-
-
-                    detailsRow.innerHTML += `<td colspan="8">
-                        <table class="table table-striped">
+                    dRows += `<tr>
+                            <td>${rel_type}</td>
+                            <td>${obj.rel_sid}</td>
+                            <td>${obj.rel_seq_sid}</td>
+                            <td>${obj.relName}</td>
+                            <td>${obj.rel_seqName}</td>
+                            <td>${pAmount}</td>
+                            <td>${qty}</td>
+                            <td>${adAmount}</td>
+                            <td>${adQty}</td>
+                            <td>${kidAmount}</td>
+                            <td>${kidQty}</td>
+                            <td>${obj.amount}</td>
+                        </tr>`
+                }
+                detailsRow.innerHTML += `<td colspan="8">
+                        <table class="table table-striped border border-info-subtle">
                                 <thead>
                                     <tr>
                                         <th scope="col">明細來源</th>
@@ -303,25 +317,10 @@ require './partsNOEDIT/connect-db.php' ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>${rel_type}</td>
-                                        <td>${obj.rel_sid}</td>
-                                        <td>${obj.rel_seq_sid}</td>
-                                        <td>${obj.relName}</td>
-                                        <td>${obj.rel_seqName}</td>
-                                        <td>${pAmount}</td>
-                                        <td>${qty}</td>
-                                        <td>${adAmount}</td>
-                                        <td>${adQty}</td>
-                                        <td>${kidAmount}</td>
-                                        <td>${kidQty}</td>
-                                        <td>${obj.amount}</td>
-                                    </tr>
+                                   ${dRows}
                                 </tbody>
                             </table>
                         </td>`;
-                }
-
                 if (detailsRow.style.display === 'none') {
                     detailsRow.style.display = 'table-row';
                 } else {
