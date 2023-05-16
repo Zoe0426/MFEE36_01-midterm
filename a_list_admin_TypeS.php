@@ -21,7 +21,12 @@ if ($totalRows) {
     }
 
 
-    $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` FROM `act_info` ai JOIN `act_group` ag ON ai.`act_sid`=ag.`act_sid`ORDER BY `act_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` 
+    FROM `act_info` ai 
+    JOIN `act_group` ag 
+    ON ai.`act_sid`=ag.`act_sid`
+    ORDER BY `act_sid` 
+    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
