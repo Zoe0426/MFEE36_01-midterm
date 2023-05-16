@@ -44,23 +44,23 @@ if ($totalRows) {
 
 <div class="t_row pt-4">
     <div class="d-flex mb-3 pt-4 px-0">
-        <form name="keyword1" onsubmit="checkForm(event)">
-            <div class="d-flex">
-                <div class="pe-3">
-                    <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
-                </div>
-                <div class="pe-2">
-                    <select class="form-select" name="catg">
-                        <option value="">餐廳類別</option>
-                        <?php foreach ($items as $i) : ?>
-                            <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
+        <div class="pe-3">
+            <select class="form-select" name="catg">
+                <option value="">全部類別</option>
+                <?php foreach ($items as $i) : ?>
+                    <option value="<?= $i['catg_name'] ?>"><?= $i['catg_name'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
 
-                <button type="submit" class="search btn btn-warning">搜尋</button>
+
+        <div class="d-flex">
+            <div class="pe-2">
+                <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
             </div>
-        </form>
+            <!-- <button type="submit" class="search btn btn-warning">搜尋</button> -->
+        </div>
+
 
 
 
@@ -164,43 +164,94 @@ if ($totalRows) {
 <?php include './partsNOEDIT/script.php' ?>
 
 <script>
+    // 獲取下拉選單元素
+    const selectElement = document.querySelector('select[name="catg"]');
+
+    // 獲取表格行元素
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    // 監聽下拉選單值的變化
+    selectElement.addEventListener('change', function() {
+        const selectedValue = this.value; // 獲取選擇的值
+
+        // 顯示或隱藏表格行
+        tableRows.forEach(function(row) {
+            const catgName = row.querySelector('td:nth-child(3)').textContent; // 獲取每行的類別名稱
+
+            // 如果選擇的值為空或者與該行的類別名稱相同，顯示該行；否則隱藏該行
+            if (selectedValue === '' || selectedValue === catgName) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // 獲取輸入框元素
+    const inputElement = document.querySelector('input[name="keyword"]');
+
+    // 獲取表格行元素
+    const tableRows2 = document.querySelectorAll('tbody tr');
+
+    // 原始表格行的顯示狀態陣列
+    const originalDisplay = Array.from(tableRows2).map(row => row.style.display);
+
+    // 監聽輸入框的輸入事件
+    inputElement.addEventListener('input', function() {
+        const keyword = this.value.trim().toLowerCase(); // 獲取輸入的關鍵字，並轉為小寫
+
+        // 顯示或隱藏表格行
+        tableRows.forEach(function(row, index) {
+            const restName = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // 獲取每行的餐廳名稱，並轉為小寫
+
+            // 如果輸入的關鍵字為空或者與該行的餐廳名稱相符，顯示該行；否則隱藏該行
+            if (keyword === '' || restName.includes(keyword)) {
+                row.style.display = originalDisplay[index];
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
             location.href = 'r_delete_api.php?rest_sid=' + sid;
         }
     }
 
-    function checkForm(event) {
-        // event.preventDefault();
-        // const fd = new FormData(document.keyword1);
-        const fd = new FormData(document.forms.keyword1);
-        fetch('r_keyword_api.php', {
-                method: 'POST',
-                body: fd,
-            })
-            .then(r => r.json())
-            .then(obj => {
-                console.log(obj);
-                if (obj.success) {
-                    // API 請求成功，處理回傳的資料
-                    const results = obj.results; // 假設 API 回傳的資料陣列名稱為 results
-                    // 在這裡進行相應的畫面更新
-                    // 例如，將搜尋結果顯示在某個元素中
-                    const searchResultsElement = document.getElementById('search-results');
-                    searchResultsElement.innerHTML = ''; // 清空原有內容
-                    results.forEach(result => {
-                        const itemElement = document.createElement('div');
-                        itemElement.textContent = result.rest_name; // 假設搜尋結果中有 rest_name 屬性
-                        searchResultsElement.appendChild(itemElement);
-                    });
-                } else {
-                    // API 請求失敗，處理錯誤訊息
-                    console.log(obj.error);
-                }
-            })
-            .catch(ex => {
-                console.log(ex);
-            })
-    }
+
+    // function checkForm(event) {
+    //     // event.preventDefault();
+    //     // const fd = new FormData(document.keyword1);
+    //     const fd = new FormData(document.forms.keyword1);
+    //     fetch('r_keyword_api.php', {
+    //             method: 'POST',
+    //             body: fd,
+    //         })
+    //         .then(r => r.json())
+    //         .then(obj => {
+    //             console.log(obj);
+    //             if (obj.success) {
+    //                 // API 請求成功，處理回傳的資料
+    //                 const results = obj.results; // 假設 API 回傳的資料陣列名稱為 results
+    //                 // 在這裡進行相應的畫面更新
+    //                 // 例如，將搜尋結果顯示在某個元素中
+    //                 const searchResultsElement = document.getElementById('search-results');
+    //                 searchResultsElement.innerHTML = ''; // 清空原有內容
+    //                 results.forEach(result => {
+    //                     const itemElement = document.createElement('div');
+    //                     itemElement.textContent = result.rest_name; // 假設搜尋結果中有 rest_name 屬性
+    //                     searchResultsElement.appendChild(itemElement);
+    //                 });
+    //             } else {
+    //                 // API 請求失敗，處理錯誤訊息
+    //                 console.log(obj.error);
+    //             }
+    //         })
+    //         .catch(ex => {
+    //             console.log(ex);
+    //         })
+    // }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
