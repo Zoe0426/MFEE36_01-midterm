@@ -100,6 +100,7 @@ $r_post = $stmt->fetchAll();
                 <label for="board">選擇看板：</label>
                 <select id="board" name="board">
                     <option value="">請選擇</option>
+                    <option value="All">全部</option>
                     <option value="1">寵物醫療板</option>
                     <option value="2">寵物住宿板</option>
                     <option value="3">寵物友善景點</option>
@@ -129,7 +130,6 @@ $r_post = $stmt->fetchAll();
                     <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
                     <th scope="col">#</th>
                     <th scope="col">管理者名稱</th>
-                    <!-- <th scope="col">看板編號</th> -->
                     <th scope="col">看板名稱</th>
                     <th scope="col">文章標題</th>
                     <th scope="col">文章內容</th>
@@ -167,6 +167,8 @@ $r_post = $stmt->fetchAll();
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
+
+    //刪除
     document.querySelector('li.page-item.active a').removeAttribute('href');
 
     function p_delete(post_sid) {
@@ -177,10 +179,11 @@ $r_post = $stmt->fetchAll();
                     console.log(obj)
                 })
                 .catch(er => console.log(er))
-            // location.href='p_delete_api.php?post_sid=' + post_sid;
+            //location.href = 'p_delete_api.php?post_sid=' + post_sid;
         }
     }
 
+    //選擇看板-下拉式選單
     const boardSelect = document.getElementById('board');
     const postList = document.getElementById('post-list');
 
@@ -242,6 +245,10 @@ $r_post = $stmt->fetchAll();
         if (boardSid == 13) {
 
             window.location.href = 'p-b13.php';
+        }
+        if (boardSid == 'All') {
+
+            window.location.href = 'p_readPost_api.php';
         }
     });
 </script>

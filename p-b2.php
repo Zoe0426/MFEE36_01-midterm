@@ -103,6 +103,7 @@ $r_post = $stmt->fetchAll();
                 <label for="board">選擇看板：</label>
                 <select id="board" name="board">
                     <option value="">請選擇</option>
+                    <option value="All">全部</option>
                     <option value="1">寵物醫療板</option>
                     <option value="2">寵物住宿板</option>
                     <option value="3">寵物友善景點</option>
@@ -110,7 +111,7 @@ $r_post = $stmt->fetchAll();
                     <option value="5">狗/貓聚板</option>
                     <option value="6">曬毛孩板</option>
                     <option value="7">寵物學校</option>
-                    <option value="8">寵物友善\r\n餐廳/咖啡廳</option>
+                    <option value="8">寵物友善餐廳/咖啡廳</option>
                     <option value="9">寵物照護</option>
                     <option value="10">寵物殯葬</option>
                     <option value="11">幼犬/貓版</option>
@@ -244,6 +245,10 @@ $r_post = $stmt->fetchAll();
         if (boardSid == 13) {
 
             window.location.href = 'p-b13.php';
+        }
+        if (boardSid == 'All') {
+
+            window.location.href = 'p_readPost_api.php';
         }
     });
 </script>

@@ -103,6 +103,7 @@ $r_post = $stmt->fetchAll();
                 <label for="board">選擇看板：</label>
                 <select id="board" name="board">
                     <option value="">請選擇</option>
+                    <option value="All">全部</option>
                     <option value="1">寵物醫療板</option>
                     <option value="2">寵物住宿板</option>
                     <option value="3">寵物友善景點</option>
@@ -243,6 +244,10 @@ $r_post = $stmt->fetchAll();
         if (boardSid == 13) {
 
             window.location.href = 'p-b13.php';
+        }
+        if (boardSid == 'All') {
+
+            window.location.href = 'p_readPost_api.php';
         }
     });
 </script>
