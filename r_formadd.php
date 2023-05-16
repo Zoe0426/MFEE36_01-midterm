@@ -47,7 +47,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
 <!-- 隱藏特色餐廳圖片 -->
 <form name="f_pic" id="f_pic">
-    <input type="file" name="tempImg" accept="image/jpeg" id="tempImg_f">
+    <input type="file" name="tempImg" accept="image/jpeg" id="tempImg_f" enctype="multipart/form-data">
 </form>
 
 <!-- 填表單的區域 -->
@@ -241,7 +241,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
         <!-- 星期幾 -->
         <div class="row mt-4">
             <label for="" class="form-label">星期幾</label>
-            <div class="d-flex">
+            <div class="d-flex pt-2">
                 <div class="form-check me-5">
                     <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]">
                     <label class="form-check-label" for="sunday">
@@ -249,7 +249,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     </label>
                 </div>
                 <div class="form-check me-5">
-                    <input class="form-check-input" type="checkbox" value="1" id="monday " name="weekly[]">
+                    <input class="form-check-input" type="checkbox" value="1" id="monday" name="weekly[]">
                     <label class="form-check-label" for="monday">
                         星期一
                     </label>

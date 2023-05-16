@@ -262,7 +262,7 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
         <!-- 星期幾 -->
         <div class="row mt-4">
             <label for="" class="form-label">星期幾</label>
-            <div class="d-flex">
+            <div class="d-flex pt-2">
                 <div class="form-check me-5">
                     <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]" <?php if (in_array('0', $selectedArray)) echo 'checked'; ?> disabled>
                     <label class="form-check-label" for="sunday">

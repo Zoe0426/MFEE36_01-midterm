@@ -43,23 +43,28 @@ if ($totalRows) {
 </style>
 
 <div class="t_row pt-4">
-    <div class="row mb-3 p-0">
-        <div class="col-3 p-0">
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
-        </div>
-        <div class="col-2">
-            <select class="form-select" name="catg">
-                <option value="">餐廳類別</option>
-                <?php foreach ($items as $i) : ?>
-                    <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <div class="col-1">
-            <button type="button" class="btn btn-warning">搜尋</button>
-        </div>
+    <div class="d-flex mb-3 pt-4 px-0">
+        <form name="keyword1" onsubmit="checkForm(event)">
+            <div class="d-flex">
+                <div class="pe-3">
+                    <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
+                </div>
+                <div class="pe-2">
+                    <select class="form-select" name="catg">
+                        <option value="">餐廳類別</option>
+                        <?php foreach ($items as $i) : ?>
+                            <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
 
-        <div class="col-3  hstack">
+                <button type="submit" class="search btn btn-warning">搜尋</button>
+            </div>
+        </form>
+
+
+
+        <div class="hstack ms-auto">
             <div class="dropdown pe-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     排序
@@ -69,13 +74,13 @@ if ($totalRows) {
                     <li><a class="dropdown-item" href="#">餐廳評價</a></li>
                 </ul>
             </div>
-            <a class="btn btn-primary" href="r_formadd.php">新增餐廳</a>
+            <a class="btn btn-primary" href="r_formadd.php"><i class="fa-sharp fa-solid fa-circle-plus pe-2"></i>新增餐廳</a>
         </div>
     </div>
 
 
     <div class="row">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped  table-hover">
             <thead>
                 <tr>
                     <th scope="col">編號</th>
@@ -157,11 +162,45 @@ if ($totalRows) {
     </div>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
+
 <script>
     function delete_it(sid) {
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
             location.href = 'r_delete_api.php?rest_sid=' + sid;
         }
+    }
+
+    function checkForm(event) {
+        // event.preventDefault();
+        // const fd = new FormData(document.keyword1);
+        const fd = new FormData(document.forms.keyword1);
+        fetch('r_keyword_api.php', {
+                method: 'POST',
+                body: fd,
+            })
+            .then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.success) {
+                    // API 請求成功，處理回傳的資料
+                    const results = obj.results; // 假設 API 回傳的資料陣列名稱為 results
+                    // 在這裡進行相應的畫面更新
+                    // 例如，將搜尋結果顯示在某個元素中
+                    const searchResultsElement = document.getElementById('search-results');
+                    searchResultsElement.innerHTML = ''; // 清空原有內容
+                    results.forEach(result => {
+                        const itemElement = document.createElement('div');
+                        itemElement.textContent = result.rest_name; // 假設搜尋結果中有 rest_name 屬性
+                        searchResultsElement.appendChild(itemElement);
+                    });
+                } else {
+                    // API 請求失敗，處理錯誤訊息
+                    console.log(obj.error);
+                }
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
