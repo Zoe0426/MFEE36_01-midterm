@@ -27,7 +27,7 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemCart(event)">
         <div class="container-fluid">
             <div class="row g-0">
-                <p class="fs-5 fw-bold">購物車系統</p>
+                <p class="fs-5 fw-bold text-secondary">購物車系統</p>
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">姓名</option>
@@ -231,9 +231,9 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
-                    <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
+                    <td><input type="number" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
-                    <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
+                    <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" class="text-secondary">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -261,20 +261,24 @@ require './partsNOEDIT/connect-db.php' ?>
         let actContent = "";
         for (let i = 0; i < aData.length; i++) {
             let astock = Math.floor(parseInt(aData[i].ppl_max) - (parseInt(aData[i].adultQty) + parseInt(aData[i].childQty) / 2));
-
             actContent +=
                 `<tr>
-                <td> <input class="form-check-input" type="checkbox" value="${encodeURIComponent(JSON.stringify(aData[i]))}" name="act[]"></td>
-                <td>${aData[i].act_sid}</td>
-                <td>${aData[i].act_name}</td>
-                <td>${aData[i].group_date}</td>
-                <td><input type="number" min="0" id="oPaqty${i}" value="${aData[i].adultQty}"></td>
-                <td>${aData[i].price_adult}</td>
-                <td><input type="number" min="0" id="oPcqty${i}" value="${aData[i].childQty}"></td>
-                <td>${aData[i].price_kid}</td>
-                <td id="oAstock${i}">${astock}</td>
-            </tr>`;
+                    <td> <input class="form-check-input" type="checkbox" value="${encodeURIComponent(JSON.stringify(aData[i]))}" name="act[]"></td>
+                    <td>${aData[i].act_sid}</td>
+                    <td>${aData[i].act_name}</td>
+                    <td>${aData[i].group_date}</td>
+
+                    <td rel="aduQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].adultQty}" ></td>
+
+                    <td>${aData[i].price_adult}</td>
+
+                    <td rel="kidQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].childQty}" ></td>
+
+                    <td>${aData[i].price_kid}</td>
+                    <td totalStock="${aData[i].ppl_max}" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" class="text-secondary">${astock}</td>
+                </tr>`;
         }
+
         oat.innerHTML = `
             <table class="ocd table table-border table-striped">
                 <thead>
@@ -419,7 +423,7 @@ require './partsNOEDIT/connect-db.php' ?>
     function toOrderDetailsPage() {
         window.location.href = "o_02_orderDetails.php";
     }
-    //====更新商品庫存====
+    //====更新商品庫存,Cart Qty====
     function sChangeStock(e, x) {
         console.log('change');
         let qtyParent = x.closest('tr');
@@ -428,10 +432,36 @@ require './partsNOEDIT/connect-db.php' ?>
         let proSid = sQty.getAttribute('proSid');
         let proDet = sQty.getAttribute('proDet');
         let updatedQty = e.target.value;
-        sQty.innerHTML = stock - updatedQty; //更改頁面庫存量
-        fetch(`o_api01_3_updateProductQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&prodQty=${updatedQty}`)
-            .then(r => r.json())
 
+        sQty.innerHTML = stock - updatedQty; //更改頁面庫存量
+        fetch(`o_api01_3_updateQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&prodQty=${updatedQty}`)
+            .then(r => r.json())
+            .then(obj => console.log(obj))
+            .catch(ex => console.log(ex))
+    }
+    //====更新活動庫存,Cart Qty===
+    function aChangeStock(e, x) {
+        console.log('change');
+        let qtyParent = x.closest('tr'); //<tr>
+        console.log(qtyParent);
+        let aQty = qtyParent.querySelector('td:last-child'); //顯示庫存的td
+        let stock = parseInt(aQty.getAttribute('totalStock')); //總庫存量
+        console.log('aQty');
+        console.log(aQty);
+        let proSid = aQty.getAttribute('proSid');
+        console.log('proSid')
+        console.log(proSid);
+
+        let proDet = aQty.getAttribute('proDet');
+        let aduQty = qtyParent.querySelector('td[rel="aduQty"]>input').value;
+        let kidQty = qtyParent.querySelector('td[rel="kidQty"]>input').value;
+        let updatedStock = Math.ceil(stock - (parseInt(aduQty) + parseInt(kidQty) / 2));
+
+        aQty.innerHTML = updatedStock; //更改頁面庫存量
+        fetch(`o_api01_3_updateQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&adultQty=${aduQty}&childQty=${kidQty}`)
+            .then(r => r.json())
+            .then(obj => console.log(obj))
+            .catch(ex => console.log(ex))
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
