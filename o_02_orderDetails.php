@@ -42,7 +42,6 @@ require './partsNOEDIT/connect-db.php' ?>
     <!-- =====顯示訂單/明細===== -->
     <div class="col-12 pt-3" id="oOrdersTable">
     </div>
-
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -70,7 +69,6 @@ require './partsNOEDIT/connect-db.php' ?>
                     } else {
                         tableByMemInfo(obj);
                     }
-
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -158,7 +156,7 @@ require './partsNOEDIT/connect-db.php' ?>
             post_Status = '未領取';
         }
 
-        orderSidTable.innerHTML = `<table class="table table-striped ocd">
+        orderSidTable.innerHTML = `<table class="table ocd">
                 <thead>
                     <tr>
                         <th scope="col">訂單編號</th>
@@ -237,7 +235,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </tr>
                     <tr style="display:none;"></tr>`;
         }
-        mixTable.innerHTML = `<table class="table table-striped ocd">
+        mixTable.innerHTML = `<table class="table ocd">
                 <thead>
                     <tr>
                         <th scope="col">訂單編號</th>
@@ -282,7 +280,12 @@ require './partsNOEDIT/connect-db.php' ?>
                     let kidAmount = "";
                     let kidQty = "";
 
-                    obj.relType == 'prod' ? rel_type = "商城" : rel_type = "活動";
+                    let lrelType = (obj.relType).toLowerCase();
+                    if (lrelType == 'prod') {
+                        rel_type = "商城"
+                    } else if (lrelType == 'event') {
+                        rel_type = "活動";
+                    }
                     obj.prodAmount == null ? pAmount = 0 : pAmount = obj.prodAmount;
                     obj.prodQty == null ? qty = 0 : qty = obj.prodQty;
                     obj.adultAmount == null ? adAmount = 0 : adAmount = obj.adultAmount;

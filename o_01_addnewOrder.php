@@ -24,7 +24,6 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container pt-4">
     <!-- =====選擇會員===== -->
-
     <form id="oGetmem" onsubmit="getMemCart(event)">
         <div class="container-fluid">
             <div class="row g-0">
@@ -58,11 +57,10 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid px-0">
                     </div>
                 </div>
-                <div class="priceInfo col-2 ocd o-d-none"></div>
+                <div class="priceInfo col-2 o-d-none ocd"></div>
             </div>
         </div>
     </form>
-
     <!-- Modal Send New Order -->
     <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -81,7 +79,6 @@ require './partsNOEDIT/connect-db.php' ?>
             </div>
         </div>
     </div>
-
 </div>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
@@ -103,7 +100,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     body: fd,
                 }).then(r => r.json())
                 .then(obj => {
-                    console.log(obj);
+                    // console.log(obj);
                     showMemInfo(obj);
                     if (obj.shoplist !== 'noShopItems') {
                         showShopList(obj);
@@ -149,7 +146,6 @@ require './partsNOEDIT/connect-db.php' ?>
             if ((i.value).trim() === '') {
                 isPass = false;
                 i.style.border = '1px solid red';
-                console.log(i);
                 i.style.display = 'block';
                 i.nextElementSibling.display = "block";
                 i.nextElementSibling.innerHTML = '此欄位必需填寫';
@@ -173,14 +169,14 @@ require './partsNOEDIT/connect-db.php' ?>
                         oCartDisplay.innerHTML = '';
                         oPostPayDisplay.innerHTML = '';
                         oMemTable.innerHTML = '';
-                        oGetItemsForm.remove(send);
+                        // oGetItemsForm.remove(send);
                     }
                 })
                 .catch(ex => {
                     console.log(ex);
                 })
         }
-
+        send.innerHTML = '';
     }
     // ====搜尋顯示哪種input====
     function searchm(e) {
@@ -234,9 +230,9 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
-                    <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}"></td>
+                    <td><input type="number" id="oMqty${i}" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
-                    <td id="oSstock${i}">${sData[i].proDet_qty}</td>
+                    <td id="oSstock${i}">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -261,9 +257,10 @@ require './partsNOEDIT/connect-db.php' ?>
     function showActList(obj) {
         let oat = document.createElement("div");
         let aData = obj.actlist;
-        // console.log(aData);
         let actContent = "";
         for (let i = 0; i < aData.length; i++) {
+            let astock = Math.floor(parseInt(aData[i].ppl_max) - (parseInt(aData[i].adultQty) + parseInt(aData[i].childQty) / 2));
+
             actContent +=
                 `<tr>
                 <td> <input class="form-check-input" type="checkbox" value="${encodeURIComponent(JSON.stringify(aData[i]))}" name="act[]"></td>
@@ -274,7 +271,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 <td>${aData[i].price_adult}</td>
                 <td><input type="number" min="0" id="oPcqty${i}" value="${aData[i].childQty}"></td>
                 <td>${aData[i].price_kid}</td>
-                <td id="oAstock${i}">${aData[i].ppl_max}</td>
+                <td id="oAstock${i}">${astock}</td>
             </tr>`;
         }
         oat.innerHTML = `
@@ -302,8 +299,8 @@ require './partsNOEDIT/connect-db.php' ?>
     function showCoupon(obj) {
         let oct = document.createElement("div");
         let cData = obj.coupons;
-        // console.log(cData);
         let couContent = "";
+        oCartDisplay.innerHTML = "";
         for (let i = 0; i < cData.length; i++) {
             couContent +=
                 `<tr>
@@ -333,7 +330,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示地址及付款方式
     function showPostnPay(obj) {
-        console.log("pp");
+        oPostPayDisplay.innerHTML = ""
         const opp = document.createElement('div');
         opp.classList.add('ocd');
         opp.classList.add('px-3');
@@ -357,7 +354,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 </div>
                 <input type="text" name="member_sid" class="o-d-none" value="${obj.sid}">
             </div>`;
-        console.log(oPostPayDisplay);
+
         oPostPayDisplay.append(opp);
         const oGetItemsForm = document.getElementById('oGetItemsForm');
         send.innerHTML = `        
@@ -367,34 +364,31 @@ require './partsNOEDIT/connect-db.php' ?>
             
         </div>    
         <!-- Modal Msg for client -->
-    <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="oCMsgLabel">溫馨提醒會員</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    訂單成立後，匯款資訊將寄至會員信箱。<br>
-                    請提醒會員於24小時內完成匯款。
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">退回編輯</button>
-                    <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#oConfirmNewOrder">送出訂單</button>
+        <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="oCMsgLabel">溫馨提醒會員</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        訂單成立後，匯款資訊將寄至會員信箱。<br>
+                        請提醒會員於24小時內完成匯款。
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">退回編輯</button>
+                        <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#oConfirmNewOrder">送出訂單</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>`;
+        </div>`;
         oGetItemsForm.append(send);
 
     }
     //====選擇所有商品====
     function selectAllProducts() {
-        // console.log('clicked');
         const shopAllCheckbox = document.querySelector('input[name="shopAll"]');
-        // console.log(shopAllCheckbox);
         const prodCheckboxes = document.querySelectorAll('input[name="prod[]"]');
-        // console.log(prodCheckboxes);
         if (shopAllCheckbox.checked) {
             prodCheckboxes.forEach((checkbox) => {
                 checkbox.checked = true;
@@ -407,7 +401,6 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====選擇所有活動====
     function selectAllActs() {
-        console.log('clicked');
         const actAllCheckbox = document.querySelector('input[name="actAll"]');
         const actCheckboxes = document.querySelectorAll('input[name="act[]"]');
 
@@ -421,9 +414,14 @@ require './partsNOEDIT/connect-db.php' ?>
             });
         }
     }
-
+    //====前往訂單明細頁====
     function toOrderDetailsPage() {
         window.location.href = "o_02_orderDetails.php";
+    }
+    //====更新商品庫存
+    function sChangeStock(e, x) {
+        console.log(e.target.value);
+        console.log(x.nextElementSibling.nextElementSibling);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

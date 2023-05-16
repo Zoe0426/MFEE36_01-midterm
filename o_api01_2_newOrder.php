@@ -77,7 +77,8 @@ if ($actOrders) {
         $aResult['prodQty'] = null;
         $aResult['adultQty'] = $aAdultQty;
         $aResult['childQty'] = $aChildQty;
-        $aResult['relType'] = 'act';
+        $aResult['relType'] = 'event';
+
         $forAct[] = $aResult;
     }
 }
