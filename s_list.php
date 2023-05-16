@@ -2,8 +2,21 @@
 require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
-    .s_proDetTh {
+    .s_proDetTh,
+    .s_proDetTd {
         text-align: center;
+    }
+
+    .s_proDetTr:hover {
+        background-color: #e0e0e0;
+    }
+
+    .s_proDetTd:nth-child(3),
+    .s_proDetTd:nth-child(4),
+    .s_proDetTd:nth-child(5),
+    .s_proDetTd:nth-child(6),
+    .s_proDetTd:nth-child(7) {
+        text-align: left;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -43,17 +56,17 @@ require './partsNOEDIT/connect-db.php' ?>
             let sendContent = sendTd.textContent;
             console.log(firstContent)
             console.log(sendContent)
-            location.href = `s_edit-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
+            location.href = `s_edit.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
         }
-        if (tar.classList.contains('fa-trash-can')) {
-            const firstTd = tar.closest('tr').querySelector('td:first-child')
-            const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
-            let firstContent = firstTd.textContent;
-            let sendContent = sendTd.textContent;
-            console.log(firstContent)
-            console.log(sendContent)
-            location.href = `s_del-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
-        }
+        // if (tar.classList.contains('fa-trash-can')) {
+        //     const firstTd = tar.closest('tr').querySelector('td:first-child')
+        //     const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
+        //     let firstContent = firstTd.textContent;
+        //     let sendContent = sendTd.textContent;
+        //     console.log(firstContent)
+        //     console.log(sendContent)
+        //     location.href = `s_del-api.php?proDet_sid=${sendContent}&pro_sid=${firstContent}`
+        // }
 
     })
 
@@ -87,13 +100,14 @@ require './partsNOEDIT/connect-db.php' ?>
             theEditTh.setAttribute("scope", "col")
             theEditTh.classList.add("s_proDetTh")
             let theDelTh = document.createElement('th');
-            theDelTh.setAttribute("scope", "col")
-            theDelTh.classList.add("s_proDetTh")
+            //theDelTh.setAttribute("scope", "col")
+            //theDelTh.classList.add("s_proDetTh")
             theDetTh.textContent = '詳細資訊';
             theEditTh.textContent = '編輯';
-            theDelTh.textContent = '刪除';
+            //theDelTh.textContent = '刪除';
 
-            theRow.append(theDetTh, theEditTh, theDelTh)
+            //theRow.append(theDetTh, theEditTh, theDelTh)
+            theRow.append(theDetTh, theEditTh)
             theTHead.append(theRow);
             form1.append(theTHead);
         };
@@ -105,9 +119,10 @@ require './partsNOEDIT/connect-db.php' ?>
             for (let j of rows) {
                 let turnToArr = Object.values(j);
                 let theTr = document.createElement('tr')
+                theTr.classList.add("s_proDetTr")
                 for (let k of turnToArr) {
                     let theTd = document.createElement('td');
-                    theTd.classList.add("s_proDetTh")
+                    theTd.classList.add("s_proDetTd")
                     let theTxt = document.createTextNode(k);
                     theTd.append(theTxt);
                     theTr.append(theTd);
@@ -124,15 +139,15 @@ require './partsNOEDIT/connect-db.php' ?>
                 theEditTd.style.color = "#14A44D"
                 theEditTd.append(theEditTxt)
 
-                let theDelTd = document.createElement('td');
-                let theDelTxt = createEl2('i', 'fa-regular', 'fa-trash-can')
-                theDelTd.classList.add("s_proDetTh")
-                theDelTd.style.color = "#DC4C64"
-                theDelTd.append(theDelTxt)
+                // let theDelTd = document.createElement('td');
+                // let theDelTxt = createEl2('i', 'fa-regular', 'fa-trash-can')
+                // theDelTd.classList.add("s_proDetTh")
+                // theDelTd.style.color = "#DC4C64"
+                // theDelTd.append(theDelTxt)
 
                 theTr.append(theDetTd)
                 theTr.append(theEditTd)
-                theTr.append(theDelTd)
+                // theTr.append(theDelTd)
 
                 docFrag.append(theTr);
             }
@@ -262,33 +277,5 @@ require './partsNOEDIT/connect-db.php' ?>
             })
     }
     changePage(1);
-
-    // const datas = ;
-    // console.log(datas)
-    // let {
-    //     proDet_sid,
-    //     pro_sid,
-    //     proDet_name,
-    //     proDet_price,
-    //     proDet_qty,
-    //     proDet_img,
-    //     pro_forAge,
-    //     pro_for,
-    //     pro_name,
-    //     pro_describe,
-    //     pro_img,
-
-
-
-
-
-
-
-
-
-
-
-
-    // } = datas;
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
