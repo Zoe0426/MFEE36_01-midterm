@@ -38,13 +38,13 @@ require './partsNOEDIT/connect-db.php' ?>
             <div class="col-10 o-mem-table"> </div>
         </div>
     </form>
-    <div class="row">
-        <div class="col-12 pt-3" id="oOrdersTable">
-        </div>
+    <!-- =====顯示訂單/明細===== -->
+    <!-- <div class="row"> -->
+    <div class="col-12 pt-3" id="oOrdersTable">
     </div>
-    <div class="row">
-
-    </div>
+    <!-- </div> -->
+    <!-- <div class="row"> -->
+    <!-- </div> -->
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -260,56 +260,77 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     // ====顯示訂單明細====
     function showDetails(ord, x) {
-        console.log('clicked');
-        console.log(ord);
+        fetch(`o-api02_2_getOrderDetails.php?orderSid=${ord}`)
+            .then(r => r.json())
+            .then(objectD => {
+                console.log(objectD);
+                let detailsRow = x.parentElement.parentElement.nextElementSibling;
+                for (let obj in objectD) {
+                    // console.log(detailsRow);
+                    let rel_type = "";
+                    let pAmount = "";
+                    let qty = "";
+                    let adAmount = "";
+                    let adQty = "";
+                    let kidAmount = "";
+                    let kidQty = "";
 
-        let detailsRow = x.parentElement.parentElement.nextElementSibling;
-        console.log(detailsRow);
-        if (detailsRow.style.display === 'none') {
-            detailsRow.style.display = 'table-row';
-        } else {
-            detailsRow.style.display = 'none';
-        }
-        `<td colspan="8">
-            <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">明細來源</th>
-                            <th scope="col">產品編號</th>
-                            <th scope="col">品項編號</th>
-                            <th scope="col">產品名稱</th>
-                            <th scope="col">規格/期別</th>
-                            <th scope="col">單價(商城)</th>
-                            <th scope="col">數量</th>
-                            <th scope="col">成人單價</th>
-                            <th scope="col">人數(ad)</th>
-                            <th scope="col">兒童單價</th>
-                            <th scope="col">人數(kid)</th>
-                            <th scope="col">小計</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>`
+                    obj.relType == 'prod' ? rel_type = "商城" : "活動";
+                    obj.prodAmount == null ? pAmount = 0 : pAmount = obj.prodAmount;
+                    obj.prodQty == null ? qty = 0 : qty = obj.prodQty;
+                    obj.adultAmount == null ? adAmount = 0 : adAmount = obj.adultAmount;
+                    obj.adultQty == null ? adQty = 0 : adQty = obj.adultQty;
+                    obj.childAmount == null ? kidAmount = 0 : kidAmount = obj.childAmount;
+                    obj.childQty == null ? kidQty = 0 : kidQty = obj.childQty;
 
 
+                    detailsRow.innerHTML += `<td colspan="8">
+                        <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">明細來源</th>
+                                        <th scope="col">產品編號</th>
+                                        <th scope="col">品項編號</th>
+                                        <th scope="col">產品名稱</th>
+                                        <th scope="col">規格/期別</th>
+                                        <th scope="col">商品單價</th>
+                                        <th scope="col">數量</th>
+                                        <th scope="col">成人單價</th>
+                                        <th scope="col">人數(ad)</th>
+                                        <th scope="col">兒童單價</th>
+                                        <th scope="col">人數(kid)</th>
+                                        <th scope="col">小計</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>${rel_type}</td>
+                                        <td>${obj.rel_sid}</td>
+                                        <td>${obj.rel_seq_sid}</td>
+                                        <td>${obj.relName}</td>
+                                        <td>${obj.rel_seqName}</td>
+                                        <td>${pAmount}</td>
+                                        <td>${qty}</td>
+                                        <td>${adAmount}</td>
+                                        <td>${adQty}</td>
+                                        <td>${kidAmount}</td>
+                                        <td>${kidQty}</td>
+                                        <td>${obj.amount}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>`;
+                }
 
-
+                if (detailsRow.style.display === 'none') {
+                    detailsRow.style.display = 'table-row';
+                } else {
+                    detailsRow.style.display = 'none';
+                }
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
