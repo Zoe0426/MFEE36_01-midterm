@@ -56,7 +56,7 @@ if ($totalRows) {
 
         <div class="d-flex">
             <div class="pe-2">
-                <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="關鍵字搜尋">
+                <input type="text" class="form-control" name="keyword" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="餐廳名稱搜尋">
             </div>
             <!-- <button type="submit" class="search btn btn-warning">搜尋</button> -->
         </div>
