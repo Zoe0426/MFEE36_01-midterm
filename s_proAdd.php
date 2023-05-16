@@ -175,7 +175,9 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label">規格二</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
+                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled>
+                                    <option value="" selected disabled>--請選擇--</option>
+                                </select>
                             </div>
                             <div class="col-6">
                                 <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
@@ -321,7 +323,9 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label">規格二</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
+                            <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled>
+                                    <option value="" selected disabled>--請選擇--</option>
+                                </select>
                             </div>
                             <div class="col-6">
                                 <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
@@ -505,10 +509,19 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
         function createSpec2(specSelId, a) {
             specSel2[a].removeAttribute('disabled')
-            while (specSel2[a].hasChildNodes()) {
-                specSel2[a].remove(specSel2[a].lastChild)
-            }
+            specSel2[a].innerHTML = "";
+            // while (specSel2[a].hasChildNodes()) {
+            //     specSel2[a].remove(specSel2[a].lastChild)
+            // }
+            const theOp = document.createElement('option');
+            theOp.setAttribute("value", "");
+            // theOp.setAttribute("selected");
+            // theOp.setAttribute("disabled", "");
+            const theTxt = document.createTextNode('--請選擇--')
+            theOp.append(theTxt)
+            theDocFrag.append(theOp);
             for (let b of spec) {
+
                 if (b.spec_sid != specSelId) {
                     createOp('option', b.spec_sid, b.spec_name)
                 }

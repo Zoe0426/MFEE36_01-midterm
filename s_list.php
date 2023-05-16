@@ -18,6 +18,13 @@ require './partsNOEDIT/connect-db.php' ?>
     .s_proDetTd:nth-child(7) {
         text-align: left;
     }
+
+    .s_proDetTd:nth-child(7) {
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 

@@ -93,7 +93,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     #s_pro_sid,
     #s_proOnWeb {
         display: none;
-        color: pink
+        /* color: pink */
     }
 
     #s_imginfo {
@@ -107,7 +107,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
     .s_proDetImgBox {
         height: 190px;
-        border: 1px dashed lightgray;
+        /* border: 1px dashed lightgray; */
     }
 
     .s_allbtn {
@@ -315,22 +315,60 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
             <div class="s_allbtn">
-                <button type="button" class="btn btn-secondary s_allcancel" onclick="allcancel">取消編輯</button>
-                <button type="button" class="btn btn-warning ms-3 s_alledit">確認編輯</button>
-                <button type="button" class="btn btn-danger ms-3 s_alldel">整筆刪除</button>
+                <button type="button" class="btn btn-secondary" id="s_allcancel">取消編輯</button>
+                <button type="button" class="btn btn-warning ms-3" onclick="checkForm(event)">確認編輯</button>
+                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#s_alldel1">整筆刪除</button>
             </div>
         </form>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="s_alldel1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">請確認是否真的要刪除全部資料</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" id="s_alldel" class="btn btn-primary">確認</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-1"></div>
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const theDocFrag = document.createDocumentFragment();
 
-    function allcancel() {
+    const allCancel = document.querySelector("#s_allcancel");
+    allCancel.addEventListener('click', () => {
+        history.go(-1)
+    })
 
-    }
+    const allDel = document.querySelector('#s_alldel')
+    allDel.addEventListener('click', () => {
+        const theProSid = document.s_Form3.pro_sid.value
+        const fd = new FormData(document.s_Form3);
+        fetch('s_delete-api.php', {
+            method: 'POST',
+            body: fd,
+        }).then(() => {
+            history.go(-1)
+        })
+    })
+
+    // function allcancel(pro_sid) {
+    //     if (confirm(`請確認是否真的要刪除全部資料`)) {
+    //         location.href = `delete.php?pro_sid=${pro_sid}`
+    //     }
+    // }
 
 
     function checkForm(event) {

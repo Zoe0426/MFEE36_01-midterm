@@ -132,22 +132,34 @@ if (!empty($_POST['pro_name'])) {
         };
 
         #添加至產品+規格關係表
-        foreach ($proNewArr['proDet_sid'] as $k => $v) {
-            $stmt_proSpec->execute([
-                $newProSid,
-                sprintf('%02d', $v),
-                $_POST['spec_sid1'][$k],
-                $_POST['specDet_sid1'][$k]
-            ]);
+        if (!empty($_POST['specDet_sid2'])) {
+            foreach ($proNewArr['proDet_sid'] as $k => $v) {
+                $stmt_proSpec->execute([
+                    $newProSid,
+                    sprintf('%02d', $v),
+                    $_POST['spec_sid1'][$k],
+                    $_POST['specDet_sid1'][$k]
+                ]);
+            }
+            foreach ($proNewArr['proDet_sid'] as $k => $v) {
+                $stmt_proSpec->execute([
+                    $newProSid,
+                    sprintf('%02d', $v),
+                    $_POST['spec_sid2'][$k],
+                    $_POST['specDet_sid2'][$k]
+                ]);
+            }
+        } else {
+            foreach ($proNewArr['proDet_sid'] as $k => $v) {
+                $stmt_proSpec->execute([
+                    $newProSid,
+                    sprintf('%02d', $v),
+                    $_POST['spec_sid1'][$k],
+                    $_POST['specDet_sid1'][$k]
+                ]);
+            }
         }
-        foreach ($proNewArr['proDet_sid'] as $k => $v) {
-            $stmt_proSpec->execute([
-                $newProSid,
-                sprintf('%02d', $v),
-                $_POST['spec_sid2'][$k],
-                $_POST['specDet_sid2'][$k]
-            ]);
-        }
+
         $output['success'] = !!$stmt_pro->rowCount();
     }
 }
