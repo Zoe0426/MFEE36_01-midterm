@@ -12,8 +12,26 @@ $output = [
 if (!empty($_POST['pro_name'])) {
     $isPass = true;
     $proCatID = $_POST['pro_for'] . $_POST['cat_sid'] . $_POST['catDet_sid'];
-    $sql_proSid = sprintf("SELECT IFNULL(MAX(pro_sid), '%s0000') FROM `shop_pro`", $proCatID);
-    $lastProCatID = $pdo->query($sql_proSid)->fetchColumn();
+
+    // 循环生成新的 $newProSid，直到找到一个不與现有记录冲突的值
+    $newProSidNum = 1;
+    $newProSid = sprintf("%s%04d", $proCatID, $newProSidNum);
+    while (true) {
+        // 檢查 $newProSid 是否已存在資料庫中
+        $sql_checkProSid = "SELECT COUNT(*) FROM `shop_pro` WHERE `pro_sid` = ?";
+        $stmt_checkProSid = $pdo->prepare($sql_checkProSid);
+        $stmt_checkProSid->execute([$newProSid]);
+        $rowCount = $stmt_checkProSid->fetchColumn();
+
+        if ($rowCount == 0) {
+            // 如果 $newProSid 不存在資料庫中，退出循環
+            break;
+        }
+
+        // 如果 $newProSid 已存在資料庫中，則遞增 $newProSidNum 加1=> $newProSid
+        $newProSidNum++;
+        $newProSid = sprintf("%s%04d", $proCatID, $newProSidNum);
+    }
 
     #2.鍵入資料準備
     $sql_pro = "INSERT INTO `shop_pro`(
@@ -29,16 +47,6 @@ if (!empty($_POST['pro_name'])) {
             )";
 
     $stmt_pro = $pdo->prepare($sql_pro);
-
-
-    if (empty($lastProCatID)) {
-        //沒有這類的產品，則pro_sid:
-        $newProSid = sprintf("%s0001", $proCatID);
-    } else {
-        //有這類的產品，則pro_sid:
-        $newProSidNum = (int)substr($lastProCatID, 4) + 1;
-        $newProSid = sprintf("%s%04d", $proCatID, $newProSidNum);
-    }
 
     #3添加至子類別表格準備
     $sql_proDet = "INSERT INTO `shop_prodet`(

@@ -268,9 +268,15 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                             <div class="row">
                                 <div class="col-6">
                                     <select class="form-select s_spec_sid2" name="spec_sid2[]">
+                                        <option value="" selected disabled>--請選擇--</option>
                                         <?php foreach ($r_shopSpec as $r) : ?>
-                                            <option value="<?= $r['spec_sid'] ?>" <?= $r['spec_sid'] == $v['spec_sid'][1] ? "selected" : "" ?>><?= $r['spec_name'] ?></option>
+                                            <?php if ($r['spec_sid'] != $v['spec_sid'][0]) : ?>
+                                                <option value="<?= $r['spec_sid'] ?>" <?php if (!empty($v['spec_sid'][1]) && $r['spec_sid'] == $v['spec_sid'][1]) {
+                                                                                            echo "selected";
+                                                                                        } ?>><?= $r['spec_name'] ?></option>
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
+                                        <!-- <option value="">--請選擇--</option> -->
                                     </select>
                                 </div>
                                 <div class="col-6">
@@ -314,7 +320,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 <?php endforeach; ?>
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
-            <div class="s_allbtn">
+            <div class="s_allbtn mt-3">
                 <button type="button" class="btn btn-secondary" id="s_allcancel">取消編輯</button>
                 <button type="button" class="btn btn-warning ms-3" onclick="checkForm(event)">確認編輯</button>
                 <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#s_alldel1">整筆刪除</button>

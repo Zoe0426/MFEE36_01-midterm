@@ -68,10 +68,15 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         height: 190px;
         border: 1px dashed lightgray;
     }
+
+    .s_allbtn {
+        display: flex;
+        justify-content: end;
+    }
 </style>
 
 <?php include './partsNOEDIT/navbar.php' ?>
-<div class="row">
+<div class="row p-0 m-0">
     <div class="col-1"></div>
     <div class="col">
         <form name="s_Form1" class="s_Form1">
@@ -213,7 +218,11 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 </div>
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
-            <button type="submit" class="btn btn-primary">新增商品</button>
+            <div class="mt-3 s_allbtn mb-3">
+                <button type="submit" class="btn btn-primary">新增商品</button>
+                <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
+            </div>
+
         </form>
 
 
@@ -225,6 +234,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const theDocFrag = document.createDocumentFragment();
+
+    function cancelcreate() {
+        history.go(-1)
+    }
 
     function checkForm(event) {
         event.preventDefault()
