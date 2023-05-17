@@ -24,12 +24,12 @@
         </div>
         <div class="mb-3">
             <label for="coupon_startDate" class="form-label">開始日</label>
-            <input type="date" class="form-control" id="coupon_startDate" aria-describedby="emailHelp" name="coupon_startDate" data-required="1">
+            <input type="date" class="form-control" id="coupon_startDate" aria-describedby="emailHelp" name="coupon_startDate" data-required="1" onchange="setMinEndDate()">
             <div id="form-text" class="form-text"></div>
         </div>
         <div class="mb-3">
             <label for="coupon_expDate" class="form-label">結束日</label>
-            <input type="date" class="form-control" id="coupon_expDate" aria-describedby="emailHelp" name="coupon_expDate" data-required="1">
+            <input type="date" class="form-control" id="coupon_expDate" aria-describedby="emailHelp" name="coupon_expDate" data-required="1" onchange="setMaxEndDate()">
             <div id="form-text" class="form-text"></div>
         </div>
         <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
@@ -78,6 +78,20 @@
 
                 }
             })
+    }
+
+    function setMinEndDate() {
+        // 獲取開始日期元素
+        const startDateInput = document.querySelector("#coupon_startDate");
+        // 將結束日期的min屬性設置為開始日期
+        document.querySelector("#coupon_expDate").setAttribute("min", startDateInput.value);
+    }
+
+    function setMaxEndDate() {
+        // 獲取結束日期元素
+        const expDateInput = document.querySelector("#coupon_expDate");
+        // 將結束日期的min屬性設置為開始日期
+        document.querySelector("#coupon_startDate").setAttribute("max", expDateInput.value);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

@@ -97,7 +97,7 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                         <td><?= $r['coupon_price'] ?></td>
                         <td><?= $r['member_sid'] ?></td>
                         <td><?= $r['member_name'] ?></td>
-                        <td><?= $r['coupon_status'] ?></td>
+                        <td><?= $r['coupon_status'] === 0 ? '未使用' : '已使用' ?></td>
                         <td><?= $r['used_time'] ?></td>
                         <td><?= $r['create_time'] ?></td>
                     </tr>

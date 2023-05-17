@@ -48,24 +48,41 @@
                 </div>
             </li> -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
-                    會員
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt1">
+                    會員管理
                 </a>
-                <div class="collapse w-100" id="collapseBt2">
+                <div class="collapse w-100" id="collapseBt1">
                     <a href="m_member-list.php" class="nav-link bg-transparent text-dark ">
                         - 會員資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
-                        - 商城資料
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    優惠券管理
+                </a>
+                <div class="collapse w-100" id="collapseBt2">
+                    <a href="m_coupon_type-list.php" class="nav-link bg-transparent text-dark ">
+                        - 種類清單
+                    </a>
+                </div>
+                <div class="collapse w-100" id="collapseBt2">
+                    <a href="m_coupon_send_list.php" class="nav-link bg-transparent text-dark ">
+                        - 發送紀錄
+                    </a>
+                </div>
+                <div class="collapse w-100" id="collapseBt2">
+                    <a href="m_coupon_send_chart.php" class="nav-link bg-transparent text-dark ">
+                        - 優惠券分析
                     </a>
                 </div>
             </li>
             <!-- 商城 -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
                     商城
                 </a>
-                <div class="collapse w-100" id="collapseBt2">
+                <div class="collapse w-100" id="collapseBt3">
                     <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
                         - 商城資料
                     </a>
@@ -77,10 +94,10 @@
 
             <!-- 餐廳 -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
                     餐廳
                 </a>
-                <div class="collapse w-100" id="collapseBt3">
+                <div class="collapse w-100" id="collapseBt4">
                     <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
                         - 餐廳資料
                     </a>
@@ -90,10 +107,10 @@
                 </div>
                 <!-- 活動 -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
                     活動
                 </a>
-                <div class="collapse w-100" id="collapseBt4">
+                <div class="collapse w-100" id="collapseBt5">
                     <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
                         - 活動資料
                     </a>
@@ -103,10 +120,10 @@
                 </div>
                 <!-- 論壇 -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt6">
                     論壇
                 </a>
-                <div class="collapse w-100" id="collapseBt5">
+                <div class="collapse w-100" id="collapseBt6">
                     <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
                         - 論壇資料
                     </a>
@@ -116,10 +133,10 @@
                 </div>
                 <!-- 購物車 -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt6">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt7">
                     購物車
                 </a>
-                <div class="collapse w-100" id="collapseBt6">
+                <div class="collapse w-100" id="collapseBt7">
                     <a href="./index_noEdit.php" class="nav-link bg-transparent text-dark ">
                         - 購物車資料
                     </a>
