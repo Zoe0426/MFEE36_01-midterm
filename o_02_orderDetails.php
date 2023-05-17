@@ -17,7 +17,7 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
             <div class="row g-0">
-                <p class="fs-5 fw-bold">訂單管理系統</p>
+                <p class="fs-5 fw-bold text-secondary">訂單管理系統</p>
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">訂單編號</option>

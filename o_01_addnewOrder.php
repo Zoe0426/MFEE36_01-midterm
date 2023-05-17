@@ -262,7 +262,7 @@ require './partsNOEDIT/connect-db.php' ?>
             </table>`;
         oCartDisplay.append(ost);
         const sProdQties = document.querySelectorAll('.sProdQty');
-        console.log(sProdQties);
+        // console.log(sProdQties);
         for (let i of sProdQties) {
             i.addEventListener('change', sChangeStock);
         }
@@ -317,9 +317,10 @@ require './partsNOEDIT/connect-db.php' ?>
         oCartDisplay.append(oat);
 
         const aProdQties = document.querySelectorAll('.aProdQty');
-        console.log(aProdQties);
+        // console.log(aProdQties);
         for (let i of aProdQties) {
             i.addEventListener('change', aChangeStock);
+
         }
     }
     //====顯示coupon
@@ -464,6 +465,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 }
             })
             .catch(ex => console.log(ex))
+
     }
     //====更新活動庫存,Cart Qty===
     function aChangeStock(e) {
@@ -504,6 +506,11 @@ require './partsNOEDIT/connect-db.php' ?>
                 }
             })
             .catch(ex => console.log(ex))
+    }
+
+    function totalAmount() {
+        const sProdQties = document.querySelectorAll('.sProdQty');
+        const aProdQties = document.querySelectorAll('.aProdQty');
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
