@@ -67,7 +67,7 @@ if (!empty($_FILES['file'])) {
         $filename //因為file裡面東西太多了，所以要給他$filename去顯示（資料庫也只能讀取檔名或二進位的字串）
     ]);
 
-    if (!!$stmt->rowCount()) { 
+    if (!!$stmt->rowCount()) {
         //如果表格新增成功，會是true，如果沒成功會是false 
         //(rowCount()原本是一個數值，是資料庫異動的筆數（如1），加一個!讓數值轉型成boolean值，但他會變false（not 1），所以再給他一個!讓他變回true)
         $output['success'] = true;
