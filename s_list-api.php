@@ -22,7 +22,7 @@ if ($totalRows) {
     };
     $sql = sprintf('SELECT * FROM `shop_proDet` pd
     JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 ORDER BY p.`pro_sid`, pd.`proDet_sid` LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
+    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 ORDER BY p.`pro_sid` DESC LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 };
 // header('Content-Type: application/json');
@@ -32,6 +32,7 @@ if ($totalRows) {
 $filteredArray = array_map(function ($item) {
     $catDetName = "";
     $proFor = '';
+    $proForAge = "";
     switch ($item['catDet_sid']) {
         case "FE":
             $catDetName = "飼料";
@@ -66,13 +67,27 @@ $filteredArray = array_map(function ($item) {
     }
     switch ($item['pro_for']) {
         case "D":
-            $proFor = "狗狗";
+            $proFor = "狗";
             break;
         case "C":
-            $proFor = "貓咪";
+            $proFor = "貓";
             break;
         case "B":
             $proFor = "皆可";
+            break;
+    }
+    switch ($item['pro_forAge']) {
+        case 1:
+            $proForAge = "幼年";
+            break;
+        case 2:
+            $proForAge = "成年";
+            break;
+        case 3:
+            $proForAge = "高齡";
+            break;
+        case 4:
+            $proForAge = "全齡";
             break;
     }
     return [
@@ -80,10 +95,10 @@ $filteredArray = array_map(function ($item) {
         '細項編號' => $item['proDet_sid'],
         '商品類別' => $catDetName,
         '適用對象' => $proFor,
+        '適用年齡' => $proForAge,
         '商品名稱' => $item['pro_name'],
         '商品價格' => number_format($item['proDet_price']),
         '商品數量' => number_format($item['proDet_qty']),
-        '商品描述' => $item['pro_describe'],
         '商品狀態' => $item['pro_status'] == 1 ? '上架中' : '下架中',
         '最後編輯' => $item['pro_update']
     ];

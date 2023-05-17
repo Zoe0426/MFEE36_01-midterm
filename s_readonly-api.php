@@ -133,7 +133,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
         <form class="pt-4 pb-4" name="s_Form3" onsubmit="checkForm(event)">
             <div class="d-flex">
-                <h2 class="me-auto">新增商品</h2>
+                <h2 class="me-auto">預覽商品</h2>
                 <div class="d-flex align-items-end">
                     <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="pro_status" id="on" value="1" <?= $r_shopInfo['pro_status'] == 1 ? "checked" : "" ?>>
@@ -321,29 +321,11 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
             <div class="s_allbtn mt-3">
-                <button type="button" class="btn btn-secondary" id="s_allcancel">取消編輯</button>
-                <button type="button" class="btn btn-warning ms-3" onclick="checkForm(event)">確認編輯</button>
-                <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#s_alldel1">整筆刪除</button>
+                <button type="button" class="btn btn-primary" onclick="backToList()">返回列表</button>
+                <button type="button" class="btn btn-warning ms-3" onclick="toEdit()">編輯商品</button>
             </div>
         </form>
 
-
-        <!-- Modal -->
-        <div class="modal fade" id="s_alldel1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">請再次確認</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">是否刪除此項商品的全部資料?</div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <button type="button" id="s_alldel" class="btn btn-primary">確認</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="col-1"></div>
 </div>
@@ -351,377 +333,24 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const theDocFrag = document.createDocumentFragment();
+    document.querySelectorAll('input, textarea, select').forEach(function(element) {
+        element.setAttribute('readonly', 'true');
+        element.setAttribute('disabled', 'true');
+    })
 
-    const allCancel = document.querySelector("#s_allcancel");
-    allCancel.addEventListener('click', () => {
+    function backToList() {
         location.href = 's_list.php'
-    })
-
-    const allDel = document.querySelector('#s_alldel')
-    allDel.addEventListener('click', () => {
-        const theProSid = document.s_Form3.pro_sid.value
-        const fd = new FormData(document.s_Form3);
-        fetch('s_delete-api.php', {
-            method: 'POST',
-            body: fd,
-        }).then(() => {
-            history.go(-1)
-        })
-    })
-
-    function checkForm(event) {
-        event.preventDefault()
-        const filedType = document.querySelectorAll('form [data-required="1"]')
-
-        let isPass = true;
-
-        //恢復所有欄位的外觀
-        for (let f of filedType) {
-            f.style.border = '1px solid #CCC';
-            f.nextElementSibling.innerText = '';
-        }
-
-        //部分欄位皆必填
-        for (let f of filedType) {
-            if (!f.value) {
-                isPass = false;
-                f.style.border = '1px solid red';
-                f.nextElementSibling.innerText = '請輸入資料';
-            }
-        }
-
-        if (isPass) {
-            const fd = new FormData(document.s_Form3);
-            fetch('s_edit-api.php', {
-                    method: 'POST',
-                    body: fd,
-                }).then(r => r.json())
-                .then(obj => {
-                    if (obj.success) {
-                        infoBar.innerText = '編輯成功';
-                        infoBar.classList.remove('alert-danger');
-                        infoBar.classList.add('alert-success');
-                        infoBar.style.display = 'block';
-                        setTimeout(() => {
-                            history.go(-1)
-                        }, 2000)
-                    } else {
-                        infoBar.innerText = '資料沒有編輯';
-                        infoBar.classList.add('alert-danger');
-                        infoBar.classList.remove('alert-success');
-                        infoBar.style.display = 'block'
-                    }
-                    setTimeout(() => {
-                        infoBar.style.display = 'none'
-                    }, 2000)
-                    console.log(obj);
-                }).catch(ex => {
-                    console.log(ex); //除錯使用
-                    infoBar.innerText = '編輯發生錯誤，請通知後端人員';
-                    infoBar.classList.add('alert-danger');
-                    infoBar.classList.remove('alert-success');
-                    infoBar.style.display = 'block'
-                    setTimeout(() => {
-                        infoBar.style.display = 'none'
-                    }, 2000)
-                })
-        }
     }
 
+    function toEdit() {
+        const proSid = document.querySelector('#s_pro_sid>input').value
+        console.log(proSid);
+        // const firstTd = tar.closest('tr').querySelector('td:first-child')
+        // const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
+        // let firstContent = firstTd.textContent;
 
-    //==================  +/-的事件監聽==================
-    const theProDetBox = document.querySelector('#s_proDetBox')
-    theProDetBox.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('s_add')) {
-            const parentCol = event.target.parentNode;
-            const index = Array.from(parentCol.parentNode.children).indexOf(parentCol);
-            const theCopy = `<div class="col-3 mb-3">
-            <div class="mb-3 s_proDetNum">
-                        <input type="text" class="form-control" name="proDet_sid[]" value="${index+2}">
-                    </div>
-                    <div class="mb-3">
-                        <div class="s_ImgBox s_proDetImgBox" ><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img1[]" class="s_proDetImg">
-                    </div>
-                    <div class="mb-3 s_spec">
-                        <label class="form-label">規格一</label>
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-select s_spec_sid1" name="spec_sid1[]">
-                                    <option value="" selected disabled>--請選擇--</option>
-                                    <?php foreach ($r_shopSpec as $r) : ?>
-                                        <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <select class="form-select s_specDet_sid1" name="specDet_sid1[]" disabled></select>
-                            </div>
-                        </div>
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3 s_spec">
-                        <label class="form-label">規格二</label>
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
-                            </div>
-                            <div class="col-6">
-                                <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
-                            </div>
-                        </div>
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="s_proDet_price">價格</label>
-                        <input type="number" class="form-control" name="proDet_price[]" data-required="1">
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="s_proDet_qty">數量</label>
-                        <input type="number" class="form-control" name="proDet_qty[]" data-required="1">
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">適用年齡</label>
-                        <div class="d-flex">
-                            <select class="form-select" name="pro_forAge[]">
-                                <option value="" selected disabled>--請選擇--</option>
-                                <option value="1">幼年</option>
-                                <option value="2">成年</option>
-                                <option value="3">高齡</option>
-                                <option value="4">皆可</option>
-                            </select>
-                        </div>
-                        <div class="form-text"></div>
-                    </div>
-                    <button type="button" class="btn btn-success s_add">+</button>
-                    <button type="button" class="btn btn-danger s_del">-</button>
-                </div>`
-            theProDetBox.insertAdjacentHTML("beforeend", theCopy)
-
-
-            createProDetBox()
-            createproDetImgBox(index + 1)
-        }
-        if (target.classList.contains('s_del')) {
-            console.log("del")
-            event.target.closest('.col-3').remove()
-        }
-
-        //console.log(target.parentNode.classList.contains('s_proDetImgBox'));
-        if (target.parentNode.classList.contains('s_proDetImgBox')) {
-            const theBox = target.closest('.col-3');
-            const index = Array.from(theProDetBox.children).indexOf(theBox);
-            const proDetImg1 = document.querySelectorAll('.s_tepProPetImg')
-            console.log(index)
-            proDetImg1[index].click()
-
-            //新增細項照片+API
-            proDetImg1[index].addEventListener("change", (event) => {
-                //console.log(event.target)
-                const formName = event.target.parentNode;
-                //console.log(formName)
-                const fd = new FormData(formName);
-                fetch('s_upLoadProImg-api.php', {
-                        method: 'POST',
-                        body: fd,
-                    }).then(r => r.json())
-                    .then(obj => {
-                        if (obj.filename) {
-                            //console.log(index)
-                            const s_proDetImgBox = document.querySelectorAll('.s_proDetImgBox');
-                            const s_proDetImg = document.querySelectorAll('.s_proDetImg');
-                            // s_proImgBox.innerText = "";
-                            s_proDetImgBox[index].firstChild.src = `./s_Imgs/${obj.filename}`;
-                            s_proDetImgBox[index].firstChild.style.display = "block";
-                            s_proDetImg[index].value = obj.filename;
-                        }
-                    })
-            })
-        }
-    })
-
-    document.addEventListener('DOMContentLoaded', () => {
-        let buttons = document.querySelectorAll('.s_del')
-        buttons[0].style.display = "none";
-    })
-
-    //新增主照片+API
-    const shopTepProImg = document.querySelector("#s_tepProImg");
-
-    function shopAddMainImg() {
-        //模擬點擊
-        shopTepProImg.click();
-    }
-
-    shopTepProImg.addEventListener("change", () => {
-        const fd = new FormData(document.s_Form1);
-        fetch('s_upLoadProImg-api.php', {
-                method: 'POST',
-                body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                //console.log(obj)
-                if (obj.filename) {
-                    const s_proImgBox = document.querySelector('#s_proImgBox');
-                    const s_proImg = document.querySelector('#s_proImg');
-                    // s_proImgBox.innerText = "";
-                    s_proImgBox.firstChild.src = `./s_Imgs/${obj.filename}`;
-                    s_proImgBox.firstChild.style.display = "block";
-                    s_proImg.value = obj.filename;
-                }
-            }).catch(ex => {
-                console.log(ex)
-            })
-    })
-
-    //==================清除結點==================
-    function removeChild(a) {
-        while (a.hasChildNodes()) {
-            a.remove(a.lastChild)
-        }
-    }
-    //==================新增option==================
-    function createOp(a, b, c) {
-        const theOp = document.createElement(a);
-        theOp.setAttribute("value", b);
-        const theTxt = document.createTextNode(c);
-        theOp.append(theTxt);
-        theDocFrag.append(theOp);
-        return theDocFrag
-    }
-
-    //==================產品子類別自動生成==================
-    const catSel = document.querySelector("#s_cat_sid");
-    catSel.addEventListener("change", () => {
-        const catSelId = catSel.value
-        createCatDet(catSelId)
-    });
-
-    function createCatDet(catSelId) {
-        const catDet = <?= json_encode($r_shopCatDet, JSON_UNESCAPED_UNICODE) ?>;
-        const catDetSel = document.querySelector('#s_catDet_sid')
-        catDetSel.innerHTML = "";
-        // catDetSel.removeAttribute('disabled')
-        for (let a of catDet) {
-            if (catSelId == a.cat_sid) {
-                createOp('option', a.catDet_sid, a.catDet_name)
-            }
-        }
-        catDetSel.append(theDocFrag)
-    }
-
-    //==================供應商產地自動生成==================
-    const supSel = document.querySelector('#s_sup_sid')
-    supSel.addEventListener('change', () => {
-        const supSelId = supSel.value;
-        createSupMIW(supSelId)
-    })
-
-    function createSupMIW(supSelId) {
-        const supMIW = <?= json_encode($r_shopSupMIW, JSON_UNESCAPED_UNICODE) ?>;
-        const supMIWSel = document.querySelector('#s_sup_MIW')
-        // supMIWSel.removeAttribute('disabled')
-        supMIWSel.innerHTML = ""
-        for (let a of supMIW) {
-            if (supSelId == a.sup_sid) {
-                createOp('option', a.sup_MIW_sid, a.sup_MIW)
-            }
-        }
-        supMIWSel.append(theDocFrag)
-    }
-    //====================================
-
-    //==================商品規格自動生成==================
-    function createProDetBox(k) {
-        const spec = <?= json_encode($r_shopSpec, JSON_UNESCAPED_UNICODE) ?>;
-        const specDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
-        const specSel1 = document.querySelectorAll('.s_spec_sid1')
-        const specDetSel1 = document.querySelectorAll(".s_specDet_sid1")
-        const specSel2 = document.querySelectorAll('.s_spec_sid2')
-        const specDetSel2 = document.querySelectorAll(".s_specDet_sid2")
-
-        for (let a = 0, amax = specSel1.length; a < amax; a++) {
-            specSel1[a].addEventListener('change', () => {
-                const specSelId = specSel1[a].value;
-                createSpecDet1(specSelId, a);
-                createSpec2(specSelId, a);
-                specDetSel2[a].innerHTML = ""
-                // while (specDetSel2[a].hasChildNodes()) {
-                //     specDetSel2[a].remove(specDetSel2[a].lastChild)
-                // }
-            })
-        }
-
-        function createSpec2(specSelId, a) {
-            specSel2[a].removeAttribute('disabled')
-            specSel2[a].innerHTML = ""
-            // while (specSel2[a].hasChildNodes()) {
-            //     specSel2[a].remove(specSel2[a].lastChild)
-            // }
-            for (let b of spec) {
-                if (b.spec_sid != specSelId) {
-                    createOp('option', b.spec_sid, b.spec_name)
-                }
-            }
-            specSel2[a].append(theDocFrag)
-            for (let c = 0, cmax = specSel2.length; c < cmax; c++) {
-                specSel2[c].addEventListener('change', () => {
-                    const specSelId = specSel2[c].value;
-                    createSpecDet2(specSelId, c);
-                })
-            }
-        }
-
-        function createSpecDet2(specSelId, index) {
-            specDetSel2[index].removeAttribute('disabled');
-            specDetSel2[index].innerHTML = ""
-            // removeChild(specDetSel2[index])
-            createSpecDet(specSelId)
-            specDetSel2[index].append(theDocFrag)
-        }
-
-        function createSpecDet1(specSelId, index) {
-            specDetSel1[index].removeAttribute('disabled');
-            specDetSel1[index].innerHTML = ""
-            // removeChild(specDetSel1[index])
-            createSpecDet(specSelId)
-            specDetSel1[index].append(theDocFrag)
-        }
-
-        function createSpecDet(specSelId) {
-            const arr = [];
-            for (let a of specDet) {
-                if (specSelId == a.spec_sid) {
-                    arr.push(a);
-                }
-            }
-            //若小規格有數字，則由小到大排序
-            arr.sort(function(a, b) {
-                let c = parseInt(a.specDet_name);
-                let d = parseInt(b.specDet_name);
-                return c - d
-            })
-            for (let b of arr) {
-                createOp('option', b.specDet_sid, b.specDet_name)
-            }
-        }
-    }
-    createProDetBox()
-
-    //==================自動生成各項目照片框==================
-    function createproDetImgBox(a) {
-        const proDetImg = document.querySelector('#s_proDetTepImgBox')
-        const formName = `s_Form2${a}`
-        const theForm = document.createElement('form')
-        theForm.setAttribute('name', formName)
-        theForm.classList.add('s_Form', 's_detImg')
-        const theInput = ` <input type="file" name="shopTepProImg" accept="image/jpeg" class="s_tepProPetImg">`
-        theForm.innerHTML = theInput
-        proDetImg.append(theForm)
+        // let sendContent = sendTd.textContent;
+        location.href = `s_edit.php?pro_sid=${proSid}`
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
