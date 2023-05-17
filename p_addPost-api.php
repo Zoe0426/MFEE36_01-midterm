@@ -17,9 +17,6 @@ $post_content = isset($_POST['post_content']) ? $_POST["post_content"] : " ";
 
 
 //子表格變數
-//$file=isset($_POST['file']) ? intval($_POST['file']) : "";//現在因為我要試試看讓他放子資料進來才先這樣用
-
-#file其實應該要這樣，但因為json檔不能讀取file，所以要另外用（再研究看看囉：）））
 $file = isset($_POST['file']) ? $_POST['file'] : "";
 
 
@@ -41,7 +38,7 @@ $stmt->execute([
 ]);
 
 if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
-    // $output['success'] = true; 
+    $output['success'] = true;
     $output['message'] = "父表格新增成功";
 }
 
@@ -52,22 +49,6 @@ if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒�
 $fatherLastSid = $pdo->lastInsertId(); //先用一個變數是抓取父表格輸入的最新一筆資料
 
 
-// $sql2="INSERT INTO `post_file`
-// (`post_sid`, `file_type`, `file`) VALUES (?,?,?)";
-
-
-// $stmt=$pdo->prepare($sql2);
-
-// $stmt -> execute([
-//     $fatherLastSid,
-//     "F01",
-//     $file
-// ]);
-// echo $stmt;
-// if(!! $stmt->rowCount()){ //如果表格新增成功，會是true，如果沒成功會是false
-//     $output['success'] = true; 
-//     $output['message2']="子表格新增成功";
-// }
 
 #file檔案讀取，原本應該要用這個，但再研究看看
 if (!empty($_FILES['file'])) {
@@ -83,10 +64,12 @@ if (!empty($_FILES['file'])) {
     $stmt->execute([
         $fatherLastSid,
         "F01",
-        $file
+        $filename //因為file裡面東西太多了，所以要給他$filename去顯示（資料庫也只能讀取檔名或二進位的字串）
     ]);
 
-    if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒成功會是false
+    if (!!$stmt->rowCount()) {
+        //如果表格新增成功，會是true，如果沒成功會是false 
+        //(rowCount()原本是一個數值，是資料庫異動的筆數（如1），加一個!讓數值轉型成boolean值，但他會變false（not 1），所以再給他一個!讓他變回true)
         $output['success'] = true;
         $output['message2'] = "子表格新增成功";
     }

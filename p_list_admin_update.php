@@ -15,6 +15,12 @@ if (empty($upDate)) {
 
 
 <?php include './partsNOEDIT/html-head.php' ?>
+<style>
+  .form-text {
+    color: red;
+  }
+</style>
+
 <?php include './partsNOEDIT/navbar.php' ?>
 
 <!-- 下拉列表 -->
@@ -32,11 +38,12 @@ $r_post = $stmt->fetchAll();
         <div class="card">
           <div class="card-body">
 
-            <h5 class="card-title">編輯文章公告</h5>
+            <h5 class="card-title">新增文章公告</h5>
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
                 <label for="admin_name">管理者名稱：</label>
                 <select name="admin_name" id="admin_name" data-required="1">
+                  <option selected value="--請選擇--">--請選擇--</option>
                   <option value="Lilian">Lilian</option>
                   <option value="Jenny">Jenny</option>
                   <option value="Gabrielle">Gabrielle</option>
@@ -44,32 +51,31 @@ $r_post = $stmt->fetchAll();
                   <option value="Jill">Jill</option>
                   <option value="Shu yi">Shu yi</option>
                 </select>
+                <div class="form-text"></div>
               </div>
-              <!-- <div class="mb-3">
-                  <label for="board_sid" class="form-label">看板編號：</label>
-                  <input type="text" name="board_sid" id="board_sid" />
-                </div> -->
-
               <div class="mb-3">
                 <label for="board_name">看板：</label>
-                <select name="board_sid" id="board_sid" data-required="1">
+                <select name="board_name" id="board_name" data-required="1">
+                  <option selected value="--請選擇--">--請選擇--</option>
                   <?php foreach ($r_post as $r) : ?>
                     <option value="<?= $r['board_sid'] ?>"><?= $r['board_name'] ?></option>
                   <?php endforeach; ?>
                 </select>
+                <div class="form-text"></div>
               </div>
 
               <div class="mb-3">
                 <label for="post_title" class="form-label">文章標題：</label>
-                <input type="text" name="post_title" id="post_title" data-required="1" value="<?= $upDate['post_title'] ?>" />
+                <input type="text" name="post_title" id="post_title" data-required="1" />
+                <div class="form-text"></div>
               </div>
-              <input type="hidden" name="post_sid" id="post_sid" data-required="1" value="<?= $upDate['post_sid'] ?>" />
               <div class="mb-3">
                 <label for="post_content" class="form-label">
                   文章內容：
                 </label>
                 <br />
-                <textarea name="post_content" id="post_content" cols="30" rows="10" data-required="1"><?= $upDate['post_content'] ?></textarea>
+                <textarea name="post_content" id="post_content" cols="30" rows="10" data-required="1"></textarea>
+                <div class="form-text"></div>
               </div>
               <!-- 這個需要隱藏，這是上傳圖片用的form -->
               <div class="mb-3">
@@ -79,7 +85,7 @@ $r_post = $stmt->fetchAll();
 
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
 
-              <button type="submit" class="btn btn-primary">儲存</button>
+              <button type="submit" class="btn btn-primary">新增</button>
             </form>
             <!-- 要顯示在頁面中，送資料給api的form -->
             <form name="form2" onsubmit="checkForm(event)">
@@ -96,58 +102,133 @@ $r_post = $stmt->fetchAll();
 
   <?php include './partsNOEDIT/script.php' ?>
   <script>
+    const admin_name = document.querySelector('#admin_name');
+    const board_name = document.querySelector('#board_name');
     const post_title = document.querySelector('#post_title');
+    const post_content = document.querySelector('#post_content');
     const infoBar = document.querySelector('#infoBar');
     // 取得必填欄位
-    const fields = document.querySelectorAll('form1 * [data-required="1"]');
+    const fields = document.querySelectorAll('form * [data-required="1"]');
 
     function checkForm(event) {
       event.preventDefault();
 
       for (let f of fields) {
-        f.style.border = '1px solid #ccc';
+        f.style.border = '1px solid blue';
         // console.log(f.nextElementSibling);
-        if (f.nextElementSibling) {
-          f.nextElementSibling.innerHTML = '';
-        }
-
-      }
-      post_title.style.border = '1px solid #ccc';
-      if (post_title.nextElementSibling) {
-        post_title.nextElementSibling.innerHTML = '';
+        f.nextElementSibling.innerHTML = '';
+        // if (f.nextElementSibling) {
+        //   f.nextElementSibling.innerHTML = '';
       }
 
       let isPass = true; // 預設值是通過的
 
-      // TODO: 檢查欄位資料
+      //跳出提示
+      if (post_title.value === "") {
+        isPass = false;
 
-      // 檢查必填欄位
-      for (let f of fields) {
-        if (!f.value) {
-          isPass = false;
-          f.style.border = '1px solid red';
-          f.nextElementSibling.innerHTML = '請填入資料'
-        }
+        post_title.style.border = '1px solid red';
+        post_title.nextElementSibling.innerHTML = '請輸入文字';
+
+        post_content.style.border = '1px solid red';
+        post_content.nextElementSibling.innerHTML = '請輸入文字';
       }
 
+      //沒有選到下拉式選單時 跳出提示
+      if (admin_name.value === "--請選擇--") {
+        isPass = false;
+        admin_name.style.border = '1px solid red';
+        admin_name.nextElementSibling.innerHTML = '請選擇';
+      }
+
+      if (board_name.value === "--請選擇--") {
+        isPass = false;
+        board_name.style.border = '1px solid red';
+        board_name.nextElementSibling.innerHTML = '請選擇';
+      }
 
       if (isPass) {
-        const fd = new FormData(document.form1);
-        fetch("p_update_api.php", {
+        const fd = new FormData(document.form1); //沒有外觀的表單
+
+        //infobar的東西
+        fetch("p_addPost-api.php", {
             method: "POST",
             body: fd, // Content-Type 省略, multipart/form-data
           })
-          .then((r) => {
-            console.log(r.json());
-          })
+          .then((r) =>
+            r.json()
+          )
           .then((obj) => {
-            console.log(obj);
+            // console.log(obj);
+            if (obj.success) {
+              infoBar.classList.remove("alert-danger");
+              infoBar.classList.add("alert-success");
+              infoBar.innerHTML = "新增成功";
+              infoBar.style.display = "block";
+            } else {
+              infoBar.classList.remove("alert-success");
+              infoBar.classList.add("alert-danger");
+              infoBar.innerHTML = "新增失敗";
+              infoBar.style.display = "block";
+            }
+            // setTime(() => {
+            //   infoBar.style.display = "none";
+            // }, 2000);
 
             //跳轉頁面回去read
             location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
-          });
+          })
+          .catch(ex => {
+            console.log(ex);
+            infoBar.classList.remove('alert-success');
+            infoBar.classList.add('alert-danger');
+            infoBar.innerHTML = '新增發生錯誤';
+            infoBar.style.display = 'block';
+            // setTimeout(() => {
+            //     infoBar.style.display = 'none';
+            // }, 2000);
+          })
+      } else {
+        // 沒通過檢查
       }
+
     }
+    // post_title.style.border = '1px solid #ccc';
+    // if (post_title.nextElementSibling) {
+    //   post_title.nextElementSibling.innerHTML = '';
+    // }
+
+
+
+    // // TODO: 檢查欄位資料
+
+    // // 檢查必填欄位
+    // for (let f of fields) {
+    //   if (!f.value) {
+    //     isPass = false;
+    //     f.style.border = '1px solid red';
+    //     f.nextElementSibling.innerHTML = '請填入資料'
+    //   }
+    // }
+
+
+    // if (isPass) {
+    //   const fd = new FormData(document.form1);
+    //   fetch("p_update_api.php", {
+    //       method: "POST",
+    //       body: fd, // Content-Type 省略, multipart/form-data
+    //     })
+    //     .then((r) => {
+    //       console.log(r.json());
+    //     })
+    //     .then((obj) => {
+    //       console.log(obj);
+
+    //       //跳轉頁面回去read
+    //       location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+    //     });
+    // }
+
 
     //===新增主照片+API===
     const tempImg = document.querySelector("#tempImg");
