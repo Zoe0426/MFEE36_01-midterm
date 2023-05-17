@@ -27,7 +27,7 @@ if ($totalRows) {
     ON ai.`act_sid`=ag.`act_sid`
     WHERE `type_sid`=3
     ORDER BY `act_sid` 
-    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 

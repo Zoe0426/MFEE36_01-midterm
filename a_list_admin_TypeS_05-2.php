@@ -27,7 +27,7 @@ if ($totalRows) {
     ON ai.`act_sid`=ag.`act_sid`
     WHERE `type_sid`=5
     ORDER BY `act_sid` 
-    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
@@ -231,11 +231,11 @@ if ($totalRows) {
         const ao = aOrder.value;
 
         if (ao == 1) {
-            window.location.href = 'a_list_admin_TypeS.php';
+            window.location.href = 'a_list_admin_TypeS_05.php';
         }
 
         if (ao == 2) {
-            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
+            window.location.href = 'a_list_admin_TypeS_05-2.php';
         }
     });
 </script>

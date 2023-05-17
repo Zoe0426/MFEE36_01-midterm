@@ -231,11 +231,11 @@ if ($totalRows) {
         const ao = aOrder.value;
 
         if (ao == 1) {
-            window.location.href = 'a_list_admin_TypeS.php';
+            window.location.href = 'a_list_admin_TypeS_02.php';
         }
 
         if (ao == 2) {
-            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
+            window.location.href = 'a_list_admin_TypeS_02-2.php';
         }
     });
 </script>
