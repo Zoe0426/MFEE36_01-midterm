@@ -11,11 +11,9 @@ $output = [
 
 if (isset($_POST['keyword'])) {
     $keyword = $_POST['keyword'];
+    $stmt = "SELECT * FROM rest_info WHERE rest_name LIKE '%$keyword%'";
 
-    $sql = "SELECT * FROM rest_info WHERE rest_name LIKE :keywordrd ";
-    $params = [
-        'keyword' => '%' . $keyword . '%'
-    ];
+
 
     $output['success'] = true;
     $output['postData'] = $_POST;
