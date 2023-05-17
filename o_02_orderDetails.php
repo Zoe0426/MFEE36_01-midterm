@@ -57,7 +57,7 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.innerHTML = '';
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
             const fd = new FormData(document.getElementById('oGetmem'));
-            fetch('o_02_1_getMemOrders.php', {
+            fetch('o_api02_1_getMemOrders.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())

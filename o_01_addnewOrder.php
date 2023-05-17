@@ -71,27 +71,26 @@ require './partsNOEDIT/connect-db.php' ?>
                     </div>
                 </div>
             </div>
-
         </div>
-    </form>
-    <!-- Modal Send New Order -->
-    <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="oCnewOdLabel">訂單成立</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    前往訂單列表？
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
-                    <button type="button" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
+        <!-- Modal Send New Order -->
+        <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="oCnewOdLabel">訂單成立</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        前往訂單列表？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
+                        <button type="submit" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
@@ -100,6 +99,7 @@ require './partsNOEDIT/connect-db.php' ?>
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
     const send = document.createElement('div');
     const totalPriceInfo = document.querySelector('#totalPriceInfo')
+
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -131,6 +131,8 @@ require './partsNOEDIT/connect-db.php' ?>
                         showCoupon(obj);
                     }
                     showPostnPay(obj);
+                    const createOrderBtn = document.querySelector('.btn[data-bs-target="#oMsgToClient"]');
+                    createOrderBtn.addEventListener('click', handleCreateOrder);
                     // showTotalPriceInfo();
                 })
                 .catch(ex => {
@@ -142,63 +144,79 @@ require './partsNOEDIT/connect-db.php' ?>
         }
 
     }
-    // ====CREATE ORDER====
-    function createOrder(e) {
-        e.preventDefault();
+
+    function handleCreateOrder() {
         let isPass = true;
         const InfoBar = document.querySelector("#oInfoBar");
         const oMemTable = document.querySelector(".o-mem-table");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
-        //沒有選任何商品就報錯
         let prods = newodfd.getAll("prod[]").length;
         let acts = newodfd.getAll("act[]").length;
+        let postFormInputs = document.querySelectorAll(".postInfo input");
+
+        //若沒選商品，就不過
         if (prods === 0 && acts === 0) {
             isPass = false;
-            oInfoBar.style.display = "block";
-            oInfoBar.innerHTML = "請選擇至少一件商品或活動";
-            setTimeout(() => {
-                oInfoBar.style.display = "none";
-            }, 3000);
         }
-
-        let postFormInputs = document.querySelectorAll(".postInfo input");
+        //若沒填內容，就不過
         for (let i of postFormInputs) {
             if ((i.value).trim() === '') {
                 isPass = false;
-                i.style.border = '1px solid red';
-                i.style.display = 'block';
-                i.nextElementSibling.display = "block";
-                i.nextElementSibling.innerHTML = '此欄位必需填寫';
-                oInfoBar.innerHTML = '寄送資訊欄位不可空白';
-                setTimeout(() => {
-                    i.style.border = "1px solid #ccc";
-                    i.nextElementSibling.innerHTML = '';
-                    i.nextElementSibling.display = "none";
-                }, 3000);
             }
         }
 
-        if (isPass) {
-            fetch('o_api01_2_newOrder.php', {
-                    method: 'POST',
-                    body: newodfd,
-                }).then(r => r.json())
-                .then(obj => {
-                    console.log(obj);
-                    if (obj.orderSuccess == true) {
-                        oCartDisplay.innerHTML = '';
-                        oPostPayDisplay.innerHTML = '';
-                        oMemTable.innerHTML = '';
-                        // oGetItemsForm.remove(send);
-                    }
-                })
-                .catch(ex => {
-                    console.log(ex);
-                })
+        if (isPass) { //若過了，觸發modal
+            const modal = new bootstrap.Modal(document.getElementById('oMsgToClient'));
+            modal.show();
+        } else { //若不過，顯示訊息
+            if (prods === 0 && acts === 0) {
+                oInfoBar.style.display = "block";
+                oInfoBar.innerHTML = "請選擇至少一件商品或活動";
+                setTimeout(() => {
+                    oInfoBar.style.display = "none";
+                }, 3000);
+            }
+            for (let i of postFormInputs) {
+                if ((i.value).trim() === '') {
+                    i.style.border = '1px solid red';
+                    i.style.display = 'block';
+                    i.nextElementSibling.display = "block";
+                    i.nextElementSibling.innerHTML = '此欄位必需填寫';
+                    oInfoBar.innerHTML = '寄送資訊欄位不可空白';
+                    setTimeout(() => {
+                        i.style.border = "1px solid #ccc";
+                        i.nextElementSibling.innerHTML = '';
+                        i.nextElementSibling.display = "none";
+                    }, 3000);
+                }
+            }
         }
+    }
+
+    // ====CREATE ORDER====
+    function createOrder(e) {
+        e.preventDefault();
+        const newodfd = new FormData(document.getElementById("oGetItemsForm"));
+        fetch('o_api01_2_newOrder.php', {
+                method: 'POST',
+                body: newodfd,
+            }).then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.orderSuccess == true) {
+                    oCartDisplay.innerHTML = '';
+                    oPostPayDisplay.innerHTML = '';
+                    oMemTable.innerHTML = '';
+                    // oGetItemsForm.remove(send);
+                }
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
         send.innerHTML = '';
         totalPriceInfo.style.display = "none";
     }
+
     // ====搜尋顯示哪種input====
     function searchm(e) {
         const sbname = document.getElementById("sbname");
@@ -405,9 +423,11 @@ require './partsNOEDIT/connect-db.php' ?>
         <div class="row pt-3 g-0">
             <div class="col-10">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
-                <button type="button" class="btn btn-warning mx-auto" data-bs-toggle="modal" data-bs-target="#oMsgToClient">成立訂單</button>
+                <button type="button" class="btn btn-warning mx-auto" data-bs-target="#oMsgToClient">成立訂單</button>
             </div>
         </div>    
+
+
         <!-- Modal Msg for client -->
         <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
             <div class="modal-dialog">
