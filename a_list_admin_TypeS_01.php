@@ -84,8 +84,8 @@ if ($totalRows) {
         <div class="mb-3 w-25">
             <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
-                <option selected>活動類型搜尋</option>
-                <option value="1">主題派對</option>
+                <option>全部類型</option>
+                <option selected value="1">主題派對</option>
                 <option value="2">在地活動</option>
                 <option value="3">市集展覽</option>
                 <option value="4">毛孩講座</option>
