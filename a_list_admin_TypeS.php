@@ -3,6 +3,7 @@ require './partsNOEDIT/connect-db.php';
 
 $perPage = 15; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
+$text = isset($_GET['text']) ? $_GET['text'] : ''; //宣告他在做搜尋
 
 if ($page < 1) {
     header('Location: ?page=1');
@@ -18,15 +19,21 @@ if ($totalRows) {
     if ($page > $totalPages) {
         header("Location: ?page=$totalPages");
         exit;
-    }
+    };
 
 
-    $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` 
+    if (isset($_GET['text']) && $_GET['text'] !== "") {
+        $sql = "SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` 
     FROM `act_info` ai 
     JOIN `act_group` ag 
     ON ai.`act_sid`=ag.`act_sid`
-    ORDER BY `act_sid` 
-    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    WHERE `act_name` LIKE '%$text%' ORDER BY `act_sid` DESC";
+    } else {
+        $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` FROM `act_info` ai JOIN `act_group` ag ON ai.`act_sid`=ag.`act_sid`ORDER BY `act_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    }
+
+
+    // $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` FROM `act_info` ai JOIN `act_group` ag ON ai.`act_sid`=ag.`act_sid`ORDER BY `act_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
@@ -106,10 +113,10 @@ if ($totalRows) {
         <!-- 按照 名稱 搜尋 -->
         <div class="row mb-3 w-50">
             <div class="col-4">
-                <input type="text" class="form-control" id="act_name" name="act_name">
+                <input type="search" class="form-control" id="a_keyword" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
             </div>
             <div class="col-2">
-                <button type="submit" class="btn btn-primary ">搜尋</button>
+                <button type="submit" class="btn btn-primary" id="search">搜尋</button>
             </div>
         </div>
     </div>
@@ -236,5 +243,13 @@ if ($totalRows) {
             window.location.href = 'a_list_admin_TypeS_orderOldest.php';
         }
     });
+
+    //關鍵字搜尋
+    let keyword = document.querySelector("#a_keyword");
+    let search = document.querySelector("#search");
+    search.addEventListener('click', function() {
+        let keywordV = keyword.value;
+        location.href = 'a_list_admin_TypeS.php?text=' + keywordV;
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
