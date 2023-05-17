@@ -27,6 +27,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
         border-radius: 6px;
         height: 280px;
         border: 2px dotted lightgray;
+        background-color: #ededed;
         padding: 0;
     }
 
