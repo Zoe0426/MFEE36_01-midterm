@@ -18,7 +18,8 @@ require './partsNOEDIT/connect-db.php' ?>
     .priceInfo {
         position: sticky;
         top: 100px;
-        height: 250px;
+        right: 0;
+        height: 320px;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -57,8 +58,20 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid px-0">
                     </div>
                 </div>
-                <div class="priceInfo col-2 o-d-none ocd"></div>
+                <div id="totalPriceInfo" class="priceInfo col-2 ocd pt-2">
+                    <div>
+                        <p>小計</p>
+                        <p id="subtotal">$</p>
+                        <p>郵寄金額</p>
+                        <p id="post">$</p>
+                        <p>優惠券金額</p>
+                        <p id="couponPrice">$</p>
+                        <p>總金額</p>
+                        <p id="showTotal">$</p>
+                    </div>
+                </div>
             </div>
+
         </div>
     </form>
     <!-- Modal Send New Order -->
@@ -85,7 +98,7 @@ require './partsNOEDIT/connect-db.php' ?>
     const oCartDisplay = document.getElementById("oCartDisplay");
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
     const send = document.createElement('div');
-
+    const totalPriceInfo = document.querySelector('#totalPriceInfo')
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -117,6 +130,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         showCoupon(obj);
                     }
                     showPostnPay(obj);
+                    // showTotalPriceInfo();
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -182,6 +196,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 })
         }
         send.innerHTML = '';
+        totalPriceInfo.style.display = "none";
     }
     // ====搜尋顯示哪種input====
     function searchm(e) {
@@ -324,7 +339,7 @@ require './partsNOEDIT/connect-db.php' ?>
             i.addEventListener('change', totalAmount);
         }
     }
-    //====顯示coupon
+    //====顯示coupon====
     function showCoupon(obj) {
         let oct = document.createElement("div");
         let cData = obj.coupons;
@@ -356,7 +371,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </table>`;
         oCartDisplay.append(oct);
     }
-    //====顯示地址及付款方式
+    //====顯示地址及付款方式====
     function showPostnPay(obj) {
         oPostPayDisplay.innerHTML = ""
         const opp = document.createElement('div');
@@ -411,6 +426,12 @@ require './partsNOEDIT/connect-db.php' ?>
             </div>
         </div>`;
         oGetItemsForm.append(send);
+
+    }
+    //====顯示總金額====
+    function showTotalPriceInfo() {
+        totalPriceInfo.style.display = "block";
+        let priceBlock = document.createElement('div');
 
     }
     //====選擇所有商品====
@@ -508,7 +529,7 @@ require './partsNOEDIT/connect-db.php' ?>
             })
             .catch(ex => console.log(ex))
     }
-
+    //====更新數量時, 更新總金額====
     function totalAmount() {
         let allSubTotal = [];
         const sProdQties = document.querySelectorAll('.sProdQty');
