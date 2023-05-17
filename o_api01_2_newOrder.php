@@ -77,7 +77,8 @@ if ($actOrders) {
         $aResult['prodQty'] = null;
         $aResult['adultQty'] = $aAdultQty;
         $aResult['childQty'] = $aChildQty;
-        $aResult['relType'] = 'act';
+        $aResult['relType'] = 'event';
+
         $forAct[] = $aResult;
     }
 }
@@ -167,6 +168,23 @@ foreach ($orderDetails as $o) {
     ]);
 }
 $output['createNewOrderDetails'] = !!$stmt2->rowCount();
+//增加地址
+if ($output['createNewOrderDetails'] == true) {
+    $sqlAddress = "INSERT INTO `mem_address`
+    ( `member_sid`, `order_sid`, `address`,
+     `default_status`, `create_time`, `update_time`) 
+    VALUES (?,?,?,
+    ?,NOW(),NOW())";
+    $stmadd = $pdo->prepare($sqlAddress);
+    $stmadd->execute([
+        $member_sid,
+        $new_ord_sid,
+        $postAddress,
+        0
+    ]);
+    $output['createNewAddress'] = !!$stmadd->rowCount();
+}
+
 //更新購物車內容
 if ($output['createNewOrderDetails'] == true) {
     foreach ($orderDetails as $o) {

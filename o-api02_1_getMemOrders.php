@@ -33,10 +33,10 @@ if (!empty($_POST['searchBy'])) {
 
         $output['getByOrderSidSuccess'] = true;
         $output['getBy'] = 'orderSid';
-        $output['sid'] = $data['member_sid'];
-        $output['name'] = $data['member_name'];
-        $output['mobile'] = $data['member_mobile'];
-        $output['birth'] = $data['member_birth'];
+        $output['member_sid'] = $data['member_sid'];
+        $output['member_name'] = $data['member_name'];
+        $output['member_mobile'] = $data['member_mobile'];
+        $output['member_birth'] = $data['member_birth'];
         $output['order_sid'] = $data['order_sid'];
         $output['order_status'] = $data['order_status'];
         $output['coupon_sid'] = $data['coupon_sid'];
