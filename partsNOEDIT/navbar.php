@@ -7,7 +7,7 @@
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://images.pexels.com/photos/4597758/pexels-photo-4597758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" width="40" height="40" class="rounded-circle me-2">
                 <?php if (isset($_SESSION['admin'])) : ?>
-                    <div><?= $_SESSION['admin']['admin_name'] ?></div>
+                    <div>Hi! <?= $_SESSION['admin']['admin_name'] ?></div>
                 <?php else : ?>
                     <div>管理員</div>
                 <?php endif; ?>
@@ -19,7 +19,11 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">登出</a></li>
+                <?php if (isset($_SESSION['admin'])) : ?>
+                    <li><a class="dropdown-item" href="m_adminLogout.php">登出</a></li>
+                <?php else : ?>
+                    <li><a class="dropdown-item" href="m_adminLogin.php">登入</a></li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>
@@ -30,8 +34,8 @@
     <div class="bg-warning-subtle  min-vh-100 pt-3 sidebar">
         <!-- 登入 -->
         <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="#" class="nav-link text-dark ">
+            <!-- <li class="nav-item">
+                <a href="m_adminLogin.php" class="nav-link text-dark ">
                     登入
                 </a>
                 <div class="collapse w-100" id="collapseBt1">
@@ -40,6 +44,19 @@
                     </a>
                     <a href="#" class="nav-link bg-transparent  text-dark ">
                         - 個人資料
+                    </a>
+                </div>
+            </li> -->
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    會員
+                </a>
+                <div class="collapse w-100" id="collapseBt2">
+                    <a href="m_member-list.php" class="nav-link bg-transparent text-dark ">
+                        - 會員資料
+                    </a>
+                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                        - 商城資料
                     </a>
                 </div>
             </li>

@@ -1,5 +1,5 @@
 <?php
-//require './partsNOEDIT/connect-db.php';
+// require '../partsNOEDIT/connect-db.php';
 
 // $codes = ["all100", "all200", "all300", "all400", "all500"];
 
@@ -291,46 +291,104 @@ JSON.stringify(ar);
 // }
 
 // 建立資料庫連線
+// $servername = "localhost";
+// $username = "root";
+// $password = "root";
+// $dbname = "pet_db";
+// $conn = new mysqli($servername, $username, $password, $dbname);
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
+
+// // 定義已知的 coupon_sid 和 member_sid 陣列
+// $coupon_sids = array("COUPON00001", "COUPON00002", "COUPON00003", "COUPON00004", "COUPON00005");
+// $member_sids = array();
+// for ($i = 1; $i <= 500; $i++) {
+//     $member_sids[] = sprintf("mem%05d", $i);
+// }
+
+// // 生成需要的假資料
+// for ($i = 1; $i <= 500; $i++) {
+//     // 隨機選擇一個 coupon_sid 和 member_sid
+//     $coupon_sid = $coupon_sids[array_rand($coupon_sids)];
+//     $member_sid = $member_sids[array_rand($member_sids)];
+
+//     // 產生隨機的 coupon_status
+//     $coupon_status = rand(0, 1);
+
+//     // 產生隨機的 create_time 和 update_time
+//     $ct = rand(strtotime('2023-03-01 00:00:00'), strtotime('2023-03-31 00:00:00'));
+//     $creatTime = date('Y-m-d H:i:s', $ct);
+//     $ut = rand(strtotime('2023-04-01 00:00:00'), strtotime('2023-05-01 00:00:00'));
+//     $updateTime = date('Y-m-d H:i:s', $ut);
+
+//     // 將新的資料列插入資料表中
+//     $sql = "INSERT INTO mem_coupon_send (couponSend_sid, coupon_sid, member_sid, coupon_status, create_time, update_time)
+//     VALUES ('$i', '$coupon_sid', '$member_sid', '$coupon_status', '$creatTime', '$updateTime')";
+//     if ($conn->query($sql) === TRUE) {
+//         echo "New record created successfully";
+//     } else {
+//         echo "Error: " . $sql . "<br>" . $conn->error;
+//     }
+// }
+
+// $sql = "INSERT INTO mem_coupon_send (couponSend_sid, coupon_sid, member_sid, coupon_status, used_time, update_time, create_time)
+// SELECT 
+//     t.n,
+//     CONCAT('COUPON', LPAD(FLOOR(RAND() * 6) + 1, 5, '0')) AS coupon_sid,
+//     CONCAT('MEM', LPAD(FLOOR(RAND() * 500) + 1, 5, '0')) AS member_sid,
+//     IF( RAND() < 0.5 , 0, 1 ) AS coupon_status,
+//     IF( RAND() < 0.5 , DATE_ADD(NOW(), INTERVAL -RAND()*30 DAY), NULL) AS used_time,
+//     DATE_ADD(NOW(), INTERVAL -RAND()*30 DAY) AS update_time,
+//     DATE_ADD(NOW(), INTERVAL -RAND()*30 DAY) AS create_time
+// FROM (
+//     SELECT @row_number:=@row_number+1 AS n
+//     FROM information_schema.tables, (SELECT @row_number:=0) AS t1
+//     LIMIT 1000
+// ) AS t";
+
+
+
+// 關閉資料庫連線
+
+
+
 $servername = "localhost";
 $username = "root";
 $password = "root";
 $dbname = "pet_db";
+
+// Create a connection
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// 定義已知的 coupon_sid 和 member_sid 陣列
-$coupon_sids = array("COUPON00001", "COUPON00002", "COUPON00003", "COUPON00004", "COUPON00005");
-$member_sids = array();
-for ($i = 1; $i <= 500; $i++) {
-    $member_sids[] = sprintf("mem%05d", $i);
+// Generate fake data
+$sql = "INSERT INTO mem_coupon_send (coupon_sid, member_sid, coupon_status, used_time, create_time)
+SELECT 
+    CONCAT('COUPON', LPAD(FLOOR(RAND() * 6) + 1, 5, '0')) AS coupon_sid,
+    CONCAT('mem', LPAD(FLOOR(RAND() * 500) + 1, 5, '0')) AS member_sid,
+    FLOOR(RAND() * 2) AS coupon_status,
+    @used_time := CASE WHEN FLOOR(RAND() * 2) = 1 THEN DATE_ADD(@create_time, INTERVAL FLOOR(RAND() * 1417) + 24 HOUR) ELSE NULL END,
+    CASE WHEN @used_time IS NOT NULL AND FLOOR(RAND() * 2) = 1 THEN ADDTIME(@create_time, SEC_TO_TIME(FLOOR(RAND() * TIME_TO_SEC(TIMEDIFF(@used_time, @create_time)))) ) ELSE NULL END AS update_time
+FROM 
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) t1,
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) t2,
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) t3,
+    (SELECT @create_time := FROM_UNIXTIME(UNIX_TIMESTAMP('2020-01-01') + FLOOR(RAND() * DATEDIFF('2023-05-01', '2020-01-01')))) t4
+HAVING update_time IS NOT NULL;
+";
+
+
+// Execute query
+if ($conn->query($sql) === TRUE) {
+    echo "1000 rows inserted successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
-// 生成需要的假資料
-for ($i = 1; $i <= 500; $i++) {
-    // 隨機選擇一個 coupon_sid 和 member_sid
-    $coupon_sid = $coupon_sids[array_rand($coupon_sids)];
-    $member_sid = $member_sids[array_rand($member_sids)];
-
-    // 產生隨機的 coupon_status
-    $coupon_status = rand(0, 1);
-
-    // 產生隨機的 create_time 和 update_time
-    $ct = rand(strtotime('2023-03-01 00:00:00'), strtotime('2023-03-31 00:00:00'));
-    $creatTime = date('Y-m-d H:i:s', $ct);
-    $ut = rand(strtotime('2023-04-01 00:00:00'), strtotime('2023-05-01 00:00:00'));
-    $updateTime = date('Y-m-d H:i:s', $ut);
-
-    // 將新的資料列插入資料表中
-    $sql = "INSERT INTO mem_coupon_send (couponSend_sid, coupon_sid, member_sid, coupon_status, create_time, update_time)
-    VALUES ('$i', '$coupon_sid', '$member_sid', '$coupon_status', '$creatTime', '$updateTime')";
-    if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// 關閉資料庫連線
+// Close connection
 $conn->close();
