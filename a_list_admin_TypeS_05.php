@@ -84,12 +84,12 @@ if ($totalRows) {
         <div class="mb-3 w-25">
             <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
-                <option selected>活動類型搜尋</option>
+                <option selected value="0">全部分類</option>
                 <option value="1">主題派對</option>
                 <option value="2">在地活動</option>
                 <option value="3">市集展覽</option>
                 <option value="4">毛孩講座</option>
-                <option value="5">寵物學校</option>
+                <option selected value="5">寵物學校</option>
             </select>
             <div class="form-text"></div>
         </div>
@@ -199,6 +199,10 @@ if ($totalRows) {
     typeSelect.addEventListener('change', function() {
         const actS = typeSelect.value;
 
+        if (actS == 0) {
+            window.location.href = 'a_list_admin_TypeS.php';
+        }
+
         if (actS == 1) {
             window.location.href = 'a_list_admin_TypeS_01.php';
         }
@@ -227,11 +231,11 @@ if ($totalRows) {
         const ao = aOrder.value;
 
         if (ao == 1) {
-            window.location.href = 'a_list_admin_TypeS.php';
+            window.location.href = 'a_list_admin_TypeS_05.php';
         }
 
         if (ao == 2) {
-            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
+            window.location.href = 'a_list_admin_TypeS_05-2.php';
         }
     });
 </script>

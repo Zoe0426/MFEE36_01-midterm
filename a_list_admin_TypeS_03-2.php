@@ -9,7 +9,7 @@ if ($page < 1) {
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM act_info";
+$t_sql = "SELECT COUNT(1) FROM act_info WHERE type_sid=3";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
@@ -25,6 +25,7 @@ if ($totalRows) {
     FROM `act_info` ai 
     JOIN `act_group` ag 
     ON ai.`act_sid`=ag.`act_sid`
+    WHERE `type_sid`=3
     ORDER BY `act_sid` 
     DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
@@ -83,10 +84,10 @@ if ($totalRows) {
         <div class="mb-3 w-25">
             <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
-                <option selected value="0">全部類型</option>
+                <option value="0">全部類型</option>
                 <option value="1">主題派對</option>
                 <option value="2">在地活動</option>
-                <option value="3">市集展覽</option>
+                <option selected value="3">市集展覽</option>
                 <option value="4">毛孩講座</option>
                 <option value="5">寵物學校</option>
             </select>
@@ -96,8 +97,8 @@ if ($totalRows) {
         <!-- 按照 升冪(小到大) 搜尋 -->
         <div class="mb-3 w-25">
             <select class="form-select" id="a_order" name="a_order" data-required="1">
-                <option selected value="1">最新上架</option>
-                <option value="2">最舊上架</option>
+                <option value="1">最新上架</option>
+                <option selected value="2">最舊上架</option>
             </select>
             <div class="form-text"></div>
         </div>
@@ -197,6 +198,7 @@ if ($totalRows) {
 
     typeSelect.addEventListener('change', function() {
         const actS = typeSelect.value;
+
         if (actS == 0) {
             window.location.href = 'a_list_admin_TypeS.php';
         }
@@ -229,11 +231,11 @@ if ($totalRows) {
         const ao = aOrder.value;
 
         if (ao == 1) {
-            window.location.href = 'a_list_admin_TypeS.php';
+            window.location.href = 'a_list_admin_TypeS_03.php';
         }
 
         if (ao == 2) {
-            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
+            window.location.href = 'a_list_admin_TypeS_03-2.php';
         }
     });
 </script>
