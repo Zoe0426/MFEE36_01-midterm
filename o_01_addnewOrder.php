@@ -85,6 +85,7 @@ require './partsNOEDIT/connect-db.php' ?>
     const oCartDisplay = document.getElementById("oCartDisplay");
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
     const send = document.createElement('div');
+
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -224,15 +225,9 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示商城商品
     function showShopList(obj) {
-        // console.log('shopListobj');
-        // console.log(obj);
         let ost = document.createElement("div");
         let sData = obj.shoplist;
-        // console.log('sData');
-        // console.log(sData);
-
         let shopContent = "";
-
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
@@ -240,14 +235,12 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
-                    <td><input type="number" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
+                    <td><input type="number" min="0" value="${sData[i].prodQty}" class="sProdQty"></td>
                     <td>${sData[i].proDet_price}</td>
                     <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" class="text-secondary">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
 
                     <td class="text-end" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${sData[i].pro_sid}','${sData[i].proDet_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
-            // console.log(i);
-            // console.log(shopContent);
         }
 
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -267,11 +260,12 @@ require './partsNOEDIT/connect-db.php' ?>
                 ${shopContent}
                 </tbody>
             </table>`;
-        // console.log('ost.innerHTML');
-        // console.log(ost.innerHTML);
         oCartDisplay.append(ost);
-        console.log('oCartDisplay.innerHTML');
-        console.log(oCartDisplay.innerHTML);
+        const sProdQties = document.querySelectorAll('.sProdQty');
+        console.log(sProdQties);
+        for (let i of sProdQties) {
+            i.addEventListener('change', sChangeStock);
+        }
     }
     //====顯示活動
     function showActList(obj) {
@@ -287,11 +281,11 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${aData[i].act_name}</td>
                     <td>${aData[i].group_date}</td>
 
-                    <td rel="aduQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].adultQty}" ></td>
+                    <td rel="aduQty"><input type="number" min="0" class="aProdQty" value="${aData[i].adultQty}" ></td>
 
                     <td>${aData[i].price_adult}</td>
 
-                    <td rel="kidQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].childQty}" ></td>
+                    <td rel="kidQty"><input type="number" min="0" class="aProdQty" value="${aData[i].childQty}" ></td>
 
                     <td>${aData[i].price_kid}</td>
                     <td totalStock="${aData[i].ppl_max}" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" class="text-secondary">${astock}</td>
@@ -321,6 +315,12 @@ require './partsNOEDIT/connect-db.php' ?>
                 </tbody>
             </table>`;
         oCartDisplay.append(oat);
+
+        const aProdQties = document.querySelectorAll('.aProdQty');
+        console.log(aProdQties);
+        for (let i of aProdQties) {
+            i.addEventListener('change', aChangeStock);
+        }
     }
     //====顯示coupon
     function showCoupon(obj) {
@@ -445,9 +445,10 @@ require './partsNOEDIT/connect-db.php' ?>
         window.location.href = "o_02_orderDetails.php";
     }
     //====更新商品庫存,Cart Qty====
-    function sChangeStock(e, x) {
+    function sChangeStock(e) {
         console.log('change');
-        let qtyParent = x.closest('tr');
+        let tdself = e.target; //本身
+        let qtyParent = tdself.closest('tr');
         let lastTd = qtyParent.querySelector('td:last-child');
         let sQty = lastTd.previousElementSibling;
         let stock = parseInt(sQty.getAttribute('totalStock'));
@@ -465,9 +466,10 @@ require './partsNOEDIT/connect-db.php' ?>
             .catch(ex => console.log(ex))
     }
     //====更新活動庫存,Cart Qty===
-    function aChangeStock(e, x) {
+    function aChangeStock(e) {
         console.log('change');
-        let qtyParent = x.closest('tr'); //<tr>
+        let tdself = e.target; //本身
+        let qtyParent = tdself.closest('tr'); //<tr>
         let lastTd = qtyParent.querySelector('td:last-child');
         let aQty = lastTd.previousElementSibling; //顯示庫存的td
         let stock = parseInt(aQty.getAttribute('totalStock')); //總庫存量
