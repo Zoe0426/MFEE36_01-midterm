@@ -89,10 +89,10 @@ if ($totalRows) {
             </ul>
         </nav>
 
-        <div class="mb-3">
-            <label for="type_sid" class="form-label">活動類型搜尋</label>
+        <div class="mb-3 w-25">
+            <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
-                <option selected>--請選擇--</option>
+                <option selected>活動類型搜尋</option>
                 <option value="1">主題派對</option>
                 <option value="2">在地活動</option>
                 <option value="3">市集展覽</option>
@@ -102,14 +102,14 @@ if ($totalRows) {
             <div class="form-text"></div>
         </div>
 
-        <!-- <div class="row mb-3">
+        <div class="row mb-3 w-50">
             <div class="col-4">
                 <input type="text" class="form-control" id="act_name" name="act_name">
             </div>
             <div class="col-2">
                 <button type="submit" class="btn btn-primary ">搜尋</button>
             </div>
-        </div> -->
+        </div>
     </div>
 
 
