@@ -11,7 +11,8 @@ $output = [
 
 if (isset($_POST['keyword'])) {
     $keyword = $_POST['keyword'];
-    $stmt = "SELECT * FROM rest_info WHERE rest_name LIKE '%$keyword%'";
+    $stmt = "SELECT ri.*, rc.`catg_name` FROM `rest_info` ri JOIN `rest_catg` rc ON ri.`catg_sid` = rc.`catg_sid`  WHERE rest_name LIKE '%$keyword%'";
+
     $data = $pdo->query($stmt)->fetchAll();
 
     // var_dump($data);

@@ -191,31 +191,6 @@ if ($totalRows) {
     //     });
     // });
 
-
-    // // 獲取輸入框元素
-    // const inputElement = document.querySelector('input[name="keyword"]');
-    // const tableRows1 = document.querySelectorAll('tbody tr');
-
-    // // 原始表格行的顯示狀態陣列
-    // const originalDisplay = Array.from(tableRows1).map(row => row.style.display);
-
-    // const searchButton = document.querySelector('.search');
-
-
-    // searchButton.addEventListener('click', function(event) {
-    //     event.preventDefault();
-
-    //     const keyword = inputElement.value.trim().toLowerCase();
-    //     tableRows.forEach(function(row, index) {
-    //         const restName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-
-    //         if (keyword === '' || restName.includes(keyword)) {
-    //             row.style.display = originalDisplay[index];
-    //         } else {
-    //             row.style.display = 'none';
-    //         }
-    //     });
-    // });
     function checkForm(event) {
         event.preventDefault();
         const fd = new FormData(document.keyword1);
@@ -271,6 +246,7 @@ if ($totalRows) {
                         tr.appendChild(td9);
 
                         const td10 = document.createElement('td');
+                        td10.classList.add('text-center');
                         const link1 = document.createElement('a');
                         link1.href = 'r_formbrowse.php?rest_sid=' + row.rest_sid;
                         link1.innerHTML = '<i class="fa-solid fa-circle-info text-primary"></i>';
@@ -278,6 +254,7 @@ if ($totalRows) {
                         tr.appendChild(td10);
 
                         const td11 = document.createElement('td');
+                        td11.classList.add('text-center');
                         const link2 = document.createElement('a');
                         link2.href = 'r_formedit.php?rest_sid=' + row.rest_sid;
                         link2.innerHTML = '<i class="fa-solid fa-pen-to-square text-success"></i>';
@@ -285,6 +262,7 @@ if ($totalRows) {
                         tr.appendChild(td11);
 
                         const td12 = document.createElement('td');
+                        td12.classList.add('text-center');
                         const link3 = document.createElement('a');
                         link3.href = 'javascript: delete_it(' + row.rest_sid + ')';
                         link3.innerHTML = '<i class="fa-solid fa-trash-can text-danger"></i>';
