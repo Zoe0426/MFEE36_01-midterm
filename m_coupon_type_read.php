@@ -1,18 +1,21 @@
 <?php
 require './partsNOEDIT/connect-db.php';
-$rows = [];
-$sql = "SELECT * FROM `mem_coupon_type`";
-$rows = $pdo->query($sql)->fetchAll();
+// $rows = [];
+// $sql = "SELECT * FROM `mem_coupon_type`";
+// $rows = $pdo->query($sql)->fetchAll();
 
 
 $coupon_sid = isset($_GET['coupon_sid']) ? $_GET['coupon_sid'] : '';
 
-$sql_cupon_detail = "SELECT `coupon_sid`, `coupon_code`, `coupon_name`, `coupon_price`, `coupon_startDate`, `coupon_expDate` FROM `mem_coupon_type` WHERE coupon_sid=:coupon_sid";
+$sql_cupon_detail = "SELECT * FROM `mem_coupon_type` WHERE coupon_sid =:coupon_sid";
 $stmt_coupon_detail = $pdo->prepare($sql_cupon_detail);
 $stmt_coupon_detail->bindValue(':coupon_sid', $coupon_sid, PDO::PARAM_STR);
 $stmt_coupon_detail->execute();
 $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
 
+
+
+print_r($r1);
 
 ?>
 
@@ -27,10 +30,9 @@ $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
         <div class="mb-3">
             <label for="coupon_name" class="form-label">優惠券名稱</label>
             <select name="coupon_sid" id="coupon_sid" data-required="1">
-                <option value="">--請選擇--</option>
-                <?php foreach ($rows as $i) : ?>
-                    <option value="<?= $i['coupon_sid'] ?> "><?= $i['coupon_name'] ?></option>
-                <?php endforeach; ?>
+
+                <option value="<?= $r1['coupon_sid'] ?> "><?= $r1['coupon_name'] ?></option>
+
             </select>
             <div class="btn btn-primary" id="search">搜尋</div>
         </div>
@@ -48,24 +50,24 @@ $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($rows as $r) : ?>
-                    <tr>
-                        <td><a href="javascript: delete_it('<?= $r['coupon_sid'] ?>')">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </a>
-                        </td>
-                        <td><?= $r['coupon_sid'] ?></td>
-                        <td><?= $r['coupon_code'] ?></td>
-                        <td><?= $r['coupon_name'] ?></td>
-                        <td><?= $r['coupon_price'] ?></td>
-                        <td><?= $r['coupon_startDate'] ?></td>
-                        <td><?= $r['coupon_expDate'] ?></td>
-                        <td><a href="m_coupon_type_update.php?coupon_sid=<?= $r['coupon_sid'] ?>">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+
+                <tr>
+                    <td><a href="javascript: delete_it('<?= $r1['coupon_sid'] ?>')">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                    <td><?= $r1['coupon_sid'] ?></td>
+                    <td><?= $r1['coupon_code'] ?></td>
+                    <td><?= $r1['coupon_name'] ?></td>
+                    <td><?= $r1['coupon_price'] ?></td>
+                    <td><?= $r1['coupon_startDate'] ?></td>
+                    <td><?= $r1['coupon_expDate'] ?></td>
+                    <td><a href="m_coupon_type_update.php?coupon_sid=<?= $r1['coupon_sid'] ?>">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
     </div>
