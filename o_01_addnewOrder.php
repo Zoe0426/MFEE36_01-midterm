@@ -19,7 +19,7 @@ require './partsNOEDIT/connect-db.php' ?>
         position: sticky;
         top: 100px;
         right: 0;
-        height: 320px;
+        height: 500px;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -93,6 +93,7 @@ require './partsNOEDIT/connect-db.php' ?>
         </div>
     </div>
 </div>
+
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
@@ -118,15 +119,15 @@ require './partsNOEDIT/connect-db.php' ?>
                     showMemInfo(obj);
 
                     if (obj.shoplist !== 'noShopItems') {
-                        console.log("showShop");
+                        // console.log("showShop");
                         showShopList(obj);
                     }
                     if (obj.actlist !== 'noActItems') {
-                        console.log("showAct");
+                        // console.log("showAct");
                         showActList(obj);
                     }
                     if (obj.coupons !== 'noCoupons') {
-                        console.log("showCoupon");
+                        // console.log("showCoupon");
                         showCoupon(obj);
                     }
                     showPostnPay(obj);
@@ -371,7 +372,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </table>`;
         oCartDisplay.append(oct);
     }
-    //====顯示地址及付款方式====
+    //====顯示地址及付款方式及送出BTN====
     function showPostnPay(obj) {
         oPostPayDisplay.innerHTML = ""
         const opp = document.createElement('div');
@@ -402,9 +403,10 @@ require './partsNOEDIT/connect-db.php' ?>
         const oGetItemsForm = document.getElementById('oGetItemsForm');
         send.innerHTML = `        
         <div class="row pt-3 g-0">
+            <div class="col-10">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
                 <button type="button" class="btn btn-warning mx-auto" data-bs-toggle="modal" data-bs-target="#oMsgToClient">成立訂單</button>
-            
+            </div>
         </div>    
         <!-- Modal Msg for client -->
         <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
@@ -487,6 +489,12 @@ require './partsNOEDIT/connect-db.php' ?>
                 }
             })
             .catch(ex => console.log(ex))
+        let checkboxVal = qtyParent.querySelector('td:first-child');
+        let encodedString = checkboxVal.childNodes[0];
+        const decodedString = JSON.parse(decodeURIComponent(encodedString.value));
+        decodedString.prodQty = updatedQty;
+        const updatedString = encodeURIComponent(JSON.stringify(decodedString));
+        encodedString.value = updatedString;
 
     }
     //====更新活動庫存,Cart Qty===
@@ -508,6 +516,18 @@ require './partsNOEDIT/connect-db.php' ?>
             .then(r => r.json())
             .then(obj => console.log(obj))
             .catch(ex => console.log(ex))
+
+        let checkboxVal = qtyParent.querySelector('td:first-child');
+        let encodedString = checkboxVal.querySelector('input:first-child');
+        const decodedString = JSON.parse(decodeURIComponent(encodedString.value));
+        let adOrkid = e.target.parentElement.getAttribute('rel');
+        if (adOrkid === 'kidQty') {
+            decodedString.childQty = kidQty;
+        } else {
+            decodedString.adultQty = aduQty;
+        }
+        const updatedString = encodeURIComponent(JSON.stringify(decodedString));
+        encodedString.value = updatedString;
     }
     //====刪除購物車內容====
     function deleteCartItem(mem, pro, prod, x) {

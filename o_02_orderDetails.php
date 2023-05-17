@@ -57,7 +57,7 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.innerHTML = '';
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
             const fd = new FormData(document.getElementById('oGetmem'));
-            fetch('o-api02_1_getMemOrders.php', {
+            fetch('o_02_1_getMemOrders.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())
@@ -257,7 +257,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     // ====顯示訂單明細====
     function showDetails(ord, x) {
-        fetch(`o-api02_2_getOrderDetails.php?orderSid=${ord}`)
+        fetch(`o_api02_2_getOrderDetails.php?orderSid=${ord}`)
             .then(r => r.json())
             .then(objectD => {
                 let objArray = objectD.order_details;
