@@ -345,11 +345,6 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     function toEdit() {
         const proSid = document.querySelector('#s_pro_sid>input').value
         console.log(proSid);
-        // const firstTd = tar.closest('tr').querySelector('td:first-child')
-        // const sendTd = tar.closest('tr').querySelector('td:nth-child(2)')
-        // let firstContent = firstTd.textContent;
-
-        // let sendContent = sendTd.textContent;
         location.href = `s_edit.php?pro_sid=${proSid}`
     }
 </script>

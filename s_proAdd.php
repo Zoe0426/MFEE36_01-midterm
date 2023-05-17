@@ -219,7 +219,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
             <div class="mt-3 s_allbtn mb-3">
-                <button type="submit" class="btn btn-primary">新增商品</button>
+                <button type="submit" class="btn btn-primary">確認新增</button>
                 <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
             </div>
 
@@ -570,11 +570,23 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 }
             }
             //若小規格有數字，則由小到大排序
-            arr.sort(function(a, b) {
-                let c = parseInt(a.specDet_name);
-                let d = parseInt(b.specDet_name);
-                return c - d
-            })
+            if (specSelId != 1) {
+                arr.sort(function(a, b) {
+                    let c = a.specDet_name;
+                    let d = b.specDet_name;
+                    //檢查是否為純文字
+                    let isPureText = /^[a-zA-Z\u4e00-\u9fa5]+$/.test(c);
+                    if (isPureText) {
+                        // 若為文字文字
+                        return c.localeCompare(d);
+                    } else {
+                        // 包含数字和中文情况下按数字大小排序
+                        let cNum = parseFloat(c);
+                        let dNum = parseFloat(d);
+                        return cNum - dNum;
+                    }
+                })
+            };
             for (let b of arr) {
                 createOp('option', b.specDet_sid, b.specDet_name)
             }

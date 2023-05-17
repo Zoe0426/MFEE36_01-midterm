@@ -656,8 +656,16 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             })
         }
 
+        for (let c = 0, cmax = specSel2.length; c < cmax; c++) {
+            specSel2[c].addEventListener('change', () => {
+                const specSelId = specSel2[c].value;
+                createSpecDet2(specSelId, c);
+            })
+        }
+
         function createSpec2(specSelId, a) {
-            specSel2[a].removeAttribute('disabled')
+            console.log(123)
+            //specSel2[a].removeAttribute('disabled')
             specSel2[a].innerHTML = ""
             // while (specSel2[a].hasChildNodes()) {
             //     specSel2[a].remove(specSel2[a].lastChild)
