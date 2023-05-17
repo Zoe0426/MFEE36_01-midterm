@@ -3,6 +3,7 @@ require './partsNOEDIT/connect-db.php';
 
 $perPage = 10; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
+$text = isset($_GET['text']) ? $_GET['text'] : ''; //一定要先宣告他在做搜尋啦
 
 if ($page < 1) {
     header('Location: ?page=1');
@@ -17,12 +18,20 @@ $totalRows = $pdo->query($p_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
 $totalPages = ceil($totalRows / $perPage); #總頁數
 $rows = [];
 
+
 if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，如果存在則繼續執行，否則不執行
     if ($page > $totalPages) {
         header("Location: ?page=$totalPages"); //判斷當前頁碼 $page 是否大於總頁數 $totalPages，如果大於則進行重定向，使頁碼指向最後一頁，然後終止程式。
         exit;
     }
-    $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` LIMIT %s, %s", ($page - 1) * $perPage, $perPage); //使用 sprintf 函數生成一條 SQL 查詢語句，按照 $perPage 條記錄每次分頁查詢數據。其中 %s 是占位符，($page - 1) * $perPage 和 $perPage 是要填入的具體值。
+    //$sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` LIMIT %s, %s", ($page - 1) * $perPage, $perPage); //使用 sprintf 函數生成一條 SQL 查詢語句，按照 $perPage 條記錄每次分頁查詢數據。其中 %s 是占位符，($page - 1) * $perPage 和 $perPage 是要填入的具體值。
+
+    if (isset($_GET['text']) && $_GET['text'] !== "") {
+        $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
+    } else {
+        $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` ORDER BY `post_sid` ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    }
+
     $rows = $pdo->query($sql)->fetchAll(); //執行 SQL 查詢語句，使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢，然後調用 fetchAll 方法將查詢結果轉化為一個二維數組 $rows。
 }
 
@@ -43,16 +52,42 @@ $r_post = $stmt->fetchAll();
     }
 
     .p_page {
-        margin: 10px;
+        margin-top: 10px;
+        margin-right: 5px;
+
     }
 
     .p_search {
-        margin: 10px;
-        margin-top: 15px;
+        margin-left: 10px;
+        margin-top: 13px;
+        margin-right: 8px;
     }
 
     .p_searchBtn {
-        margin: 10px;
+        /* margin: 10px; */
+        padding: 4px;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-top: 14px;
+    }
+
+    .p_board {
+        margin-left: 10px;
+        margin-top: 15px;
+        margin-right: 12px;
+    }
+
+    #board {
+        padding: 5px;
+    }
+
+    #admin_name {
+        padding: 5px;
+    }
+
+    .p_admin {
+        margin-right: 12px;
+        margin-top: 15px;
     }
 </style>
 
@@ -94,32 +129,56 @@ $r_post = $stmt->fetchAll();
             </nav>
         </div>
 
-        <div class="p_search">
+        <div class="p_board">
             <!-- 搜尋篩選 -->
             <form>
-                <label for="board">選擇看板：</label>
-                <select id="board" name="board">
-                    <option value="">請選擇</option>
-                    <option value="All">全部</option>
-                    <option value="1">寵物醫療板</option>
-                    <option value="2">寵物住宿板</option>
-                    <option value="3">寵物友善景點</option>
-                    <option value="4">寵物安親板</option>
-                    <option value="5">狗/貓聚板</option>
-                    <option value="6">曬毛孩板</option>
-                    <option value="7">寵物學校</option>
-                    <option value="8">寵物友善餐廳/咖啡廳</option>
-                    <option value="9">寵物照護</option>
-                    <option value="10">寵物殯葬</option>
-                    <option value="11">幼犬/貓版</option>
-                    <option value="12">老犬/貓版</option>
-                    <option value="13">寵物梗圖</option>
-                    <!-- 其他選項 -->
-                </select>
+                <div>
+                    <label for="board">看板：</label>
+                    <select id="board" name="board">
+                        <option value="">選擇看板</option>
+                        <option value="All">全部</option>
+                        <option value="1">寵物醫療板</option>
+                        <option value="2">寵物住宿板</option>
+                        <option value="3">寵物友善景點</option>
+                        <option value="4">寵物安親板</option>
+                        <option value="5">狗/貓聚板</option>
+                        <option value="6">曬毛孩板</option>
+                        <option value="7">寵物學校</option>
+                        <option value="8">寵物友善餐廳/咖啡廳</option>
+                        <option value="9">寵物照護</option>
+                        <option value="10">寵物殯葬</option>
+                        <option value="11">幼犬/貓版</option>
+                        <option value="12">老犬/貓版</option>
+                        <option value="13">寵物梗圖</option>
+                        <!-- 其他選項 -->
+                    </select>
+                </div>
             </form>
         </div>
+        <div class="p_admin">
+            <label for="admin_name">管理者：</label>
+            <select name="admin_name" id="admin_name" data-required="1">
+                <option selected value="">選擇管理者</option>
+                <option selected value="adAll">全部</option>
+                <option value="Lilian">Lilian</option>
+                <option value="Jenny">Jenny</option>
+                <option value="Gabrielle">Gabrielle</option>
+                <option value="Lily">Lily</option>
+                <option value="Jill">Jill</option>
+                <option value="Shu yi">Shu yi</option>
+            </select>
+        </div>
+        <div class="p_search">
+            <!-- <label for="search">關鍵字搜尋：</label> -->
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="search" class="form-control" id="keyword" placeholder="關鍵字查詢" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
+            </div>
+            <!-- <input type="search" id="keyword" placeholder="" style="height:28px" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>"> -->
+
+        </div>
         <div>
-            <button type="submit" class="p_searchBtn btn btn-warning ">搜尋</button>
+            <button type="submit" class="p_searchBtn btn btn-warning" id="search">搜尋</button>
         </div>
 
     </div>
@@ -167,7 +226,6 @@ $r_post = $stmt->fetchAll();
 
 <?php include './partsNOEDIT/script.php' ?>
 <script>
-
     //刪除
     document.querySelector('li.page-item.active a').removeAttribute('href');
 
@@ -184,19 +242,18 @@ $r_post = $stmt->fetchAll();
     }
 
     //選擇看板-下拉式選單
+
+    //選擇看板
     const boardSelect = document.getElementById('board');
     const postList = document.getElementById('post-list');
 
     boardSelect.addEventListener('change', function() {
         const boardSid = boardSelect.value;
 
-        // // 清空文章列表
-        // postList.innerHTML = '';
-
         // 檢查是否選擇了板塊
         if (boardSid == 1) {
 
-            window.location.href = 'p-b1.php';
+            window.location.href = 'test_p-b1.php';
         }
         if (boardSid == 2) {
 
@@ -251,5 +308,37 @@ $r_post = $stmt->fetchAll();
             window.location.href = 'p_readPost_api.php';
         }
     });
+
+    //選擇管理員
+    const adminSelect = document.getElementById('admin_name');
+    adminSelect.addEventListener('change', function() {
+        const adminVal = adminSelect.value;
+        if (adminVal == 'Lilian') {
+            window.location.href = 'p-admin1.php';
+        }
+        if (adminVal == 'Jenny') {
+            window.location.href = 'p-admin2.php';
+        }
+        if (adminVal == 'Gabrielle') {
+            window.location.href = 'p-admin3.php';
+        }
+        if (adminVal == 'Lily') {
+            window.location.href = 'p-admin4.php';
+        }
+        if (adminVal == 'Jill') {
+            window.location.href = 'p-admin5.php';
+        }
+        if (adminVal == 'Shu yi') {
+            window.location.href = 'p-admin6.php';
+        }
+    })
+
+    //關鍵字搜尋
+    let keyword = document.querySelector("#keyword");
+    let search = document.querySelector("#search");
+    search.addEventListener('click', function() {
+        let keywordVal = keyword.value;
+        location.href = 'p_readPost_api.php?text=' + keywordVal;
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
