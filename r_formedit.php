@@ -90,8 +90,9 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
     <!-- 分頁 -->
     <div class="px-3 pt-4 ">
 
+        <h3 class="px-3">基本資料</h3>
 
-        <h3 class="mb-4 px-3">基本資料</h3>
+
         <!-- 圖片區 -->
         <div class="row mb-4 px-3">
             <div class="col-3" onclick="restImg()" id="finalImg">

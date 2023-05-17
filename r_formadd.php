@@ -325,6 +325,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
     <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="px-4 py-2 btn btn-outline-primary mt-4 mb-4" href="r_read.php">取消</a>
         <button type="submit" class="px-4 py-2 btn btn-primary mt-4 mb-4">新增餐廳</button>
     </div>
 

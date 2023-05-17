@@ -12,11 +12,12 @@ $output = [
 if (isset($_POST['keyword'])) {
     $keyword = $_POST['keyword'];
     $stmt = "SELECT * FROM rest_info WHERE rest_name LIKE '%$keyword%'";
+    $data = $pdo->query($stmt)->fetchAll();
 
-
+    // var_dump($data);
 
     $output['success'] = true;
-    $output['postData'] = $_POST;
+    $output['postData'] = $data;
     $output['code'] = 0;
     $output['error'] = [];
 } else {

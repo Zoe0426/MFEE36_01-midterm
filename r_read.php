@@ -225,19 +225,76 @@ if ($totalRows) {
             })
             .then(r => r.json())
             .then(obj => {
-                console.log(obj);
+                console.log(obj.postData);
                 if (obj.success) {
-                    // API 請求成功，處理回傳的資料
-                    const results = obj.results; // 假設 API 回傳的資料陣列名稱為 results
-                    // 在這裡進行相應的畫面更新
-                    // 例如，將搜尋結果顯示在某個元素中
-                    const searchResultsElement = document.getElementById('search-results');
-                    searchResultsElement.innerHTML = ''; // 清空原有內容
-                    results.forEach(result => {
-                        const itemElement = document.createElement('div');
-                        itemElement.textContent = result.rest_name; // 假設搜尋結果中有 rest_name 屬性
-                        searchResultsElement.appendChild(itemElement);
+                    const data = obj.postData;
+                    const tbody = document.querySelector('tbody');
+                    tbody.innerHTML = '';
+                    data.forEach(function(row) {
+                        const tr = document.createElement('tr');
+
+                        // 建立各個欄位的儲存格
+                        const td1 = document.createElement('td');
+                        td1.textContent = row.rest_sid;
+                        tr.appendChild(td1);
+
+                        const td2 = document.createElement('td');
+                        td2.textContent = row.rest_name;
+                        tr.appendChild(td2);
+
+                        const td3 = document.createElement('td');
+                        td3.textContent = row.catg_name;
+                        tr.appendChild(td3);
+
+                        const td4 = document.createElement('td');
+                        td4.textContent = row.rest_phone;
+                        tr.appendChild(td4);
+
+                        const td5 = document.createElement('td');
+                        td5.textContent = row.m_start;
+                        tr.appendChild(td5);
+
+                        const td6 = document.createElement('td');
+                        td6.textContent = row.n_end;
+                        tr.appendChild(td6);
+
+                        const td7 = document.createElement('td');
+                        td7.textContent = row.ml_time;
+                        tr.appendChild(td7);
+
+                        const td8 = document.createElement('td');
+                        td8.textContent = row.weekly;
+                        tr.appendChild(td8);
+
+                        const td9 = document.createElement('td');
+                        td9.textContent = row.p_max;
+                        tr.appendChild(td9);
+
+                        const td10 = document.createElement('td');
+                        const link1 = document.createElement('a');
+                        link1.href = 'r_formbrowse.php?rest_sid=' + row.rest_sid;
+                        link1.innerHTML = '<i class="fa-solid fa-circle-info text-primary"></i>';
+                        td10.appendChild(link1);
+                        tr.appendChild(td10);
+
+                        const td11 = document.createElement('td');
+                        const link2 = document.createElement('a');
+                        link2.href = 'r_formedit.php?rest_sid=' + row.rest_sid;
+                        link2.innerHTML = '<i class="fa-solid fa-pen-to-square text-success"></i>';
+                        td11.appendChild(link2);
+                        tr.appendChild(td11);
+
+                        const td12 = document.createElement('td');
+                        const link3 = document.createElement('a');
+                        link3.href = 'javascript: delete_it(' + row.rest_sid + ')';
+                        link3.innerHTML = '<i class="fa-solid fa-trash-can text-danger"></i>';
+                        td12.appendChild(link3);
+                        tr.appendChild(td12);
+
+                        // 將 tr 元素插入到 tbody 中
+                        tbody.appendChild(tr);
                     });
+
                 } else {
                     // API 請求失敗，處理錯誤訊息
                     console.log(obj.error);

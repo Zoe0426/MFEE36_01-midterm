@@ -80,7 +80,7 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
     <div class="px-3 pt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="px-3">基本資料</h3>
-            <a class="btn btn-success text-align-center" href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="btn btn-success text-align-center" href="r_formedit.php?rest_sid=<?= $r['rest_sid'] ?>"><i class="fa-solid fa-pen-to-square me-2"></i>編輯</a>
         </div>
 
         <!-- 圖片區 -->
@@ -342,6 +342,11 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
                     </div>
                 <?php endforeach ?>
             </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="px-4 py-2 btn btn-outline-primary mt-4 mb-4" href="r_read.php">返回</a>
+
         </div>
 
 
