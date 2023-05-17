@@ -296,6 +296,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${aData[i].price_kid}</td>
                     <td totalStock="${aData[i].ppl_max}" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" class="text-secondary">${astock}</td>
                     <td class="text-end"><i class="fa-solid fa-trash-can text-body-tertiary" ></i></td>
+
+                    <td class="text-end" proSid="${aData[i].act_sid}" proDet="${sData[i].proDet_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${sData[i].pro_sid}','${sData[i].proDet_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
         }
 
