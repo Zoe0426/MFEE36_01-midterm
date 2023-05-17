@@ -203,7 +203,16 @@ if ($output['createNewOrderDetails'] == true) {
     $stm5->execute([$couponSendSid]);
     $output['orderSuccess'] = true;
 }
-//
+//更新coupon Status
+if ($output['createNewOrderDetails'] == true) {
+    $sqlUpdateCouponStatus = "UPDATE `mem_coupon_send` SET `coupon_status`=?, `used_time`=NOW() WHERE `couponSend_sid`=?";
+    $stmUpdateCoupon = $pdo->prepare($sqlUpdateCouponStatus);
+    $stmUpdateCoupon->execute([
+        1,
+        $couponSendSid
+    ]);
+}
+
 
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);
