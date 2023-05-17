@@ -88,7 +88,6 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
-
         const nameInput = document.getElementById('sbname');
         const mobileInput = document.getElementById('sbmobile');
         const memsidInput = document.getElementById('sbmemsid');
@@ -101,6 +100,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 }).then(r => r.json())
                 .then(obj => {
                     // console.log(obj);
+                    oCartDisplay.innerHTML = "";
                     showMemInfo(obj);
                     if (obj.shoplist !== 'noShopItems') {
                         showShopList(obj);
@@ -220,10 +220,12 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示商城商品
     function showShopList(obj) {
+        console.log(obj);
         let ost = document.createElement("div");
         let sData = obj.shoplist;
 
         let shopContent = "";
+
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
@@ -234,7 +236,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td><input type="number" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
                     <td>${sData[i].proDet_price}</td>
                     <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" class="text-secondary">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
-                    <td class="text-end"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
+
+                    <td class="text-end" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${sData[i].pro_sid}','${sData[i].proDet_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
         }
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -447,15 +450,9 @@ require './partsNOEDIT/connect-db.php' ?>
     function aChangeStock(e, x) {
         console.log('change');
         let qtyParent = x.closest('tr'); //<tr>
-        console.log(qtyParent);
         let aQty = qtyParent.querySelector('td:last-child'); //顯示庫存的td
         let stock = parseInt(aQty.getAttribute('totalStock')); //總庫存量
-        console.log('aQty');
-        console.log(aQty);
         let proSid = aQty.getAttribute('proSid');
-        console.log('proSid')
-        console.log(proSid);
-
         let proDet = aQty.getAttribute('proDet');
         let aduQty = qtyParent.querySelector('td[rel="aduQty"]>input').value;
         let kidQty = qtyParent.querySelector('td[rel="kidQty"]>input').value;
@@ -465,6 +462,26 @@ require './partsNOEDIT/connect-db.php' ?>
         fetch(`o_api01_3_updateQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&adultQty=${aduQty}&childQty=${kidQty}`)
             .then(r => r.json())
             .then(obj => console.log(obj))
+            .catch(ex => console.log(ex))
+    }
+    //====刪除購物車內容====
+    function deleteCartItem(mem, pro, prod, x) {
+        console.log('change');
+        let qtyParent = x.closest('tr'); //<tr>
+        console.log(qtyParent);
+        let member_sid = x.getAttribute("mem");
+        let pro_sid = x.getAttribute('proSid');
+        let proDet_sid = x.getAttribute('proDet');
+        fetch(`o_api01_4_deleteCartItem.php?rel_sid=${pro_sid}&rel_seqNum_sid=${proDet_sid}&member_sid=${member_sid}`)
+            .then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+                console.log(obj.deleteSuccess);
+                if (obj.deleteSuccess) {
+                    qtyParent.style.display = "none";
+                    alert("刪除成功");
+                }
+            })
             .catch(ex => console.log(ex))
     }
 </script>
