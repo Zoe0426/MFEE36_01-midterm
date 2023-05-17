@@ -16,10 +16,8 @@ $member_sid = isset($_GET['member_sid']) ? $_GET['member_sid'] : '';
 
 
 $sql = "INSERT INTO `mem_coupon_send`(
-`coupon_sid`, `member_sid`, `coupon_status`, 
-`update_time`, `create_time`) VALUES (
-?, ?, ?,
-NOW(),
+`coupon_sid`, `member_sid`, `coupon_status`, `used_time` ,`create_time`) VALUES (
+?, ?, ?, ?,
 NOW()
     )";
 
@@ -28,6 +26,7 @@ $stmt->execute([
     $coupon_sid,
     $member_sid,
     0,
+    null
 ]);
 
 

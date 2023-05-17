@@ -17,7 +17,7 @@ $rows = [];
 if ($t_rows) {
 
 
-    $sql = sprintf("SELECT cs.*,ct.`coupon_name`,`coupon_price` FROM `mem_coupon_send` AS cs JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid`ORDER BY cs.couponSend_sid DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT cs.*,ct.`coupon_name`,`coupon_price`,mb.`member_name` FROM `mem_coupon_send` AS cs JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid` JOIN `mem_member` AS mb ON`cs`.`member_sid`=`mb`.`member_sid` ORDER BY cs.couponSend_sid DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 }
 
@@ -78,8 +78,9 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                     <th scope="col">優惠券名稱</th>
                     <th scope="col">優惠券金額</th>
                     <th scope="col">會員編號</th>
+                    <th scope="col">會員姓名</th>
                     <th scope="col">使用狀況</th>
-                    <th scope="col">更新時間</th>
+                    <th scope="col">使用狀況</th>
                     <th scope="col">新增時間</th>
                 </tr>
             </thead>
@@ -95,8 +96,9 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                         <td><?= $r['coupon_name'] ?></td>
                         <td><?= $r['coupon_price'] ?></td>
                         <td><?= $r['member_sid'] ?></td>
+                        <td><?= $r['member_name'] ?></td>
                         <td><?= $r['coupon_status'] ?></td>
-                        <td><?= $r['update_time'] ?></td>
+                        <td><?= $r['used_time'] ?></td>
                         <td><?= $r['create_time'] ?></td>
                     </tr>
                 <?php endforeach; ?>

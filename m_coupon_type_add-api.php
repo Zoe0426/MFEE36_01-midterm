@@ -31,7 +31,7 @@ if (!empty($code) and !empty($name) and !empty($price) and !empty($startDate) an
     $sql = "INSERT INTO `mem_coupon_type`(
     `coupon_sid`, `coupon_code`, `coupon_name`, 
     `coupon_price`, `coupon_startDate`, `coupon_expDate`, 
-    `update_time`, `creat_time`) VALUES (
+    `update_time`, `create_time`) VALUES (
         ?, ?, ?,
         ?, ?, ?,
         NOW(), NOW()
