@@ -69,7 +69,7 @@
                 if (obj.success) {
                     infoBar.classList.remove('alert-danger');
                     infoBar.classList.add('alert-success');
-                    infoBar.innerHTML = '登入成功';
+                    infoBar.innerHTML = '新增成功';
                     infoBar.style.display = 'block';
                     setTimeout(() => {
                         location.href = 'm_coupon_type-list.php';
