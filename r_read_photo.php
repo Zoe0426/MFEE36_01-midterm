@@ -41,6 +41,12 @@ if ($totalRows) {
     $rows = $pdo->query($sql)->fetchAll();
 }
 
+$sid = isset($_GET['rest_sid']) ? intval($_GET['rest_sid']) : 0;
+$sql4 = "SELECT * FROM `rest_img` WHERE rest_sid = {$sid}";
+$stmt4 = $pdo->prepare($sql4);
+$stmt4->execute();
+$c = $stmt4->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -98,6 +104,7 @@ if ($totalRows) {
             <thead>
                 <tr>
                     <th class="bg-info-subtle py-3" scope="col">編號 <a href=""><i class="fa-solid fa-caret-down ms-1"></i></a></th>
+                    <th class="bg-info-subtle py-3" scope="col">餐廳照片</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳名稱</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳類別</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳電話</th>
@@ -106,7 +113,7 @@ if ($totalRows) {
                     <th class="bg-info-subtle py-3" scope="col">用餐時間</th>
                     <th class="bg-info-subtle py-3" scope="col">星期</th>
                     <th class="bg-info-subtle py-3" scope="col">人數上限</th>
-                    <th class="bg-info-subtle py-3" scope="col">預約次數 <a href=""><i class="fa-solid fa-caret-down ms-1"></i></a></th>
+                    <th class="bg-info-subtle py-3" scope="col">預約次數<a href=""><i class="fa-solid fa-caret-down ms-1"></th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">細項</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">編輯</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">刪除</th>
@@ -117,6 +124,7 @@ if ($totalRows) {
                     <tr>
 
                         <td class="py-3"><?= $r['rest_sid'] ?></td>
+                        <td class="py-3"><img src="./r_img/<?= $c['img_name'] ?>"></td>
                         <td class="py-3"><?= $r['rest_name'] ?></td>
                         <td class="py-3"><?= $r['catg_name'] ?></td>
                         <td class="py-3"><?= $r['rest_phone'] ?></td>

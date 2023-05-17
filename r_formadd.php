@@ -368,7 +368,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
             if (!f.value) {
                 isPass = false;
                 f.style.border = '1px solid red';
-                f.nextElementSibling.innerHTML = '請輸入資料!';
+                f.nextElementSibling.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請輸入資料!';
                 f.nextElementSibling.style.color = 'red';
                 f.scrollIntoView({
                     behavior: 'smooth',
@@ -381,7 +381,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
         if (name.value.length < 2) {
             isPass = false;
             name.style.border = '1px solid red';
-            name.nextElementSibling.innerHTML = '請輸入至少三個字!';
+            name.nextElementSibling.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請輸入至少三個字!';
             name.nextElementSibling.style.color = 'red';
             name.scrollIntoView({
                 behavior: 'smooth',
