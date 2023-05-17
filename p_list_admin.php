@@ -167,7 +167,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            //location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);
@@ -182,6 +182,48 @@ $r_post = $stmt->fetchAll();
       } else {
         // 沒通過檢查
       }
+
+      //選擇項目後，提示消失
+      adminName.addEventListener('input', (event) => {
+        if (event.target.value != "--請選擇--") {
+          event.target.style.border = '1px solid #ccc';
+          event.target.nextElementSibling.textContent = "";
+        } else {
+          event.target.style.border = '1px solid red';
+          event.target.nextElementSibling.textContent = "請選擇";
+        }
+      })
+      boardName.addEventListener('input', (event) => {
+        if (event.target.value != "--請選擇--") {
+          event.target.style.border = '1px solid #ccc';
+          event.target.nextElementSibling.textContent = "";
+        } else {
+          event.target.style.border = '1px solid red';
+          event.target.nextElementSibling.textContent = "請選擇";
+        }
+      })
+
+      //輸入東西之後，提示消失
+      postTitle.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+          event.target.style.border = '1px solid #ccc';
+          event.target.nextElementSibling.textContent = "";
+        } else {
+          event.target.style.border = '1px solid red';
+          event.target.nextElementSibling.textContent = "請輸入文字";
+        }
+      })
+
+      postContent.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+          event.target.style.border = '1px solid #ccc';
+          event.target.nextElementSibling.textContent = "";
+        } else {
+          event.target.style.border = '1px solid red';
+          event.target.nextElementSibling.textContent = "請輸入文字";
+        }
+      })
+
 
 
     }
