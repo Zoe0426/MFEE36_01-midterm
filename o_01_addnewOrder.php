@@ -447,29 +447,34 @@ require './partsNOEDIT/connect-db.php' ?>
     function sChangeStock(e, x) {
         console.log('change');
         let qtyParent = x.closest('tr');
-        let sQty = qtyParent.querySelector('td:last-child');
+        let lastTd = qtyParent.querySelector('td:last-child');
+        let sQty = lastTd.previousElementSibling;
         let stock = parseInt(sQty.getAttribute('totalStock'));
         let proSid = sQty.getAttribute('proSid');
         let proDet = sQty.getAttribute('proDet');
-        let updatedQty = e.target.value;
+        let updatedQty = parseInt(e.target.value);
 
-        sQty.innerHTML = stock - updatedQty; //更改頁面庫存量
         fetch(`o_api01_3_updateQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&prodQty=${updatedQty}`)
             .then(r => r.json())
-            .then(obj => console.log(obj))
+            .then(obj => {
+                if (obj.updateSuccess) {
+                    sQty.innerHTML = stock - updatedQty; //更改頁面庫存量
+                }
+            })
             .catch(ex => console.log(ex))
     }
     //====更新活動庫存,Cart Qty===
     function aChangeStock(e, x) {
         console.log('change');
         let qtyParent = x.closest('tr'); //<tr>
-        let aQty = qtyParent.querySelector('td:last-child'); //顯示庫存的td
+        let lastTd = qtyParent.querySelector('td:last-child');
+        let aQty = lastTd.previousElementSibling; //顯示庫存的td
         let stock = parseInt(aQty.getAttribute('totalStock')); //總庫存量
         let proSid = aQty.getAttribute('proSid');
         let proDet = aQty.getAttribute('proDet');
         let aduQty = qtyParent.querySelector('td[rel="aduQty"]>input').value;
         let kidQty = qtyParent.querySelector('td[rel="kidQty"]>input').value;
-        let updatedStock = Math.ceil(stock - (parseInt(aduQty) + parseInt(kidQty) / 2));
+        let updatedStock = Math.floor(stock - (parseInt(aduQty) + parseInt(kidQty) / 2));
 
         aQty.innerHTML = updatedStock; //更改頁面庫存量
         fetch(`o_api01_3_updateQty.php?rel_sid=${proSid}&rel_seqNum_sid=${proDet}&adultQty=${aduQty}&childQty=${kidQty}`)
