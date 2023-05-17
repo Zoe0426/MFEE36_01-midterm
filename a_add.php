@@ -208,6 +208,14 @@
                         infoBar.classList.add('alert-success')
                         infoBar.innerHTML = '新增成功'
                         infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            // infoBar.style.display = 'none';
+
+                            //跳轉頁面回去read
+                            location.href = 'http://localhost:8888/MFEE36_01/a_list_admin_TypeS.php';
+                        }, 1500);
+
+
 
                     } else {
                         infoBar.classList.remove('alert-success')
@@ -215,9 +223,9 @@
                         infoBar.innerHTML = '新增失敗'
                         infoBar.style.display = 'block';
                     }
-                    // setTimeout(() => {
-                    //     infoBar.style.display = 'none';
-                    // }, 2000);
+
+
+
                 })
                 .catch(ex => {
                     console.log(ex);
