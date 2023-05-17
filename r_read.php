@@ -84,24 +84,24 @@ if ($totalRows) {
 
 
     <div class="row">
-        <table class="table table-bordered table-striped  table-hover">
+        <table class="table table-bordered  table-striped  table-hover ">
             <thead>
                 <tr>
-                    <th scope="col">編號</th>
-                    <th scope="col">餐廳名稱</th>
-                    <th scope="col">餐廳類別</th>
-                    <th scope="col">餐廳電話</th>
-                    <th scope="col">早上開始時間</th>
-                    <th scope="col">晚上結束時間</th>
-                    <th scope="col">用餐時間</th>
-                    <th scope="col">星期</th>
-                    <th scope="col">人數上限</th>
-                    <th scope="col" class="text-center">細項</th>
-                    <th scope="col" class="text-center">編輯</th>
-                    <th scope="col" class="text-center">刪除</th>
+                    <th class="bg-info-subtle" scope="col">編號 <a href=""><i class="fa-solid fa-caret-down ms-1"></i></a></th>
+                    <th class="bg-info-subtle" scope="col">餐廳名稱</th>
+                    <th class="bg-info-subtle" scope="col">餐廳類別</th>
+                    <th class="bg-info-subtle" scope="col">餐廳電話</th>
+                    <th class="bg-info-subtle" scope="col">早上開始時間</th>
+                    <th class="bg-info-subtle" scope="col">晚上結束時間</th>
+                    <th class="bg-info-subtle" scope="col">用餐時間</th>
+                    <th class="bg-info-subtle" scope="col">星期</th>
+                    <th class="bg-info-subtle" scope="col">人數上限</th>
+                    <th class="bg-info-subtle" scope="col" class="text-center">細項</th>
+                    <th class="bg-info-subtle" scope="col" class="text-center">編輯</th>
+                    <th class="bg-info-subtle" scope="col" class="text-center">刪除</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
                 <?php foreach ($rows as $r) : ?>
                     <tr>
 
