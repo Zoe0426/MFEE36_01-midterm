@@ -103,12 +103,15 @@ require './partsNOEDIT/connect-db.php' ?>
                     oCartDisplay.innerHTML = "";
                     showMemInfo(obj);
                     if (obj.shoplist !== 'noShopItems') {
+                        console.log("showShop");
                         showShopList(obj);
                     }
                     if (obj.actlist !== 'noActItems') {
+                        console.log("showAct");
                         showActList(obj);
                     }
                     if (obj.coupons !== 'noCoupons') {
+                        console.log("showCoupon");
                         showCoupon(obj);
                     }
                     showPostnPay(obj);
@@ -220,9 +223,12 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示商城商品
     function showShopList(obj) {
-        console.log(obj);
+        // console.log('shopListobj');
+        // console.log(obj);
         let ost = document.createElement("div");
         let sData = obj.shoplist;
+        // console.log('sData');
+        // console.log(sData);
 
         let shopContent = "";
 
@@ -239,7 +245,10 @@ require './partsNOEDIT/connect-db.php' ?>
 
                     <td class="text-end" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${sData[i].pro_sid}','${sData[i].proDet_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
+            // console.log(i);
+            // console.log(shopContent);
         }
+
         ost.innerHTML = `<table class="ocd table table-border table-striped">
                 <thead>
                     <tr>
@@ -257,7 +266,11 @@ require './partsNOEDIT/connect-db.php' ?>
                 ${shopContent}
                 </tbody>
             </table>`;
+        // console.log('ost.innerHTML');
+        // console.log(ost.innerHTML);
         oCartDisplay.append(ost);
+        console.log('oCartDisplay.innerHTML');
+        console.log(oCartDisplay.innerHTML);
     }
     //====顯示活動
     function showActList(obj) {
