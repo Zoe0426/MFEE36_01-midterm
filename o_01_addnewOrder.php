@@ -102,6 +102,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     // console.log(obj);
                     oCartDisplay.innerHTML = "";
                     showMemInfo(obj);
+
                     if (obj.shoplist !== 'noShopItems') {
                         console.log("showShop");
                         showShopList(obj);
@@ -325,7 +326,6 @@ require './partsNOEDIT/connect-db.php' ?>
         let oct = document.createElement("div");
         let cData = obj.coupons;
         let couContent = "";
-        oCartDisplay.innerHTML = "";
         for (let i = 0; i < cData.length; i++) {
             couContent +=
                 `<tr>
