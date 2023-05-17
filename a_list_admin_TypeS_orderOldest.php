@@ -9,7 +9,7 @@ if ($page < 1) {
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM act_info WHERE type_sid=1";
+$t_sql = "SELECT COUNT(1) FROM act_info";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
@@ -25,9 +25,8 @@ if ($totalRows) {
     FROM `act_info` ai 
     JOIN `act_group` ag 
     ON ai.`act_sid`=ag.`act_sid`
-    WHERE `type_sid`=1
     ORDER BY `act_sid` 
-    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
@@ -97,8 +96,8 @@ if ($totalRows) {
         <!-- 按照 升冪(小到大) 搜尋 -->
         <div class="mb-3 w-25">
             <select class="form-select" id="a_order" name="a_order" data-required="1">
-                <option selected value="1">最新上架</option>
-                <option value="2">最舊上架</option>
+                <option value="1">最新上架</option>
+                <option selected value="2">最舊上架</option>
             </select>
             <div class="form-text"></div>
         </div>

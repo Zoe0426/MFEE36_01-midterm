@@ -45,16 +45,6 @@ if ($totalRows) {
 <div class="container m-5">
     <div class="row">
 
-        <!-- <div class="input-group">
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">Search</label>
-            </div>
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-search"></i>
-            </button>
-        </div> -->
-
         <!-- 頁數 -->
         <nav aria-label="Page navigation example">
             <ul class="pagination">
@@ -89,6 +79,7 @@ if ($totalRows) {
             </ul>
         </nav>
 
+        <!-- 按照 類型 搜尋 -->
         <div class="mb-3 w-25">
             <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
@@ -102,6 +93,17 @@ if ($totalRows) {
             <div class="form-text"></div>
         </div>
 
+        <!-- 按照 升冪(小到大) 搜尋 -->
+        <div class="mb-3 w-25">
+            <select class="form-select" id="a_order" name="a_order" data-required="1">
+                <option selected value="1">最新上架</option>
+                <option value="2">最舊上架</option>
+            </select>
+            <div class="form-text"></div>
+        </div>
+
+
+        <!-- 按照 名稱 搜尋 -->
         <div class="row mb-3 w-50">
             <div class="col-4">
                 <input type="text" class="form-control" id="act_name" name="act_name">
@@ -214,6 +216,21 @@ if ($totalRows) {
 
         if (actS == 5) {
             window.location.href = 'a_list_admin_TypeS_05.php';
+        }
+    });
+
+    const aOrder = document.getElementById('a_order');
+
+    aOrder.addEventListener('change', function() {
+
+        const ao = aOrder.value;
+
+        if (ao == 1) {
+            window.location.href = 'a_list_admin_TypeS.php';
+        }
+
+        if (ao == 2) {
+            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
         }
     });
 </script>

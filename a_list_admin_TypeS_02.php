@@ -9,7 +9,7 @@ if ($page < 1) {
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM act_info WHERE `type_sid`=2";
+$t_sql = "SELECT COUNT(1) FROM act_info WHERE type_sid=2";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
@@ -21,7 +21,13 @@ if ($totalRows) {
     }
 
 
-    $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` FROM `act_info` ai JOIN `act_group` ag ON ai.`act_sid`=ag.`act_sid` WHERE `type_sid`=2 ORDER BY `act_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+    $sql = sprintf("SELECT ai.`act_sid`,`type_sid`,`act_name`,`act_content`,ag.`group_date`,`group_time`,`ppl_max`,`act_post_date` 
+    FROM `act_info` ai 
+    JOIN `act_group` ag 
+    ON ai.`act_sid`=ag.`act_sid`
+    WHERE `type_sid`=2
+    ORDER BY `act_sid` 
+    DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
 
 
 
@@ -39,16 +45,6 @@ if ($totalRows) {
 
 <div class="container m-5">
     <div class="row">
-
-        <!-- <div class="input-group">
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">Search</label>
-            </div>
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-search"></i>
-            </button>
-        </div> -->
 
         <!-- 頁數 -->
         <nav aria-label="Page navigation example">
@@ -84,10 +80,11 @@ if ($totalRows) {
             </ul>
         </nav>
 
-        <div class="mb-3">
-            <label for="type_sid" class="form-label">活動類型搜尋</label>
+        <!-- 按照 類型 搜尋 -->
+        <div class="mb-3 w-25">
+            <!-- <label for="type_sid" class="form-label">活動類型搜尋</label> -->
             <select class="form-select" id="type_sid" name="type_sid" data-required="1">
-                <option selected>--請選擇--</option>
+                <option selected>活動類型搜尋</option>
                 <option value="1">主題派對</option>
                 <option value="2">在地活動</option>
                 <option value="3">市集展覽</option>
@@ -97,14 +94,25 @@ if ($totalRows) {
             <div class="form-text"></div>
         </div>
 
-        <!-- <div class="row mb-3">
+        <!-- 按照 升冪(小到大) 搜尋 -->
+        <div class="mb-3 w-25">
+            <select class="form-select" id="a_order" name="a_order" data-required="1">
+                <option selected value="1">最新上架</option>
+                <option value="2">最舊上架</option>
+            </select>
+            <div class="form-text"></div>
+        </div>
+
+
+        <!-- 按照 名稱 搜尋 -->
+        <div class="row mb-3 w-50">
             <div class="col-4">
                 <input type="text" class="form-control" id="act_name" name="act_name">
             </div>
             <div class="col-2">
                 <button type="submit" class="btn btn-primary ">搜尋</button>
             </div>
-        </div> -->
+        </div>
     </div>
 
 
@@ -186,7 +194,7 @@ if ($totalRows) {
     }
 
     const typeSelect = document.getElementById('type_sid');
-    //const actList = document.getElementById('table');
+    const actList = document.getElementById('act_list');
 
     typeSelect.addEventListener('change', function() {
         const actS = typeSelect.value;
@@ -209,6 +217,21 @@ if ($totalRows) {
 
         if (actS == 5) {
             window.location.href = 'a_list_admin_TypeS_05.php';
+        }
+    });
+
+    const aOrder = document.getElementById('a_order');
+
+    aOrder.addEventListener('change', function() {
+
+        const ao = aOrder.value;
+
+        if (ao == 1) {
+            window.location.href = 'a_list_admin_TypeS.php';
+        }
+
+        if (ao == 2) {
+            window.location.href = 'a_list_admin_TypeS_orderOldest.php';
         }
     });
 </script>
