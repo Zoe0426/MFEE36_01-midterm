@@ -265,6 +265,7 @@ require './partsNOEDIT/connect-db.php' ?>
         // console.log(sProdQties);
         for (let i of sProdQties) {
             i.addEventListener('change', sChangeStock);
+            i.addEventListener('change', totalAmount);
         }
     }
     //====顯示活動
@@ -320,7 +321,7 @@ require './partsNOEDIT/connect-db.php' ?>
         // console.log(aProdQties);
         for (let i of aProdQties) {
             i.addEventListener('change', aChangeStock);
-
+            i.addEventListener('change', totalAmount);
         }
     }
     //====顯示coupon
@@ -509,8 +510,22 @@ require './partsNOEDIT/connect-db.php' ?>
     }
 
     function totalAmount() {
+        let allSubTotal = [];
         const sProdQties = document.querySelectorAll('.sProdQty');
+        for (let s of sProdQties) {
+            let sprice = parseInt(s.parentElement.nextElementSibling.innerHTML);
+            let sqty = parseInt(s.value);
+            allSubTotal.push(sprice * sqty);
+        }
         const aProdQties = document.querySelectorAll('.aProdQty');
+        for (let a of aProdQties) {
+            let aprice = parseInt(a.parentElement.nextElementSibling.innerHTML);
+            let aqty = parseInt(a.value);
+            allSubTotal.push(aprice * aqty);
+        }
+
+        const totalPrice = allSubTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        console.log(totalPrice);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
