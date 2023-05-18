@@ -591,5 +591,34 @@ require './partsNOEDIT/connect-db.php' ?>
         const totalPrice = allSubTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
         console.log(totalPrice);
     }
+
+
+    function sumCheckedValues() {
+        const checkboxes = document.querySelectorAll('input[name="coupon"]:checked');
+        let sum = 0;
+
+        checkboxes.forEach((checkbox) => {
+            sum += parseInt(checkbox.value);
+        });
+
+        return sum;
+    }
+
+    // Event listener for checkbox change
+    const checksboxes = document.querySelectorAll('input[name="coupon"]');
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            const totalSum = sumCheckedValues();
+            console.log(totalSum);
+            // You can perform any other actions with the updated sum here
+        });
+    });
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
+
+
+document.querySelector('input[name="coupon"]:checked')
+
+document.querySelectorAll('input[name="act[]"]:checked')
+
+document.querySelectorAll('input[name="prod[]"]:checked')
