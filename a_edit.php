@@ -243,6 +243,14 @@ $groupList = $pdo->query($sql3)->fetch();
                         infoBar.classList.add('alert-success')
                         infoBar.innerHTML = '新增成功'
                         infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            // infoBar.style.display = 'none';
+
+                            //跳轉頁面回去read
+                            location.href = 'a_list_admin_TypeS.php';
+                        }, 1500);
+
+
 
                     } else {
                         infoBar.classList.remove('alert-success')
@@ -250,9 +258,6 @@ $groupList = $pdo->query($sql3)->fetch();
                         infoBar.innerHTML = '新增失敗'
                         infoBar.style.display = 'block';
                     }
-                    // setTimeout(() => {
-                    //     infoBar.style.display = 'none';
-                    // }, 2000);
                 })
                 .catch(ex => {
                     console.log(ex);

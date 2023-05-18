@@ -108,11 +108,11 @@
                     活動
                 </a>
                 <div class="collapse w-100" id="collapseBt5">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
-                        - 活動資料
+                    <a href="a_add.php" class="nav-link bg-transparent text-dark ">
+                        - 活動上架
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
-                        - 活動資料
+                    <a href="a_list_admin_TypeS.php" class="nav-link bg-transparent text-dark ">
+                        - 活動列表
                     </a>
                 </div>
                 <!-- 論壇 -->

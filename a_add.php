@@ -113,16 +113,17 @@
     // 取得必填欄位
     const fields = document.querySelectorAll('form *[data-required="1"]');
 
-
     //for測試：
     //console.log(date.value); //date裡面是空的 
     //console.log(fields);
+    console.log(pplMax.value);
+
 
     function checkForm(event) {
         event.preventDefault();
 
         for (let f of fields) {
-            f.style.border = '1px solid blue';
+            f.style.border = '1px solid #ccc';
             f.nextElementSibling.innerHTML = '';
         }
 
@@ -135,31 +136,39 @@
 
             nameField.style.border = '1px solid red';
             nameField.nextElementSibling.innerHTML = '請輸入至少兩個字'
+        }
 
+        if (pplMax.value === "") {
             pplMax.style.border = '1px solid red';
             pplMax.nextElementSibling.innerHTML = '請輸入人數'
-
+        }
+        if (city.value.length < 2) {
             city.style.border = '1px solid red';
-            city.nextElementSibling.innerHTML = '請輸入縣市名稱'
-
+            city.nextElementSibling.innerHTML = '請輸入縣市'
+        }
+        if (area.value.length < 2) {
             area.style.border = '1px solid red';
-            area.nextElementSibling.innerHTML = '請輸入地區名稱'
-
+            area.nextElementSibling.innerHTML = '請輸入地區'
+        }
+        if (address.value.length < 2) {
             address.style.border = '1px solid red';
             address.nextElementSibling.innerHTML = '請輸入地址'
-
+        }
+        if (adult.value === "") {
             adult.style.border = '1px solid red';
             adult.nextElementSibling.innerHTML = '請輸入價格'
-
+        }
+        if (kid.value === "") {
             kid.style.border = '1px solid red';
             kid.nextElementSibling.innerHTML = '請輸入價格'
-
+        }
+        if (content.value.length < 2) {
             content.style.border = '1px solid red';
             content.nextElementSibling.innerHTML = '請輸入內容'
-
+        }
+        if (policy.value.length < 2) {
             policy.style.border = '1px solid red';
             policy.nextElementSibling.innerHTML = '請輸入規範'
-
         }
 
         //沒有選到時 跳出提示
@@ -199,6 +208,14 @@
                         infoBar.classList.add('alert-success')
                         infoBar.innerHTML = '新增成功'
                         infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            // infoBar.style.display = 'none';
+
+                            //跳轉頁面回去read
+                            location.href = 'a_list_admin_TypeS.php';
+                        }, 1500);
+
+
 
                     } else {
                         infoBar.classList.remove('alert-success')
@@ -206,9 +223,9 @@
                         infoBar.innerHTML = '新增失敗'
                         infoBar.style.display = 'block';
                     }
-                    // setTimeout(() => {
-                    //     infoBar.style.display = 'none';
-                    // }, 2000);
+
+
+
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -227,6 +244,118 @@
 
 
     }
+
+    //輸入東西之後, 讓提示消失
+    nameField.addEventListener('input', (a) => {
+        if (a.target.value != "") {
+            a.target.style.border = '1px solid #ccc';
+            a.target.nextElementSibling.textContent = ""
+        } else {
+            a.target.style.border = '1px solid red';
+            a.target.nextElementSibling.textContent = "請輸入活動名稱"
+        }
+    });
+    pplMax.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入人數"
+        }
+    });
+    city.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入縣市"
+        }
+    });
+    area.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入地區"
+        }
+    });
+    address.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入地址"
+        }
+    });
+    adult.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入價格"
+        }
+    });
+    kid.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入價格"
+        }
+    });
+    content.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入內容"
+        }
+    });
+    policy.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請輸入規範"
+        }
+    });
+
+    //選擇項目後, 讓提示消失
+    type.addEventListener('input', (event) => {
+        if (event.target.value != "--請選擇--") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請選擇"
+        }
+    });
+    date.addEventListener('input', (event) => {
+        if (event.target.value != "") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請選擇"
+        }
+    });
+    time.addEventListener('input', (event) => {
+        if (event.target.value != "--請選擇--") {
+            event.target.style.border = '1px solid #ccc';
+            event.target.nextElementSibling.textContent = ""
+        } else {
+            event.target.style.border = '1px solid red';
+            event.target.nextElementSibling.textContent = "請選擇"
+        }
+    });
 </script>
 
 <?php include './partsNOEDIT/html-foot.php' ?>
