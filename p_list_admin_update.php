@@ -38,7 +38,7 @@ $r_post = $stmt->fetchAll();
         <div class="card">
           <div class="card-body">
 
-            <h5 class="card-title">新增文章公告</h5>
+            <h5 class="card-title">編輯文章公告</h5>
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
                 <label for="admin_name">管理者名稱：</label>

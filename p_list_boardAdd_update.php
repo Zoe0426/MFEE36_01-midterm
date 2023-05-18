@@ -102,7 +102,7 @@ if (empty($upDate)) {
             // }, 2000);
 
             //跳轉頁面回去read
-            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_%20board.php';
+            location.href = 'p_readPost_board.php';
           })
           .catch(ex => {
             console.log(ex);
