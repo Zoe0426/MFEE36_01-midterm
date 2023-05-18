@@ -56,7 +56,6 @@ if (!!$stmt->rowCount()) { //如果表格新增成功，會是true，如果沒�
     $output['message'] = "父表格新增成功";
 }
 
-
 $parentSid = $pdo->lastInsertId(); //取得剛加入父表的品項編號 
 //echo $lastsid;
 
