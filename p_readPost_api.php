@@ -306,6 +306,9 @@ $r_post = $stmt->fetchAll();
     const adminSelect = document.getElementById('admin_name');
     adminSelect.addEventListener('change', function() {
         const adminName = adminSelect.value;
+        if (adminName == '') {
+            window.location.href = 'p_readPost_api_admin.php';
+        }
         if (adminName == 'Lilian') {
             window.location.href = 'p_readPost_api_admin.php?adminName=Lilian';
         }

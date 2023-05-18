@@ -90,6 +90,12 @@
                     <a href="p_list_admin.php" class="nav-link bg-transparent  text-dark ">
                         - 新增管理文章
                     </a>
+                    <a href="p_readPost_ board.php" class="nav-link bg-transparent text-dark ">
+                        - 看板類別總覽
+                    </a>
+                    <a href="p_list_boardAdd.php" class="nav-link bg-transparent  text-dark ">
+                        - 新增看板
+                    </a>
                 </div>
                 <!-- 購物車 -->
             <li class="nav-item">
