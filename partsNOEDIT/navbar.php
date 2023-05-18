@@ -61,7 +61,9 @@
                     <a href="./r_read.php" class="nav-link bg-transparent text-dark">
                         - 餐廳資料
                     </a>
-
+                    <a href="./r_chart.php" class="nav-link bg-transparent text-dark">
+                        - 數據統計
+                    </a>
                 </div>
                 <!-- 活動 -->
             <li class="nav-item">

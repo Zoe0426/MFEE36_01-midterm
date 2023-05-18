@@ -162,7 +162,12 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
         <div class="col-4">
             <label for="f_pic" class="form-label">特色圖片</label>
             <div onclick="restImg_f()" id="finalImg">
-                <img src="./r_img/<?= $r['rest_f_img'] ?>" alt="" id="f_imginfo">
+
+                <?php if (!empty($r['rest_f_img'])) : ?>
+                    <img src="./r_img/<?= $r['rest_f_img'] ?>" alt="" id="f_imginfo">
+                <?php else : ?>
+                    <img alt="" id="f_imginfo">
+                <?php endif; ?>
             </div>
             <input type="text" name="rest_f_img" id="rest_f_img" value="<?= $r['rest_f_img'] ?>">
         </div>

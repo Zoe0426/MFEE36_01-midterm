@@ -127,12 +127,12 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
     }
 
     .r_content {
-        height: 100px;
-        background-color: #efefef;
+        height: 90px;
+        background-color: rgba(255, 205, 86, 0.2);
         margin-bottom: 50px;
         padding: 30px;
         margin-right: 20px;
-        border-radius: 8px;
+        border-radius: 6px;
         font-size: 20px;
     }
 </style>
@@ -145,11 +145,11 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
     <div class="d-flex">
         <div class="vstack">
             <h5 class="r_total1">平台餐廳總數</h5>
-            <div class="r_content" id="recordCount"></div>
+            <div class="r_content vertical-middle" id="recordCount"></div>
         </div>
         <div class="vstack">
             <h5 class="r_total2">平台預約總數</h5>
-            <div class="r_content" id="bookCount"></div>
+            <div class="r_content vertical-middle" id="bookCount"></div>
         </div>
     </div>
     <div class="chartBox">
@@ -169,13 +169,13 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
     var recordCount = <?= json_encode($rest_row, JSON_UNESCAPED_UNICODE) ?>;
     var recordCountStr = recordCount.toString();
     var rContent = document.getElementById('recordCount');
-    rContent.innerText = '總數：' + recordCountStr;
+    rContent.innerText = '總數：' + recordCountStr + '間';
 
 
     var bookCount = <?= json_encode($book_row, JSON_UNESCAPED_UNICODE) ?>;
     var bookCountStr = bookCount.toString();
     var bContent = document.getElementById('bookCount');
-    bContent.innerText = '總數：' + bookCountStr;
+    bContent.innerText = '總數：' + bookCountStr + '次';
 
 
     var restaurantCounts = <?= json_encode($arr, JSON_UNESCAPED_UNICODE) ?>;
@@ -189,7 +189,6 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
             label: '餐廳類別統計',
             data: restaurantCounts,
             backgroundColor: [
-
                 'rgba(255, 159, 64, 0.4)',
             ],
             borderColor: [
