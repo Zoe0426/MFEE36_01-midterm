@@ -139,50 +139,61 @@
         }
 
         if (pplMax.value === "") {
+            isPass = false;
             pplMax.style.border = '1px solid red';
             pplMax.nextElementSibling.innerHTML = '請輸入人數'
         }
         if (city.value.length < 2) {
+            isPass = false;
             city.style.border = '1px solid red';
             city.nextElementSibling.innerHTML = '請輸入縣市'
         }
         if (area.value.length < 2) {
+            isPass = false;
             area.style.border = '1px solid red';
             area.nextElementSibling.innerHTML = '請輸入地區'
         }
         if (address.value.length < 2) {
+            isPass = false;
             address.style.border = '1px solid red';
             address.nextElementSibling.innerHTML = '請輸入地址'
         }
         if (adult.value === "") {
+            isPass = false;
             adult.style.border = '1px solid red';
             adult.nextElementSibling.innerHTML = '請輸入價格'
         }
         if (kid.value === "") {
+            isPass = false;
             kid.style.border = '1px solid red';
             kid.nextElementSibling.innerHTML = '請輸入價格'
         }
         if (content.value.length < 2) {
+            isPass = false;
             content.style.border = '1px solid red';
             content.nextElementSibling.innerHTML = '請輸入內容'
         }
         if (policy.value.length < 2) {
+            isPass = false;
             policy.style.border = '1px solid red';
             policy.nextElementSibling.innerHTML = '請輸入規範'
         }
 
         //沒有選到時 跳出提示
         if (type.value === "--請選擇--") {
+            isPass = false;
             type.style.border = '1px solid red';
             type.nextElementSibling.innerHTML = '請選擇'
         }
 
         if (date.value === "") {
+            isPass = false;
             date.style.border = '1px solid red';
             date.nextElementSibling.innerHTML = '請選擇'
         }
 
         if (time.value === "--請選擇--") {
+            isPass = false;
             time.style.border = '1px solid red';
             time.nextElementSibling.innerHTML = '請選擇'
         }
