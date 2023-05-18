@@ -677,7 +677,7 @@ if ($totalRows) {
     }
 
 
-    // 關鍵字搜尋
+    //餐廳類別
     const catgSelect = document.querySelector('#catg_sid');
 
     catgSelect.addEventListener('change', function() {

@@ -432,13 +432,13 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
                     if (obj.success) {
                         infoBar.classList.remove('alert-danger');
                         infoBar.classList.add('alert-success');
-                        infoBar.innerHTML = "資料更新成功!";
+                        infoBar.innerHTML = "餐廳更新成功!";
                         infoBar.style.display = 'block';
 
                     } else {
                         infoBar.classList.remove('alert-success');
                         infoBar.classList.add('alert-danger');
-                        infoBar.innerHTML = "資料更新失敗";
+                        infoBar.innerHTML = "餐廳更新失敗!";
                         infoBar.style.display = 'block';
                     }
                     setTimeout(() => {

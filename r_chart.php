@@ -74,6 +74,8 @@ GROUP BY ri.rest_name
 ORDER BY book_count DESC
 LIMIT 6;";
 
+
+
 $stmt_restb_1 = $pdo->query($sqlrestb_1)->fetchAll();
 $bookCounts = array_column($stmt_restb_1, 'book_count');
 $arry = $bookCounts;
@@ -91,6 +93,17 @@ $book_row = $pdo->query($book_sql)->fetchColumn();
 //餐廳總比數
 $rest_sql = sprintf("SELECT COUNT(*) FROM rest_info");
 $rest_row = $pdo->query($rest_sql)->fetchColumn();
+
+
+//餐廳評價平均
+// $rest_cmtsql = sprintf("SELECT rc.rest_sid, ri.rest_name, ROUND(AVG(rc.cmt_evnt), 1) AS avg_cmt_evnt, ROUND(AVG(rc.cmt_food), 1) AS avg_cmt_food, ROUND(AVG(rc.cmt_service), 1) AS avg_cmt_service, ROUND(AVG(rc.cmt_cp), 1) AS avg_cmt_cp
+// FROM rest_cmt rc
+// JOIN rest_info ri ON rc.rest_sid = ri.rest_sid
+// GROUP BY rc.rest_sid;
+
+// ");
+// $cmt_row = $pdo->query($rest_cmtsql)->fetchAll();
+
 
 
 ?>
@@ -161,7 +174,7 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
         <h5 class="r_catg">餐廳類別</h5>
         <canvas id="myChart"></canvas>
     </div>
-    <div class="">
+    <div class="mb-4">
         <h5 class="r_book">餐廳預約</h5>
         <canvas id="myChart2"></canvas>
     </div>
@@ -258,5 +271,55 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
             }
         }
     });
+
+    // function handleRestSelect() {
+    //     var restSelect = document.getElementById('restSelect');
+    //     var restSid = restSelect.value;
+    //     console.log(restSid);
+    //     fetch('r_ratings.php?rest_sid=' + restSid)
+    //         .then(response => response.json())
+    //         .then(obj => {
+
+    //             const rows = obj.getData;
+
+    //             var canvasContainer = document.getElementById('chart3');
+    //             canvasContainer.innerHTML = '<canvas id="chart3"></canvas>';
+
+
+    //             var chartData = {
+    //                 labels: ['環境', '食物', '服務', 'CP值'],
+    //                 datasets: [{
+    //                     label: '評價分析',
+    //                     data: [
+    //                         rows.avg_cmt_evnt,
+    //                         rows.avg_cmt_food,
+    //                         rows.avg_cmt_service,
+    //                         rows.avg_cmt_cp
+    //                     ],
+    //                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
+    //                     borderColor: 'rgba(75, 192, 192, 1)',
+    //                     borderWidth: 1
+    //                 }]
+    //             };
+
+    //             // 使用 Chart.js 繪製長條圖
+    //             var ctx3 = document.getElementById('chart3').getContext('2d');
+    //             new Chart(ctx3, {
+    //                 type: 'bar',
+    //                 data: chartData,
+    //                 options: {
+    //                     scales: {
+    //                         y: {
+    //                             beginAtZero: true
+    //                         }
+    //                     }
+    //                 }
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.error('發生錯誤:', error);
+    //         });
+    // }
+    // restSelect.addEventListener('change', handleRestSelect);
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
