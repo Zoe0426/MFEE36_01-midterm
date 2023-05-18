@@ -20,7 +20,8 @@ require './partsNOEDIT/connect-db.php' ?>
         top: 100px;
         right: 0;
         height: 350px;
-        border: 2px dashed lightgray;
+        border: 2px dashed #ffc107;
+        padding-top: 1rem;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -59,17 +60,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid px-0 bg-body-secondary">
                     </div>
                 </div>
-                <div id="totalPriceInfo" class="oPriceInfo col-2 pt-2">
-                    <div>
-                        <p>小計</p>
-                        <p id="subtotal">$</p>
-                        <p>郵寄金額</p>
-                        <p id="post">$80元</p>
-                        <p>優惠券金額</p>
-                        <p id="couponPrice">$</p>
-                        <p>總金額</p>
-                        <p id="showTotal">$</p>
-                    </div>
+                <div id="totalPriceInfo" class="col-2 oPriceInfo pt-2 o-d-none">
+
                 </div>
             </div>
         </div>
@@ -135,9 +127,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     showPostnPay(obj);
                     const createOrderBtn = document.querySelector('.btn[data-bs-target="#oMsgToClient"]');
                     createOrderBtn.addEventListener('click', handleCreateOrder);
-                    // showTotalPriceInfo();
+                    showTotalPriceInfo();
                     totalPriceInfo.style.display = "block";
-
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -261,6 +252,40 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tbody>
                     </table>`;
     }
+    //====顯示計算金額====
+    function calAllTotalPrice() {
+        const subtotal = document.querySelector("#subtotal");
+        const post = document.querySelector("#post");
+        const couponPrice = document.querySelector('#couponPrice');
+        const total = document.querySelector('#total');
+
+        subtotal.innerHTML = calProdTotalPrice() + calActTotalPrice();
+        post.innerHTML = '80';
+        couponPrice.innerHTMl = calCouponPrice();
+        total.innerHTML = calProdTotalPrice() + calActTotalPrice() - calCouponPrice();
+    }
+    //====顯示總金額block====
+    function showTotalPriceInfo() {
+        let priceBlock = document.createElement('div');
+        priceBlock.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <p>小計:</p>
+                            <p>$<span id="subtotal" class="fw-bold">0</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>郵寄金額:</p>
+                            <p>$<span id="post" class="fw-bold">0</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>優惠券金額:</p>
+                            <p>$<span id="couponPrice" class="fw-bold">0</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>總金額:</p>
+                            <p>$<span id="total" class="fw-bold">0</span></p>
+                        </div>`
+        totalPriceInfo.append(priceBlock);
+    }
     //====顯示商城商品
     function showShopList(obj) {
         let ost = document.createElement("div");
@@ -303,8 +328,34 @@ require './partsNOEDIT/connect-db.php' ?>
         // console.log(sProdQties);
         for (let i of sProdQties) {
             i.addEventListener('change', sChangeStock);
-            i.addEventListener('change', totalAmount);
         }
+        //算商城總金額
+        const sCheckboxes = document.querySelectorAll('input[name="prod[]"]');
+        for (let i of sCheckboxes) {
+            i.addEventListener('change', (event) => {
+                calAllTotalPrice();
+            });
+        }
+
+    }
+    //====算商城被選取的總額
+    function calProdTotalPrice() {
+        const checkboxes = document.querySelectorAll('input[name="prod[]"]:checked');
+        let totalPrice = 0;
+
+        checkboxes.forEach((checkbox) => {
+            const decodedValue = decodeURIComponent(checkbox.value);
+            const product = JSON.parse(decodedValue);
+            const price = parseFloat(product.proDet_price);
+            const quantity = parseInt(product.prodQty);
+            const productTotal = price * quantity;
+
+            totalPrice += productTotal;
+        });
+
+        console.log('prod total : ' + totalPrice); // 输出价格总和，你可以根据需要进行进一步处理或显示
+
+        return totalPrice;
     }
     //====顯示活動
     function showActList(obj) {
@@ -359,8 +410,35 @@ require './partsNOEDIT/connect-db.php' ?>
         // console.log(aProdQties);
         for (let i of aProdQties) {
             i.addEventListener('change', aChangeStock);
-            i.addEventListener('change', totalAmount);
+            // i.addEventListener('change', calculateTotalPrice);
+            // i.addEventListener('change', totalAmount);
         }
+
+        //算活動總金額
+        const aCheckboxes = document.querySelectorAll('input[name="act[]"]');
+        for (let i of aCheckboxes) {
+            i.addEventListener('change', (event) => {
+                calAllTotalPrice();
+            });
+        }
+    }
+    //====算活動被選取的總額
+    function calActTotalPrice() {
+        const checkboxes = document.querySelectorAll('input[name="act[]"]:checked');
+        let totalPrice = 0;
+
+        checkboxes.forEach((checkbox) => {
+            const decodedValue = decodeURIComponent(checkbox.value);
+            const product = JSON.parse(decodedValue);
+            const price_adult = parseFloat(product.price_adult);
+            const price_kid = parseFloat(product.price_kid);
+            const adultQty = parseInt(product.adultQty);
+            const childQty = parseInt(product.childQty);
+            const productTotal = price_adult * adultQty + price_kid * childQty;
+            totalPrice += productTotal;
+        });
+        console.log('act total : ' + totalPrice); // 输出价格总和，你可以根据需要进行进一步处理或显示
+        return totalPrice;
     }
     //====顯示coupon====
     function showCoupon(obj) {
@@ -370,7 +448,7 @@ require './partsNOEDIT/connect-db.php' ?>
         for (let i = 0; i < cData.length; i++) {
             couContent +=
                 `<tr>
-                    <td> <input class="form-check-input" type="radio" value="${cData[i].couponSend_sid}" name="coupon"></td>
+                    <td> <input class="form-check-input" type="radio" value="${cData[i].couponSend_sid}" name="coupon" coupon_price ="${cData[i].coupon_price}"></td>
                     <td>${cData[i].coupon_code}</td>
                     <td>${cData[i].coupon_name}</td>
                     <td>$${cData[i].coupon_price}</td>
@@ -393,6 +471,23 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tbody>
                     </table>`;
         oCartDisplay.append(oct);
+        const cCheckboxes = document.querySelectorAll('input[name="coupon"]');
+        for (let i of cCheckboxes) {
+            i.addEventListener('change', (event) => {
+                calAllTotalPrice();
+            });
+        }
+    }
+    //====算活動被選取的總額
+    function calCouponPrice() {
+        const checkboxes = document.querySelector('input[name="coupon"]:checked');
+        if (checkboxes && checkboxes.getAttribute('coupon_price')) {
+            console.log('coupon_price : ' + checkboxes.getAttribute('coupon_price'));
+            return parseInt(checkboxes.getAttribute('coupon_price'));
+        } else {
+            console.log('coupon_price : ' + 0);
+            return 0;
+        }
     }
     //====顯示地址及付款方式及送出BTN====
     function showPostnPay(obj) {
@@ -458,9 +553,25 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示總金額====
     function showTotalPriceInfo() {
-        totalPriceInfo.style.display = "block";
         let priceBlock = document.createElement('div');
-
+        priceBlock.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <p>小計:</p>
+                            <p>$<span id="subtotal" class="fw-bold">0</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>郵寄金額:</p>
+                            <p>$<span id="post" class="fw-bold">80</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>優惠券金額:</p>
+                            <p>$<span id="couponPrice" class="fw-bold">80</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>總金額:</p>
+                            <p>$<span id="coupshowTotalonPrice" class="fw-bold text-success">0</span></p>
+                        </div>`
+        totalPriceInfo.append(priceBlock);
     }
     //====選擇所有商品====
     function selectAllProducts() {
@@ -521,6 +632,8 @@ require './partsNOEDIT/connect-db.php' ?>
         decodedString.prodQty = updatedQty;
         const updatedString = encodeURIComponent(JSON.stringify(decodedString));
         encodedString.value = updatedString;
+
+
 
     }
     //====更新活動庫存,Cart Qty===
@@ -594,34 +707,5 @@ require './partsNOEDIT/connect-db.php' ?>
         const totalPrice = allSubTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
         console.log(totalPrice);
     }
-
-
-    function sumCheckedValues() {
-        const checkboxes = document.querySelectorAll('input[name="coupon"]:checked');
-        let sum = 0;
-
-        checkboxes.forEach((checkbox) => {
-            sum += parseInt(checkbox.value);
-        });
-
-        return sum;
-    }
-
-    // Event listener for checkbox change
-    const checksboxes = document.querySelectorAll('input[name="coupon"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', () => {
-            const totalSum = sumCheckedValues();
-            console.log(totalSum);
-            // You can perform any other actions with the updated sum here
-        });
-    });
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
-
-<!-- 
-document.querySelector('input[name="coupon"]:checked')
-
-document.querySelectorAll('input[name="act[]"]:checked')
-
-document.querySelectorAll('input[name="prod[]"]:checked') -->
