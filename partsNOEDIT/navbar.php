@@ -121,11 +121,17 @@
                     論壇
                 </a>
                 <div class="collapse w-100" id="collapseBt6">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt5">
-                        - 論壇資料
+                    <a href="p_readPost_api.php" class="nav-link bg-transparent text-dark ">
+                        - 管理者文章總覽
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark ">
-                        - 論壇資料
+                    <a href="p_list_admin.php" class="nav-link bg-transparent  text-dark ">
+                        - 新增管理文章
+                    </a>
+                    <a href="p_readPost_ board.php" class="nav-link bg-transparent text-dark ">
+                        - 看板類別總覽
+                    </a>
+                    <a href="p_list_boardAdd.php" class="nav-link bg-transparent  text-dark ">
+                        - 新增看板
                     </a>
                 </div>
                 <!-- 購物車 -->

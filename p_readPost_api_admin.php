@@ -11,27 +11,38 @@ if ($page < 1) {
     header('Location: ?page=1');
     exit;
 }
-// 篩選看板及搜尋關鍵字
-if (isset($_GET['boardSid'])) {
-    $p_sql = "SELECT COUNT(1) FROM `post_list_admin` WHERE board_sid = $boardSid"; //COUNT(1)的1是true的意思，資料庫裡的資料表如果有的話就會跑
-    $totalRows = $pdo->query($p_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
+
+// 篩選管理者及搜尋關鍵字
+if (isset($_GET['adminName'])) {
+    $p_sql = 'SELECT COUNT(1) FROM `post_list_admin` WHERE admin_name =:adminName'; //COUNT(1)的1是true的意思，資料庫裡的資料表如果有的話就會跑
+    $totalRows = $pdo->prepare($p_sql);
+    $totalRows->bindValue(':adminName', $adminName, PDO::PARAM_STR);
+    $totalRows->execute(); #總筆數
+    $r = $totalRows->fetch(PDO::FETCH_NUM)[0];
+    print_r($r);
     //1. $pdo->query($p_sql)：使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢語句 $p_sql，並返回一個 PDOStatement 對象。
     //2. ->fetch(PDO::FETCH_NUM)：對 PDOStatement 對象調用 fetch 方法，以數字索引方式讀取該結果集的一行數據，並將其轉化為一個數組。因為在此處沒有指定讀取的欄位名稱，所以 PDO::FETCH_NUM 用於指示以數字索引的方式讀取數據。
     //3. [0]：將讀取到的數組的第一個元素（即第一列第一行的數據）取出，賦值給 $totalRows 變量。這個數值就是符合條件的數據總數。
-    $totalPages = ceil($totalRows / $perPage); #總頁數
+    $totalPages = ceil($r / $perPage); #總頁數
     $rows = [];
-    if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，如果存在則繼續執行，否則不執行
+    if ($r) { //判斷符合條件的數據總數 $totalRows 是否存在，如果存在則繼續執行，否則不執行
         if ($page > $totalPages) {
             header("Location: ?page=$totalPages"); //判斷當前頁碼 $page 是否大於總頁數 $totalPages，如果大於則進行重定向，使頁碼指向最後一頁，然後終止程式。
             exit;
         }
 
         if (isset($_GET['text']) && $_GET['text'] !== "") {
+            echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_board`.board_sid = $boardSid ORDER BY `post_sid` ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+            echo "notext";
+            $sql = sprintf('SELECT * FROM `post_list_admin` pa
+            JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
+            WHERE pa.admin_name = ?
+            ORDER BY `post_sid` ASC LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
         }
-        $rows = $pdo->query($sql)->fetchAll();
+        $rows = $pdo->prepare($sql);
+        $rows->execute([$adminName]);
     }
 } else {
     $p_sql = "SELECT COUNT(1) FROM `post_list_admin`";
@@ -45,55 +56,19 @@ if (isset($_GET['boardSid'])) {
             exit;
         }
         if (isset($_GET['text']) && $_GET['text'] !== "") {
+            echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` ORDER BY `post_sid` ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
+            echo "notext";
+            $sql = sprintf('SELECT * FROM `post_list_admin` pa
+            JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
+            WHERE pa.admin_name = ?
+            ORDER BY `post_sid` ASC LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
         }
-        $rows = $pdo->query($sql)->fetchAll(); //執行 SQL 查詢語句，使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢，然後調用 fetchAll 方法將查詢結果轉化為一個二維數組 $rows。
+        $rows = $pdo->prepare($sql);
+        $rows->execute([$adminName]);
     }
 }
-
-// 篩選管理者及搜尋關鍵字
-// if (isset($_GET['adminName'])) {
-//     $p_sql = "SELECT COUNT(1) FROM `post_list_admin` WHERE admin_name = $adminName"; //COUNT(1)的1是true的意思，資料庫裡的資料表如果有的話就會跑
-//     $totalRows = $pdo->query($p_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
-//     //1. $pdo->query($p_sql)：使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢語句 $p_sql，並返回一個 PDOStatement 對象。
-//     //2. ->fetch(PDO::FETCH_NUM)：對 PDOStatement 對象調用 fetch 方法，以數字索引方式讀取該結果集的一行數據，並將其轉化為一個數組。因為在此處沒有指定讀取的欄位名稱，所以 PDO::FETCH_NUM 用於指示以數字索引的方式讀取數據。
-//     //3. [0]：將讀取到的數組的第一個元素（即第一列第一行的數據）取出，賦值給 $totalRows 變量。這個數值就是符合條件的數據總數。
-//     $totalPages = ceil($totalRows / $perPage); #總頁數
-//     $rows = [];
-//     if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，如果存在則繼續執行，否則不執行
-//         if ($page > $totalPages) {
-//             header("Location: ?page=$totalPages"); //判斷當前頁碼 $page 是否大於總頁數 $totalPages，如果大於則進行重定向，使頁碼指向最後一頁，然後終止程式。
-//             exit;
-//         }
-
-//         if (isset($_GET['text']) && $_GET['text'] !== "") {
-//             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
-//         } else {
-//             $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_list_admin`.admin_name = $adminName ORDER BY `post_sid` ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
-//         }
-//         $rows = $pdo->query($sql)->fetchAll();
-//     }
-// } else {
-//     $p_sql = "SELECT COUNT(1) FROM `post_list_admin`";
-//     $totalRows = $pdo->query($p_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
-//     $totalPages = ceil($totalRows / $perPage); #總頁數
-//     $rows = [];
-
-//     if ($totalRows) {
-//         if ($page > $totalPages) {
-//             header("Location: ?page=$totalPages");
-//             exit;
-//         }
-//         if (isset($_GET['text']) && $_GET['text'] !== "") {
-//             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
-//         } else {
-//             $sql = sprintf("SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` ORDER BY `post_sid` ASC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
-//         }
-//         $rows = $pdo->query($sql)->fetchAll(); //執行 SQL 查詢語句，使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢，然後調用 fetchAll 方法將查詢結果轉化為一個二維數組 $rows。
-//     }
-// }
 
 ?>
 
@@ -219,7 +194,7 @@ $r_post = $stmt->fetchAll();
             <label for="admin_name">管理者：</label>
             <select name="admin_name" id="admin_name" data-required="1">
                 <option selected value="">選擇管理者</option>
-                <option selected value="">全部</option>
+                <option value="">全部</option>
                 <option value="Lilian">Lilian</option>
                 <option value="Jenny">Jenny</option>
                 <option value="Gabrielle">Gabrielle</option>
@@ -287,7 +262,7 @@ $r_post = $stmt->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     //刪除
-    document.querySelector('li.page-item.active a').removeAttribute('href');
+    // document.querySelector('li.page-item.active a').removeAttribute('href');
 
     function p_delete(post_sid) {
         if (confirm(`是否要刪除編號為 ${post_sid} 的資料？`)) {
@@ -306,27 +281,25 @@ $r_post = $stmt->fetchAll();
     const adminSelect = document.getElementById('admin_name');
     adminSelect.addEventListener('change', function() {
         const adminName = adminSelect.value;
-        if (adminName == '') {
-            window.location.href = 'p_readPost_api_admin.php';
-        }
-        if (adminName == 'Lilian') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Lilian';
-        }
-        if (adminName == 'Jenny') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Jenny';
-        }
-        if (adminName == 'Gabrielle') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Gabrielle';
-        }
-        if (adminName == 'Lily') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Lily';
-        }
-        if (adminName == 'Jill') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Jill';
-        }
-        if (adminName == 'Shu yi') {
-            window.location.href = 'p_readPost_api_admin.php?adminName=Shu yi';
-        }
+        location.href = 'p_readPost_api_admin.php?adminName=' + adminName;
+        // if (adminName == 'Lilian') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Lilian';
+        // }
+        // if (adminName == 'Jenny') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Jenny';
+        // }
+        // if (adminName == 'Gabrielle') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Gabrielle';
+        // }
+        // if (adminName == 'Lily') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Lily';
+        // }
+        // if (adminName == 'Jill') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Jill';
+        // }
+        // if (adminName == 'Shu yi') {
+        //     window.location.href = 'p_readPost_api_admin.php?adminName=Shu yi';
+        // }
     })
 
     //關鍵字搜尋
