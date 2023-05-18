@@ -253,23 +253,29 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示計算金額====
     function calAllTotalPrice() {
-        const subtotal = document.querySelector("#subtotal");
+        const prodSubtotal = document.querySelector("#prodSubtotal");
+        const actSubtotal = document.querySelector("#actSubtotal");
         const post = document.querySelector("#post");
         const couponPrice = document.querySelector('#couponPrice');
         const total = document.querySelector('#total');
 
-        subtotal.innerHTML = calProdTotalPrice() + calActTotalPrice();
+        prodSubtotal.innerHTML = calProdTotalPrice();
+        actSubtotal.innerHTML = calActTotalPrice();
         post.innerHTML = '80';
         couponPrice.innerHTMl = calCouponPrice();
-        total.innerHTML = calProdTotalPrice() + calActTotalPrice() - calCouponPrice();
+        total.innerHTML = calProdTotalPrice() + calActTotalPrice() + 80 - calCouponPrice();
     }
     //====顯示總金額block====
     function showTotalPriceInfo() {
         let priceBlock = document.createElement('div');
         priceBlock.innerHTML = `
                         <div class="d-flex justify-content-between">
-                            <p>小計:</p>
-                            <p>$<span id="subtotal" class="fw-bold">0</span></p>
+                            <p>商城小計:</p>
+                            <p>$<span id="prodSubtotal" class="fw-bold">0</span></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>活動小計:</p>
+                            <p>$<span id="actSubtotal" class="fw-bold">0</span></p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>郵寄金額:</p>
@@ -277,7 +283,7 @@ require './partsNOEDIT/connect-db.php' ?>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>優惠券金額:</p>
-                            <p>$<span id="couponPrice" class="fw-bold">0</span></p>
+                            <p>-$<span id="couponPrice" class="fw-bold">0</span></p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>總金額:</p>
@@ -560,15 +566,15 @@ require './partsNOEDIT/connect-db.php' ?>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>郵寄金額:</p>
-                            <p>$<span id="post" class="fw-bold">80</span></p>
+                            <p>$<span id="post" class="fw-bold">0</span></p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>優惠券金額:</p>
-                            <p>$<span id="couponPrice" class="fw-bold">80</span></p>
+                            <p>$<span id="couponPrice" class="fw-bold">0</span></p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p>總金額:</p>
-                            <p>$<span id="coupshowTotalonPrice" class="fw-bold text-success">0</span></p>
+                            <p>$<span id="coupshowTotalonPrice" class="fw-bold">0</span></p>
                         </div>`
         totalPriceInfo.append(priceBlock);
     }
