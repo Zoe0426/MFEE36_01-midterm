@@ -1,7 +1,7 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
-$perPage = 25; # 每頁最多幾筆
+$perPage = 15; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
 
 if ($page < 1) {
@@ -9,7 +9,7 @@ if ($page < 1) {
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM #你的資料表 ";
+$t_sql = "SELECT COUNT(1) FROM `ord_order` ";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
 $totalPages = ceil($totalRows / $perPage); # 總頁數
 $rows = [];
@@ -19,8 +19,7 @@ if ($totalRows) {
         header("Location: ?page=$totalPages");
         exit;
     }
-    $sql = sprintf("SELECT * FROM `xxx` LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
-
+    $sql = sprintf("SELECT * FROM `ord_order` ORDER BY `order_sid` DESC LIMIT %s, %s", ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 }
 
