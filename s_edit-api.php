@@ -11,44 +11,34 @@ $output = [
 
 if (!empty($_POST['pro_name'])) {
     $isPass = true;
-    $proCatID = $_POST['pro_for'] . $_POST['cat_sid'] . $_POST['catDet_sid'];
 
-    // 循环生成新的 $newProSid，直到找到一个不與现有记录冲突的值
-    $newProSidNum = 1;
-    $newProSid = sprintf("%s%04d", $proCatID, $newProSidNum);
-    while (true) {
-        // 檢查 $newProSid 是否已存在資料庫中
-        $sql_checkProSid = "SELECT COUNT(*) FROM `shop_pro` WHERE `pro_sid` = ?";
-        $stmt_checkProSid = $pdo->prepare($sql_checkProSid);
-        $stmt_checkProSid->execute([$newProSid]);
-        $rowCount = $stmt_checkProSid->fetchColumn();
 
-        if ($rowCount == 0) {
-            // 如果 $newProSid 不存在資料庫中，退出循環
-            break;
-        }
+    #1.主商品更新資料準備
+    $sql_proUpdate = "UPDATE `shop_pro` SET 
+    `pro_sid`=?,
+    `cat_sid`=?,
+    `catDet_sid`=?,
+    `sup_sid`=?,
+    `pro_for`=?,
+    `pro_name`=?,
+    `pro_describe`=?,
+    `pro_img`=?,
+    `pro_onWeb`=?,
+    `pro_update`=NOW(),
+    `pro_status`=?
+    WHERE `pro_sid`=?";
 
-        // 如果 $newProSid 已存在資料庫中，則遞增 $newProSidNum 加1=> $newProSid
-        $newProSidNum++;
-        $newProSid = sprintf("%s%04d", $proCatID, $newProSidNum);
-    }
 
-    #2.鍵入資料準備
-    $sql_pro = "INSERT INTO `shop_pro`(
-        `pro_sid`, `cat_sid`, `catDet_sid`,
-         `sup_sid`, `pro_for`, `pro_name`, 
-         `pro_describe`, `pro_img`, `pro_onWeb`,
-          `pro_update`, `pro_status`
-          ) VALUES (
-            ?,      ?,      ?,
-            ?,      ?,      ?,
-            ?,      ?,      NOW(),
-            NOW(),  1
-            )";
+    $stmt_proUpdate = $pdo->prepare($sql_proUpdate);
 
-    $stmt_pro = $pdo->prepare($sql_pro);
+    $pro_name = isset($_POST['pro_name']) ? htmlentities($_POST['pro_name']) : "";
+    $pro_describe = isset($_POST['pro_describe']) ? htmlentities($_POST['pro_describe']) : "";
 
-    #3添加至子類別表格準備
+    #2.刪除細項商品的表格準備
+
+    $sql_proDetDel = sprintf("DELETE FROM `shop_prodet` WHERE `pro_sid`='%s'", $_POST['pro_sid']);
+
+    #3添加細項商品表格準備
     $sql_proDet = "INSERT INTO `shop_prodet`(
         `proDet_sid`, `pro_sid`, `proDet_name`, `proDet_price`, `proDet_qty`, `proDet_img`, `pro_forAge`) VALUES (
             ?,?,?,
@@ -57,7 +47,11 @@ if (!empty($_POST['pro_name'])) {
 
     $stmt_proDet = $pdo->prepare($sql_proDet);
 
-    #3 添加至產品+規格關係表準備
+    #4.刪除商品規格的表格準備
+    $sql_proSpecDel = sprintf("DELETE FROM `shop_prospec` WHERE `prod_sid`='%s'", $_POST['pro_sid']);
+
+
+    #5.添加至產品+規格關係表準備
     $sql_proSpec = "INSERT INTO `shop_prospec`(
     `prod_sid`, `prodDet_sid`, 
     `spec_sid`, `specDet_sid`) 
@@ -67,22 +61,25 @@ if (!empty($_POST['pro_name'])) {
         )";
     $stmt_proSpec = $pdo->prepare($sql_proSpec);
 
-    $pro_name = isset($_POST['pro_name']) ? htmlentities($_POST['pro_name']) : "";
-    $pro_describe = isset($_POST['pro_describe']) ? htmlentities($_POST['pro_describe']) : "";
 
     if ($isPass) {
-        #2.鍵入資料
-        $stmt_pro->execute([
-            $newProSid,
+        #1.主商品更新
+        $stmt_proUpdate->execute([
+            $_POST['pro_sid'],
             $_POST['cat_sid'],
             $_POST['catDet_sid'],
             $_POST['sup_sid'],
             $_POST['pro_for'],
             $pro_name,
             $pro_describe,
-            $_POST['pro_img']
+            $_POST['pro_img'],
+            $_POST['pro_onWeb'],
+            $_POST['pro_status'],
+            $_POST['pro_sid']
         ]);
 
+        #2.刪除細項商品
+        $pdo->query($sql_proDetDel);
 
         //取得品項名稱
         //1. 先將資料庫的規格表資訊取出來
@@ -122,7 +119,6 @@ if (!empty($_POST['pro_name'])) {
             }
         }
 
-
         #3添加至子類別表格
         $proNewArr = [];
         $proNewArr['proDet_sid'] = $_POST['proDet_sid'];
@@ -130,7 +126,7 @@ if (!empty($_POST['pro_name'])) {
         foreach ($proNewArr['proDet_sid'] as $k => $v) {
             $stmt_proDet->execute([
                 sprintf('%02d', $v),
-                $newProSid,
+                $_POST['pro_sid'],
                 $proDet_name[$k],
                 $_POST['proDet_price'][$k],
                 $_POST['proDet_qty'][$k],
@@ -139,36 +135,28 @@ if (!empty($_POST['pro_name'])) {
             ]);
         };
 
-        #添加至產品+規格關係表
-        if (!empty($_POST['specDet_sid2'])) {
-            foreach ($proNewArr['proDet_sid'] as $k => $v) {
-                $stmt_proSpec->execute([
-                    $newProSid,
-                    sprintf('%02d', $v),
-                    $_POST['spec_sid1'][$k],
-                    $_POST['specDet_sid1'][$k]
-                ]);
-            }
-            foreach ($proNewArr['proDet_sid'] as $k => $v) {
-                $stmt_proSpec->execute([
-                    $newProSid,
-                    sprintf('%02d', $v),
-                    $_POST['spec_sid2'][$k],
-                    $_POST['specDet_sid2'][$k]
-                ]);
-            }
-        } else {
-            foreach ($proNewArr['proDet_sid'] as $k => $v) {
-                $stmt_proSpec->execute([
-                    $newProSid,
-                    sprintf('%02d', $v),
-                    $_POST['spec_sid1'][$k],
-                    $_POST['specDet_sid1'][$k]
-                ]);
-            }
-        }
 
-        $output['success'] = !!$stmt_pro->rowCount();
+        #4.刪除細項商品
+        $pdo->query($sql_proSpecDel);
+
+        #5.添加至產品+規格關係表
+        foreach ($proNewArr['proDet_sid'] as $k => $v) {
+            $stmt_proSpec->execute([
+                $_POST['pro_sid'],
+                sprintf('%02d', $v),
+                $_POST['spec_sid1'][$k],
+                $_POST['specDet_sid1'][$k]
+            ]);
+        }
+        foreach ($proNewArr['proDet_sid'] as $k => $v) {
+            $stmt_proSpec->execute([
+                $_POST['pro_sid'],
+                sprintf('%02d', $v),
+                $_POST['spec_sid2'][$k],
+                $_POST['specDet_sid2'][$k]
+            ]);
+        }
+        $output['success'] = !!$stmt_proSpec->rowCount();
     }
 }
 

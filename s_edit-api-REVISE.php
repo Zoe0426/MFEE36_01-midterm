@@ -1,6 +1,25 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
+$proDet_sid = isset($_GET['proDet_sid']) ? $_GET['proDet_sid'] : '';
+$pro_sid = isset($_GET['pro_sid']) ? $_GET['pro_sid'] : '';
+
+//主商品資訊
+$sql_shopInfo = sprintf("SELECT * FROM `shop_pro` WHERE `pro_sid`='%s'", $pro_sid);
+$r_shopInfo = $pdo->query($sql_shopInfo)->fetch();
+
+//各項商品資訊
+$sql_shopDetInfo = sprintf("SELECT * FROM `shop_prodet` pd 
+JOIN `shop_pro` p ON p.`pro_sid`=pd.`pro_sid` WHERE pd.`pro_sid`='%s'", $pro_sid);
+$r_shopDetInfo = $pdo->query($sql_shopDetInfo)->fetchAll();
+
+//各項商品資訊的規格
+$sql_shopSpecInfo = sprintf("SELECT * FROM `shop_prospec` ps WHERE ps.`prod_sid`='%s'", $pro_sid);
+$r_shopSpecInfo = $pdo->query($sql_shopSpecInfo)->fetchAll();
+// header('Content-Type: application/json');
+// print_r($r_shopSpecInfo);
+// exit;
+
 //下拉的大類別列表
 $sql_shopCat = "SELECT distinct `cat_sid`, `cat_name` FROM `shop_cat` ORDER BY `cat_name`";
 $r_shopCat = $pdo->query($sql_shopCat)->fetchAll();
@@ -51,8 +70,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     .s_proDetImg,
     #s_proDetTepImgBox,
     .s_proDetNum,
-    #infoBar {
+    #infoBar,
+    #s_pro_sid {
         display: none;
+        color: pink;
     }
 
     #s_imginfo {
@@ -60,7 +81,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         width: 100%;
         height: 100%;
         object-fit: contain;
-        display: none;
+        /* display: none; */
         position: absolute;
     }
 
@@ -68,15 +89,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         height: 190px;
         border: 1px dashed lightgray;
     }
-
-    .s_allbtn {
-        display: flex;
-        justify-content: end;
-    }
 </style>
 
 <?php include './partsNOEDIT/navbar.php' ?>
-<div class="row p-0 m-0">
+<div class="row">
     <div class="col-1"></div>
     <div class="col">
         <form name="s_Form1" class="s_Form1">
@@ -88,23 +104,28 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             <h2>新增商品</h2>
             <div class="row pb-3 border-bottom">
                 <div class="col-5">
-                    <div class="w-100 s_ImgBox" onclick="shopAddMainImg()" id="s_proImgBox"><img src="" id="s_imginfo">+</div>
-                    <input type="text" name="pro_img" id="s_proImg">
+                    <div class="w-100 s_ImgBox" onclick="shopAddMainImg()" id="s_proImgBox"><img src="./s_imgs/<?= $r_shopInfo['pro_img'] ?>" id="s_imginfo">+</div>
+                    <input type="text" name="pro_img" id="s_proImg" value="<?= $r_shopInfo['pro_img'] ?>">
                 </div>
                 <div class="col-7">
+                    <div class="mb-3" id="s_pro_sid">
+                        <label class="form-label" for="pro_sid">產品編號</label>
+                        <input type="text" class="form-control" name="pro_sid" data-required="1" value="<?= $r_shopInfo['pro_sid'] ?>">
+                        <div class="form-text"></div>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="pro_name">產品名稱</label>
-                        <input type="text" class="form-control" id="pro_name" name="pro_name" data-required="1">
+                        <input type="text" class="form-control" id="pro_name" name="pro_name" data-required="1" value="<?= htmlentities($r_shopInfo['pro_name']) ?>">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">適用對象</label>
                         <div class="d-flex">
                             <select class="form-select" name="pro_for" id="shopForSel">
-                                <option value="" selected disabled>--請選擇--</option>
-                                <option value="D">狗</option>
-                                <option value="C">貓</option>
-                                <option value="B">皆可</option>
+                                <option value="" disabled>--請選擇--</option>
+                                <option value="D" <?= $r_shopInfo['pro_for'] == 'D' ? "selected" : "" ?>>狗</option>
+                                <option value="C" <?= $r_shopInfo['pro_for'] == 'C' ? "selected" : "" ?>>貓</option>
+                                <option value="B" <?= $r_shopInfo['pro_for'] == 'B' ? "selected" : "" ?>>皆可</option>
                             </select>
                         </div>
                         <div class="form-text"></div>
@@ -114,14 +135,20 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <div class="row">
                             <div class="col-6">
                                 <select class="form-select" name="cat_sid" id="s_cat_sid">
-                                    <option value="" selected disabled>--請選擇--</option>
+                                    <option value="" disabled>--請選擇--</option>
                                     <?php foreach ($r_shopCat as $r) : ?>
-                                        <option value="<?= $r['cat_sid'] ?>"><?= $r['cat_name'] ?></option>
+                                        <option value="<?= $r['cat_sid'] ?>" <?= $r_shopInfo['cat_sid'] == $r['cat_sid'] ? "selected" : "" ?>><?= $r['cat_name'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-6">
-                                <select class="form-select" name="catDet_sid" id="s_catDet_sid" disabled></select>
+                                <select class="form-select" name="catDet_sid" id="s_catDet_sid">
+                                    <?php foreach ($r_shopCatDet as $r) : ?>
+                                        <?php if ($r['cat_sid'] == $r_shopInfo['cat_sid']) : ?>
+                                            <option value="<?= $r['catDet_sid'] ?>" <?= $r_shopInfo['catDet_sid'] == $r['catDet_sid'] ? "selected" : "" ?>><?= $r['catDet_name'] ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
                         <div class="form-text"></div>
@@ -131,98 +158,101 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <div class="row">
                             <div class="col-6">
                                 <select class="form-select" name="sup_sid" id="s_sup_sid">
-                                    <option value="" selected disabled>--請選擇--</option>
+                                    <option value="" disabled>--請選擇--</option>
                                     <?php foreach ($r_shopSup as $r) : ?>
-                                        <option value="<?= $r['sup_sid'] ?>"><?= $r['sup_name'] ?></option>
+                                        <option value="<?= $r['sup_sid'] ?>" <?= $r_shopInfo['sup_sid'] == $r['sup_sid'] ? "selected" : "" ?>><?= $r['sup_name'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-6">
-                                <select class="form-select" name="sup_MIW" id="s_sup_MIW" disabled></select>
+                                <select class="form-select" name="sup_MIW" id="s_sup_MIW">
+                                    <?php foreach ($r_shopSupMIW as $r) : ?>
+                                        <?php if ($r['sup_sid'] == $r_shopInfo['sup_sid']) : ?>
+                                            <option value="<?= $r['sup_MIW'] ?>" <?= $r_shopInfo['sup_sid'] == $r['sup_sid'] ? "selected" : "" ?>><?= $r['sup_MIW'] ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+
+                                </select>
                             </div>
                         </div>
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="pro_describe" class="form-label">產品描述</label>
-                        <textarea name="pro_describe" id="pro_describe" class="form-control" data-required="1"></textarea>
+                        <textarea name="pro_describe" id="pro_describe" class="form-control" data-required="1"><?= htmlentities($r_shopInfo['pro_describe']) ?></textarea>
                         <div class="form-text"></div>
                     </div>
                 </div>
             </div>
             <div class="row pb-3 border-bottom mt-4" id="s_proDetBox">
-                <div class="col-3 mb-3">
-                    <div class="mb-3 s_proDetNum">
-                        <input type="text" class="form-control " name="proDet_sid[]" value="1">
-                    </div>
-                    <div class="mb-3">
-                        <div class="s_ImgBox s_proDetImgBox"><img src="" id="s_imginfo">+</div>
-                        <input type="text" name="pro_img1[]" class="s_proDetImg">
-                    </div>
-                    <div class="mb-3 s_spec">
-                        <label class="form-label">規格一</label>
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-select s_spec_sid1" name="spec_sid1[]">
-                                    <option value="" selected disabled>--請選擇--</option>
-                                    <?php foreach ($r_shopSpec as $r) : ?>
-                                        <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
-                                    <?php endforeach; ?>
+                <?php foreach ($r_shopDetInfo as $k => $v) : ?>
+                    <div class="col-3 mb-3">
+                        <div class="mb-3 s_proDetNum">
+                            <input type="text" class="form-control " name="proDet_sid[]" value="<?= $r_shopDetInfo[$k]['proDet_sid'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <div class="s_ImgBox s_proDetImgBox"><img src="" id="s_imginfo">+</div>
+                            <input type="text" name="pro_img1[]" class="s_proDetImg" value="<?= $r_shopDetInfo[$k]['proDet_img'] ?>">
+                        </div>
+                        <div class="mb-3 s_spec">
+                            <label class="form-label">規格一</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <select class="form-select s_spec_sid1" name="spec_sid1[]">
+                                        <option value="" disabled>--請選擇--</option>
+                                        <?php foreach ($r_shopSpec as $r) : ?>
+                                            <option value="<?= $r['spec_sid'] ?>" <?= $r_shopSpecInfo['spec_sid'] == $r['spec_sid'] ? "selected" : "" ?>><?= $r['spec_name'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-select s_specDet_sid1" name="specDet_sid1[]" disabled></select>
+                                </div>
+                            </div>
+                            <div class="form-text"></div>
+                        </div>
+                        <div class="mb-3 s_spec">
+                            <label class="form-label">規格二</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
+                                </div>
+                            </div>
+                            <div class="form-text"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="s_proDet_price">價格</label>
+                            <input type="number" class="form-control" name="proDet_price[]" data-required="1" value="<?= $r_shopDetInfo[$k]['proDet_price'] ?>">
+                            <div class="form-text"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="s_proDet_qty">數量</label>
+                            <input type="number" class="form-control" name="proDet_qty[]" data-required="1" value="<?= $r_shopDetInfo[$k]['proDet_qty'] ?>">
+                            <div class="form-text"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">適用年齡</label>
+                            <div class="d-flex">
+                                <select class="form-select" name="pro_forAge[]">
+                                    <option value="" disabled>--請選擇--</option>
+                                    <option value="1" <?= $r_shopDetInfo[$k]['pro_forAge'] == 1 ? "selected" : "" ?>>幼年</option>
+                                    <option value="2" <?= $r_shopDetInfo[$k]['pro_forAge'] == 2 ? "selected" : "" ?>>成年</option>
+                                    <option value="3" <?= $r_shopDetInfo[$k]['pro_forAge'] == 3 ? "selected" : "" ?>>高齡</option>
+                                    <option value="4" <?= $r_shopDetInfo[$k]['pro_forAge'] == 4 ? "selected" : "" ?>>皆可</option>
                                 </select>
                             </div>
-                            <div class="col-6">
-                                <select class="form-select s_specDet_sid1" name="specDet_sid1[]" disabled></select>
-                            </div>
+                            <div class="form-text"></div>
                         </div>
-                        <div class="form-text"></div>
+                        <button type="button" class="btn btn-success s_add">+</button>
+                        <button type="button" class="btn btn-danger s_del d-none">-</button>
                     </div>
-                    <div class="mb-3 s_spec">
-                        <label class="form-label">規格二</label>
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled>
-                                    <option value="" selected disabled>--請選擇--</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
-                            </div>
-                        </div>
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="s_proDet_price">價格</label>
-                        <input type="number" class="form-control" name="proDet_price[]" data-required="1">
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="s_proDet_qty">數量</label>
-                        <input type="number" class="form-control" name="proDet_qty[]" data-required="1">
-                        <div class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">適用年齡</label>
-                        <div class="d-flex">
-                            <select class="form-select" name="pro_forAge[]">
-                                <option value="" selected disabled>--請選擇--</option>
-                                <option value="1">幼年</option>
-                                <option value="2">成年</option>
-                                <option value="3">高齡</option>
-                                <option value="4">皆可</option>
-                            </select>
-                        </div>
-                        <div class="form-text"></div>
-                    </div>
-                    <button type="button" class="btn btn-success s_add">+</button>
-                    <button type="button" class="btn btn-danger s_del d-none">-</button>
-                </div>
+                <?php endforeach; ?>
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
-            <div class="mt-3 s_allbtn mb-3">
-                <button type="submit" class="btn btn-primary">確認新增</button>
-                <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
-            </div>
-
+            <button type="submit" class="btn btn-primary">新增商品</button>
         </form>
 
 
@@ -234,10 +264,6 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const theDocFrag = document.createDocumentFragment();
-
-    function cancelcreate() {
-        history.go(-1)
-    }
 
     function checkForm(event) {
         event.preventDefault()
@@ -272,9 +298,6 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         infoBar.classList.remove('alert-danger');
                         infoBar.classList.add('alert-success');
                         infoBar.style.display = 'block'
-                        setTimeout(() => {
-                            location.href = 's_list.php'
-                        }, 2000)
                     } else {
                         infoBar.innerText = '新增失敗';
                         infoBar.classList.add('alert-danger');
@@ -336,9 +359,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label">規格二</label>
                         <div class="row">
                             <div class="col-6">
-                            <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled>
-                                    <option value="" selected disabled>--請選擇--</option>
-                                </select>
+                                <select class="form-select s_spec_sid2" name="spec_sid2[]" disabled></select>
                             </div>
                             <div class="col-6">
                                 <select class="form-select s_specDet_sid2" name="specDet_sid2[]" disabled></select>
@@ -463,14 +484,14 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     const catSel = document.querySelector("#s_cat_sid");
     catSel.addEventListener("change", () => {
         const catSelId = catSel.value
+        console.log(catSelId)
         createCatDet(catSelId)
     });
 
     function createCatDet(catSelId) {
-        const catDet = <?= json_encode($r_shopCatDet, JSON_UNESCAPED_UNICODE) ?>;
         const catDetSel = document.querySelector('#s_catDet_sid')
-        removeChild(catDetSel)
-        catDetSel.removeAttribute('disabled')
+        catDetSel.innerHTML = ""
+        const catDet = <?= json_encode($r_shopCatDet, JSON_UNESCAPED_UNICODE) ?>;
         for (let a of catDet) {
             if (catSelId == a.cat_sid) {
                 createOp('option', a.catDet_sid, a.catDet_name)
@@ -490,7 +511,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         const supMIW = <?= json_encode($r_shopSupMIW, JSON_UNESCAPED_UNICODE) ?>;
         const supMIWSel = document.querySelector('#s_sup_MIW')
         supMIWSel.removeAttribute('disabled')
-        removeChild(supMIWSel)
+        supMIWSel.innerHTML = ""
         for (let a of supMIW) {
             if (supSelId == a.sup_sid) {
                 createOp('option', a.sup_MIW_sid, a.sup_MIW)
@@ -522,19 +543,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
         function createSpec2(specSelId, a) {
             specSel2[a].removeAttribute('disabled')
-            specSel2[a].innerHTML = "";
-            // while (specSel2[a].hasChildNodes()) {
-            //     specSel2[a].remove(specSel2[a].lastChild)
-            // }
-            const theOp = document.createElement('option');
-            theOp.setAttribute("value", "");
-            // theOp.setAttribute("selected");
-            // theOp.setAttribute("disabled", "");
-            const theTxt = document.createTextNode('--請選擇--')
-            theOp.append(theTxt)
-            theDocFrag.append(theOp);
+            while (specSel2[a].hasChildNodes()) {
+                specSel2[a].remove(specSel2[a].lastChild)
+            }
             for (let b of spec) {
-
                 if (b.spec_sid != specSelId) {
                     createOp('option', b.spec_sid, b.spec_name)
                 }
@@ -570,23 +582,11 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 }
             }
             //若小規格有數字，則由小到大排序
-            if (specSelId != 1) {
-                arr.sort(function(a, b) {
-                    let c = a.specDet_name;
-                    let d = b.specDet_name;
-                    //檢查是否為純文字
-                    let isPureText = /^[a-zA-Z\u4e00-\u9fa5]+$/.test(c);
-                    if (isPureText) {
-                        // 若為文字文字
-                        return c.localeCompare(d);
-                    } else {
-                        // 包含数字和中文情况下按数字大小排序
-                        let cNum = parseFloat(c);
-                        let dNum = parseFloat(d);
-                        return cNum - dNum;
-                    }
-                })
-            };
+            arr.sort(function(a, b) {
+                let c = parseInt(a.specDet_name);
+                let d = parseInt(b.specDet_name);
+                return c - d
+            })
             for (let b of arr) {
                 createOp('option', b.specDet_sid, b.specDet_name)
             }

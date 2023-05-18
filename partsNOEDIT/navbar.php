@@ -66,11 +66,11 @@
                     商城
                 </a>
                 <div class="collapse w-100" id="collapseBt2">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
-                        - 商城資料
+                    <a href="./s_list.php" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                        - 商品管理
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
-                        - 商城資料
+                    <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                        - 規格管理
                     </a>
                 </div>
             </li>
