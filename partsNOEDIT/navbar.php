@@ -56,6 +56,11 @@
                         - 會員資料
                     </a>
                 </div>
+                <div class="collapse w-100" id="collapseBt1">
+                    <a href="m_member_chart.php" class="nav-link bg-transparent text-dark ">
+                        - 會員分析
+                    </a>
+                </div>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">

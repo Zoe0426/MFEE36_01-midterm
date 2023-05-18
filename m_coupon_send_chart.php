@@ -48,7 +48,7 @@ foreach ($stmt_coupon_get as $row) {
     $result_coupon_get[] = $row['usage_count'];
 }
 
-print_r($result_coupon_get) . "<br>";
+// print_r($result_coupon_get) . "<br>";
 
 // coupon 使用數量
 $sql_coupon_use = "SELECT coupon_sid, COUNT(*) AS usage_count
@@ -64,6 +64,42 @@ foreach ($stmt_coupon_num as $row) {
 }
 
 // print_r($stmt_coupon_num) . "<br>";
+
+
+// coupon 每月使用數量
+$sql_coupon_month = "SELECT 
+coupon_sid,
+DATE_FORMAT(used_time, '%Y') AS year,
+DATE_FORMAT(used_time, '%m') AS month,
+COUNT(*) AS count
+FROM
+mem_coupon_send
+WHERE
+    coupon_status = 1
+GROUP BY
+    coupon_sid, year, month
+ORDER BY
+    coupon_sid, year, month ASC
+
+";
+
+$stmt_coupon_month = $pdo->query($sql_coupon_month)->fetchAll();
+$result_coupon_month = array();
+
+
+
+foreach ($stmt_coupon_month as $row) {
+    $result_coupon_month[$row['coupon_sid']][] = $row['count'];
+}
+
+
+// foreach ($stmt_coupon_month as $row) {
+//     $result_coupon_num[] = $row['usage_count'];
+// }
+
+// print_r($result_coupon_month['COUPON00001']) . "<br>";
+
+
 ?>
 
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -71,6 +107,7 @@ foreach ($stmt_coupon_num as $row) {
 <style>
     .chartBox {
         width: 650px;
+        margin-top: 100px;
     }
 </style>
 <div class="container">
@@ -156,101 +193,69 @@ foreach ($stmt_coupon_num as $row) {
     );
 
     // 優惠券使用時間myChart3
-    const labels3 = ['一月', '二月', '三月'];
+    const labels3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const data3 = {
         labels: labels3,
         datasets: [{
                 label: '全站100',
-                data: [23, 57, 47, 24],
+                data: <?php echo json_encode($result_coupon_month['COUPON00001']) ?>,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
                     'rgb(255, 99, 132)'
                 ],
-            },
-            {
-                label: '全站200',
-                data: [67, 89, 24, 13],
-                backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
-                ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(255, 99, 132)',
                 ],
             },
             {
                 label: '全站200',
-                data: [67, 89, 24, 13],
+                data: <?php echo json_encode($result_coupon_month['COUPON00002']) ?>,
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(115, 58, 58)'
                 ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(115, 58, 58)',
                 ],
             },
             {
-                label: '全站200',
-                data: [67, 89, 24, 13],
+                label: '全站300',
+                data: <?php echo json_encode($result_coupon_month['COUPON00003']) ?>,
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(255, 205, 86)'
                 ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(255, 205, 86)',
                 ],
             },
             {
-                label: '全站200',
-                data: [67, 89, 24, 13],
+                label: '全站400',
+                data: <?php echo json_encode($result_coupon_month['COUPON00004']) ?>,
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(75, 192, 192)'
                 ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(75, 192, 192)',
                 ],
             },
             {
-                label: '全站200',
-                data: [67, 89, 24, 13],
+                label: '全站500',
+                data: <?php echo json_encode($result_coupon_month['COUPON00005']) ?>,
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(54, 162, 235)'
                 ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(54, 162, 235)',
                 ],
             },
             {
-                label: '全站200',
-                data: [67, 89, 24, 13],
+                label: '全站600',
+                data: <?php echo json_encode($result_coupon_month['COUPON00006']) ?>,
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(153, 102, 255)'
                 ],
                 borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgb(153, 102, 255)',
                 ],
             },
-            {
-                label: '全站200',
-                data: [67, 89, 24, 13],
-                backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-            },
-            {
-                label: '全站200',
-                data: [67, 89, 24, 13],
-                backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-            },
-
-
         ]
     };
 

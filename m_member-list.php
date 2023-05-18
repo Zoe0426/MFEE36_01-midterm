@@ -135,5 +135,10 @@ if ($t_rows) {
         const keyword = document.querySelector("#keyword");
         location.href = `m_member_read.php?keyword=${keyword.value}`
     })
+
+    const toCouponSend_chart_php = document.querySelector("#toCouponSend_chart_php");
+    toCouponSend_chart_php.addEventListener("click", function() {
+        location.href = `m_member_chart.php?`
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
