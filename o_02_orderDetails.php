@@ -32,8 +32,11 @@ require './partsNOEDIT/connect-db.php' ?>
                     <input type="text" class="form-control mx-2 o-d-none" id="sbmobile" name="sbmobile">
                     <input type="text" class="form-control mx-2 o-d-none" id="sbmemsid" name="sbmemsid">
                 </div>
-                <div class="col-2">
-                    <button type="submit" class="btn btn-warning ">搜尋</button>
+                <div class="col-4 ps-4">
+                    <div class="d-flex align-items-start"><button type="submit" class="btn btn-warning ">搜尋</button>
+                        <div id=oPageBtns class="ms-3"></div>
+                    </div>
+
                 </div>
             </div>
             <div class="col-10 o-mem-table"> </div>
@@ -48,17 +51,98 @@ require './partsNOEDIT/connect-db.php' ?>
 <script>
     const oOrdersTable = document.getElementById('oOrdersTable');
     // ====顯示所有訂單明細====
-    function showAllOrders() {
-        fetch('o_api02_3_showOrders.php?page=1')
+    function showAllOrders(page) {
+        fetch(`o_api02_3_showOrders.php?page=${page}`)
             .then(r => r.json())
             .then(obj => {
                 tableAll(obj);
+                displayPageBtns(obj)
             })
             .catch(ex => {
                 console.log(ex);
             })
     }
-    showAllOrders();
+    showAllOrders(1);
+    // ====顯示頁數BTN====
+
+    function displayPageBtns(obj) {
+        console.log(obj);
+        let oPageBtns = document.querySelector("#oPageBtns");
+        //若原本有內容就清掉
+        if (oPageBtns.innerHTML) {
+            oPageBtns.innerHTML = "";
+        }
+        // //產出有頁碼的按鈕
+        let pageBtn = "";
+        let page = parseInt(obj.page);
+        let start = page - 2;
+        let size = page + 2;
+
+        for (let i = start; i <= size; i++) {
+            let btns = "";
+            if (i == page) {
+                btns = `<li class="page-item active" ><a class="page-link cPage">${i}</a></li>`;
+                pageBtn += btns;
+                continue;
+            } else if (i >= 1 && i <= obj.totalPage) {
+                btns = `<li class="page-item" ><a class="page-link cPage">${i}</a></li>`;
+                pageBtn += btns;
+            }
+        }
+        // //顯示頁碼按鈕
+        oPageBtns.innerHTML = `
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" ><a id="fPage" class="page-link"><i class="fa-solid fa-angles-left"></i></a></li>
+
+                <li class="page-item" >
+                <a id="pPage" class=" page-link">
+                <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                </li>
+                ${pageBtn}
+                <li class="page-item" ><a id="nPage" class="page-link"><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="page-item" ><a id="lPage" class="page-link"><i class="fa-solid fa-angles-right"></i></a></li>
+            </ul>
+        </nav>`;
+
+
+        //設定按鈕，監聽要顯示的頁面
+        let fPage = document.querySelector("#fPage");
+        let pPage = document.querySelector("#pPage");
+        let nPage = document.querySelector("#nPage");
+        let lPage = document.querySelector("#lPage");
+        let cPages = document.querySelectorAll(".cPage");
+
+        fPage.addEventListener("click", () => {
+            showAllOrders(1);
+        })
+        pPage.addEventListener("click", () => {
+            let p = parseInt(obj.page) - 1;
+            console.log(p);
+            if (p >= 1) {
+                showAllOrders(p);
+            }
+        })
+        nPage.addEventListener("click", () => {
+            let p = parseInt(obj.page) + 1;
+            let totalP = obj.totalPage;
+            console.log(p);
+            if (p <= totalP)
+                showAllOrders(page + 1);
+        })
+        lPage.addEventListener("click", () => {
+            let p = obj.totalPage;
+            showAllOrders(p);
+        })
+
+        for (let cpage of cPages) {
+            cpage.addEventListener("click", () => {
+                let p = (cpage.innerHTML);
+                showAllOrders(p);
+            })
+        }
+    }
     // ====取得訂單資料====
     function getMemOrd(e) {
         e.preventDefault();
@@ -186,23 +270,23 @@ require './partsNOEDIT/connect-db.php' ?>
         <tr style="display:none;"></tr>`;
         }
         allOrderTable.innerHTML = `<table class="table ocd">
-    <thead>
-        <tr>
-            <th scope="col">訂單編號</th>
-            <th scope="col">會員編號</th>
-            <th scope="col">訂單狀態</th>
-            <th scope="col">優惠券編號</th>
-            <th scope="col">寄送方式</th>
-            <th scope="col">寄送狀態</th>
-            <th scope="col">訂單成立時間</th>
-            <th scope="col"><i class="fa-regular fa-file-lines"></i></th>
-        </tr>
-    </thead>
-    <tbody>
-        ${items}
-    
-    </tbody>
-</table>`;
+            <thead>
+                <tr>
+                    <th scope="col">訂單編號</th>
+                    <th scope="col">會員編號</th>
+                    <th scope="col">訂單狀態</th>
+                    <th scope="col">優惠券編號</th>
+                    <th scope="col">寄送方式</th>
+                    <th scope="col">寄送狀態</th>
+                    <th scope="col">訂單成立時間</th>
+                    <th scope="col"><i class="fa-regular fa-file-lines"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                ${items}
+            
+            </tbody>
+        </table>`;
         oOrdersTable.append(allOrderTable);
 
     }

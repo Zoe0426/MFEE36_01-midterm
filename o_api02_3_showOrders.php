@@ -1,7 +1,7 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
-$perPage = 15; # 每頁最多幾筆
+$perPage = 10; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
 
 if ($page < 1) {
