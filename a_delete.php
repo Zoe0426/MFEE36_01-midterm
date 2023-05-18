@@ -2,7 +2,6 @@
 //require 'a_admin_required.php';
 require './partsNOEDIT/connect-db.php';
 
-
 $output = [
     'success' => false, #刪除成功或失敗的結果（MUST）
     'code' => 0,
