@@ -85,10 +85,12 @@ foreach ($stmt_restb_1 as $row) {
 }
 
 //預約總比數
+$book_sql = sprintf("SELECT COUNT(*) FROM rest_book");
+$book_row = $pdo->query($book_sql)->fetchColumn();
 
 //餐廳總比數
-$rest_sql = "SELECT COUNT(*) FROM rest_info";
-$rest_row = $pdo->query($rest_sql)->fetchAll();
+$rest_sql = sprintf("SELECT COUNT(*) FROM rest_info");
+$rest_row = $pdo->query($rest_sql)->fetchColumn();
 
 
 ?>
@@ -104,11 +106,15 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 
     .r_catg {
         font-weight: 800;
+        font-size: 28px;
+
     }
 
     .r_book {
         font-weight: 800;
         margin-top: 100px;
+        font-size: 28px;
+
     }
 
     .r_total1,
@@ -116,16 +122,18 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
         font-weight: 800;
         margin-top: 50px;
         margin-bottom: 10px;
+        font-size: 28px;
+
     }
 
     .r_content {
-        height: 80px;
+        height: 100px;
         background-color: #efefef;
         margin-bottom: 50px;
         padding: 30px;
         margin-right: 20px;
         border-radius: 8px;
-
+        font-size: 20px;
     }
 </style>
 
@@ -136,12 +144,12 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 <div class="container pt-5 pb-5">
     <div class="d-flex">
         <div class="vstack">
-            <h5 class="r_total1">餐廳總數</h5>
-            <div class="r_content" id="recordCount">200</div>
+            <h5 class="r_total1">平台餐廳總數</h5>
+            <div class="r_content" id="recordCount"></div>
         </div>
         <div class="vstack">
-            <h5 class="r_total2">平台與約總數</h5>
-            <div class="r_content">2000</div>
+            <h5 class="r_total2">平台預約總數</h5>
+            <div class="r_content" id="bookCount"></div>
         </div>
     </div>
     <div class="chartBox">
@@ -158,11 +166,16 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var recordCount = <?php echo $rest_row[0][0]; ?>;
-
-
+    var recordCount = <?= json_encode($rest_row, JSON_UNESCAPED_UNICODE) ?>;
+    var recordCountStr = recordCount.toString();
     var rContent = document.getElementById('recordCount');
-    rContent.innerText = '總紀錄：' + recordCount;
+    rContent.innerText = '總數：' + recordCountStr;
+
+
+    var bookCount = <?= json_encode($book_row, JSON_UNESCAPED_UNICODE) ?>;
+    var bookCountStr = bookCount.toString();
+    var bContent = document.getElementById('bookCount');
+    bContent.innerText = '總數：' + bookCountStr;
 
 
     var restaurantCounts = <?= json_encode($arr, JSON_UNESCAPED_UNICODE) ?>;
