@@ -48,16 +48,14 @@
                 </div>
             </li> -->
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt1">
                     會員
                 </a>
-                <div class="collapse w-100" id="collapseBt2">
+                <div class="collapse w-100" id="collapseBt1">
                     <a href="m_member-list.php" class="nav-link bg-transparent text-dark ">
                         - 會員資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
-                        - 商城資料
-                    </a>
+
                 </div>
             </li>
             <!-- 商城 -->
@@ -66,10 +64,10 @@
                     商城
                 </a>
                 <div class="collapse w-100" id="collapseBt2">
-                    <a href="./s_list.php" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    <a href="./s_list.php" class="nav-link bg-transparent text-dark">
                         - 商品管理
                     </a>
-                    <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark">
                         - 規格管理
                     </a>
                 </div>
