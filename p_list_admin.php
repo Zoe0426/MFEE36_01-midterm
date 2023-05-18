@@ -95,12 +95,12 @@ $r_post = $stmt->fetchAll();
     const postContent = document.querySelector('#post_content');
     const infoBar = document.querySelector('#infoBar');
 
-    console.log(adminName);
-    console.log(boardName);
-    console.log(postTitle);
-    console.log(adminName);
-    console.log(adminName);
-    console.log(adminName);
+    // console.log(adminName);
+    // console.log(boardName);
+    // console.log(postTitle);
+    // console.log(adminName);
+    // console.log(adminName);
+    // console.log(adminName);
     // 取得必填欄位
     const fields = document.querySelectorAll('form *[data-required="1"]');
 
@@ -167,7 +167,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            //location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            location.href = 'p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);

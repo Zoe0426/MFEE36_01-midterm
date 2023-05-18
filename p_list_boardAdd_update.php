@@ -7,9 +7,9 @@ $board_sid = isset($_GET['board_sid']) ? intval($_GET['board_sid']) : 0;
 $sql = "SELECT * FROM `post_board` WHERE `board_sid`={$board_sid}";
 
 $upDate = $pdo->query($sql)->fetch();
-print_r($upDate);
+// print_r($upDate);
 if (empty($upDate)) {
-  header('Location: p_readPost_ board.php');
+  header('Location: p_readPost_board.php');
   exit;
 }
 ?>
@@ -29,16 +29,16 @@ if (empty($upDate)) {
         <div class="card">
           <div class="card-body">
 
-            <h5 class="card-title">新增文章公告</h5>
+            <h5 class="card-title">編輯文章公告</h5>
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
                 <label for="board_name">看板名稱：</label>
-                <input type="text" name="board_name" id="board_name" data-required="1" value="<?= $upDate['board_name'] ?>">
+                <input type="text" name="board_name" id="board_name" data-required="1" value="<?= $upDate['board_name'] ?>" />
                 <div class="form-text"></div>
               </div>
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
-
-              <button type="submit" class="btn btn-primary">新增</button>
+              <input type="text" style="display:none" name="board_sid" value="<?= "$board_sid" ?>">
+              <button type="submit" class="btn btn-primary">確定</button>
             </form>
           </div>
         </div>
@@ -77,7 +77,7 @@ if (empty($upDate)) {
         const fd = new FormData(document.form1); //沒有外觀的表單
 
         //infobar的東西
-        fetch("p_addBoard-api.php", {
+        fetch("p_updateBoard_api.php", {
             method: "POST", //資料傳遞的方式
             body: fd, // Content-Type 省略, multipart/form-data
           })

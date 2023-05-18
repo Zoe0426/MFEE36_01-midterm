@@ -32,10 +32,10 @@ if (isset($_GET['adminName'])) {
         }
 
         if (isset($_GET['text']) && $_GET['text'] !== "") {
-            echo "text";
+            // echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            echo "notext";
+            // echo "notext";
             $sql = sprintf('SELECT * FROM `post_list_admin` pa
             JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
             WHERE pa.admin_name = ?
@@ -56,10 +56,10 @@ if (isset($_GET['adminName'])) {
             exit;
         }
         if (isset($_GET['text']) && $_GET['text'] !== "") {
-            echo "text";
+            // echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            echo "notext";
+            // echo "notext";
             $sql = sprintf('SELECT * FROM `post_list_admin` pa
             JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
             WHERE pa.admin_name = ?

@@ -172,7 +172,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            location.href = 'p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);
@@ -230,68 +230,5 @@ $r_post = $stmt->fetchAll();
       })
 
     }
-    // post_title.style.border = '1px solid #ccc';
-    // if (post_title.nextElementSibling) {
-    //   post_title.nextElementSibling.innerHTML = '';
-    // }
-
-
-
-    // // TODO: 檢查欄位資料
-
-    // // 檢查必填欄位
-    // for (let f of fields) {
-    //   if (!f.value) {
-    //     isPass = false;
-    //     f.style.border = '1px solid red';
-    //     f.nextElementSibling.innerHTML = '請填入資料'
-    //   }
-    // }
-
-
-    // if (isPass) {
-    //   const fd = new FormData(document.form1);
-    //   fetch("p_update_api.php", {
-    //       method: "POST",
-    //       body: fd, // Content-Type 省略, multipart/form-data
-    //     })
-    //     .then((r) => {
-    //       console.log(r.json());
-    //     })
-    //     .then((obj) => {
-    //       console.log(obj);
-
-    //       //跳轉頁面回去read
-    //       location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
-    //     });
-    // }
-
-
-    // //===新增主照片+API===
-    // const tempImg = document.querySelector("#tempImg");
-
-    // function postAddImg() {
-    //   //模擬點擊
-    //   tempImg.click();
-    // }
-    // tempImg.addEventListener("change", () => {
-    //   event.preventDefault();
-    //   const fd2 = new FormData(document.form1);
-    //   fetch("p_file_api.php", {
-    //       method: 'POST',
-    //       body: fd2,
-    //     }).then(r => r.json())
-    //     .then(obj => {
-    //       if (obj.filename) {
-    //         const postImg = document.querySelector('#postImg');
-    //         const post_img = document.querySelector('#post_img');
-    //         postImg.firstChild.src = `./postImg/${obj.filename}`;
-    //         postImg.firstChild.style.display = "block";
-    //         post_img.value = obj.filename;
-    //       }
-    //     }).catch(ex => {
-    //       console.log(ex);
-    //     })
-    // })
   </script>
   <?php include './partsNOEDIT/html-foot.php' ?>
