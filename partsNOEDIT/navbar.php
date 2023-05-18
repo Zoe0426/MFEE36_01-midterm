@@ -43,10 +43,10 @@
                     商城
                 </a>
                 <div class="collapse w-100" id="collapseBt2">
-                    <a href="./s_list.php" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    <a href="./s_list.php" class="nav-link bg-transparent text-dark">
                         - 商品管理
                     </a>
-                    <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt2">
+                    <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark">
                         - 規格管理
                     </a>
                 </div>

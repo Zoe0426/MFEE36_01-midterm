@@ -134,19 +134,22 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         <form class="pt-4 pb-4" name="s_Form3" onsubmit="checkForm(event)">
             <div class="d-flex">
                 <h2 class="me-auto">編輯商品</h2>
-                <div class="d-flex align-items-end">
+                <div class="d-flex align-items-center">
                     <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="pro_status" id="on" value="1" <?= $r_shopInfo['pro_status'] == 1 ? "checked" : "" ?>>
                         <label class="form-check-label" for="on">
                             上架
                         </label>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check me-5">
                         <input class="form-check-input" type="radio" name="pro_status" id="off" value="2" <?= $r_shopInfo['pro_status'] == 2 ? "checked" : "" ?>>
                         <label class="form-check-label" for="off">
                             下架
                         </label>
                     </div>
+                </div>
+                <div class="mt-3 s_allbtn mb-3">
+                    <button type="button" class="btn btn-warning" onclick="createSpec()">新增規格</button>
                 </div>
             </div>
             <div id="s_proOnWeb"><input type="text" name="pro_onWeb" value="<?= $r_shopInfo['pro_onWeb'] ?>"></div>
@@ -322,7 +325,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
             <div class="s_allbtn mt-3">
                 <button type="button" class="btn btn-secondary" id="s_allcancel">取消編輯</button>
-                <button type="button" class="btn btn-warning ms-3" onclick="checkForm(event)">確認編輯</button>
+                <button type="button" class="btn btn-primary ms-3" onclick="checkForm(event)">確認編輯</button>
                 <button type="button" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#s_alldel1">整筆刪除</button>
             </div>
         </form>
@@ -353,6 +356,9 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <script>
     const theDocFrag = document.createDocumentFragment();
 
+    function createSpec() {
+        location.href = 's_proSpecAdd.php'
+    }
     const allCancel = document.querySelector("#s_allcancel");
     allCancel.addEventListener('click', () => {
         location.href = 's_list.php'
@@ -366,7 +372,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             method: 'POST',
             body: fd,
         }).then(() => {
-            history.go(-1)
+            location.href = 's_list.php'
         })
     })
 
