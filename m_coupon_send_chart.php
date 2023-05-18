@@ -79,15 +79,19 @@ foreach ($stmt_coupon_num as $row) {
         <canvas id="myChart1"></canvas>
     </div>
     <div class="chartBox">
-        <h4>優惠使用數量</h4>
+        <h4>優惠券使用數量</h4>
         <canvas id="myChart2"></canvas>
+    </div>
+    <div class="chartBox">
+        <h4>優惠券使用時間</h4>
+        <canvas id="myChart3"></canvas>
     </div>
 </div>
 
 <?php include './partsNOEDIT/script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // 優惠券持有數量
+    // 優惠券持有數量 myChart1
     const ctx1 = document.getElementById('myChart1');
 
     new Chart(ctx1, {
@@ -104,10 +108,10 @@ foreach ($stmt_coupon_num as $row) {
             scales: {}
         }
     });
-    // 優惠券使用數量
+    // 優惠券使用數量 myChart2
 
-    const labels = '優惠券使用數量';
-    const data = {
+    const labels2 = '優惠券使用數量';
+    const data2 = {
         labels: <?php echo json_encode($result_coupon_name) ?>,
         datasets: [{
             label: '',
@@ -134,9 +138,9 @@ foreach ($stmt_coupon_num as $row) {
         }]
     };
 
-    const config = {
+    const config2 = {
         type: 'bar',
-        data: data,
+        data: data2,
         options: {
             scales: {
                 y: {
@@ -148,7 +152,123 @@ foreach ($stmt_coupon_num as $row) {
 
     var myChart = new Chart(
         document.getElementById("myChart2"),
-        config
+        config2
+    );
+
+    // 優惠券使用時間myChart3
+    const labels3 = ['一月', '二月', '三月'];
+    const data3 = {
+        labels: labels3,
+        datasets: [{
+                label: '全站100',
+                data: [23, 57, 47, 24],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+            {
+                label: '全站200',
+                data: [67, 89, 24, 13],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+            },
+
+
+        ]
+    };
+
+    const config3 = {
+        type: 'line',
+        data: data3,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    };
+
+    var myChart = new Chart(
+        document.getElementById("myChart3"),
+        config3
     );
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
