@@ -98,6 +98,7 @@ require './partsNOEDIT/connect-db.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
+    const oMemTb = document.querySelector(".o-mem-table");
     const send = document.createElement('div');
     const totalPriceInfo = document.querySelector('#totalPriceInfo')
 
@@ -135,6 +136,8 @@ require './partsNOEDIT/connect-db.php' ?>
                     const createOrderBtn = document.querySelector('.btn[data-bs-target="#oMsgToClient"]');
                     createOrderBtn.addEventListener('click', handleCreateOrder);
                     // showTotalPriceInfo();
+                    totalPriceInfo.style.display = "block";
+
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -149,7 +152,7 @@ require './partsNOEDIT/connect-db.php' ?>
     function handleCreateOrder() {
         let isPass = true;
         const InfoBar = document.querySelector("#oInfoBar");
-        const oMemTable = document.querySelector(".o-mem-table");
+        // const oMemTb = document.querySelector(".o-mem-table");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
         let prods = newodfd.getAll("prod[]").length;
         let acts = newodfd.getAll("act[]").length;
@@ -207,7 +210,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 if (obj.orderSuccess == true) {
                     oCartDisplay.innerHTML = '';
                     oPostPayDisplay.innerHTML = '';
-                    oMemTable.innerHTML = '';
+                    oMemTb.innerHTML = '';
                     // oGetItemsForm.remove(send);
                 }
             })
@@ -237,7 +240,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示會員資料====
     function showMemInfo(obj) {
-        let oMemTb = document.querySelector(".o-mem-table");
+        // let oMemTb = document.querySelector(".o-mem-table");
         oMemTb.innerHTML = `
                 <table class="table">
                         <thead class="bg-warning-subtle">
@@ -616,9 +619,9 @@ require './partsNOEDIT/connect-db.php' ?>
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
 
-
+<!-- 
 document.querySelector('input[name="coupon"]:checked')
 
 document.querySelectorAll('input[name="act[]"]:checked')
 
-document.querySelectorAll('input[name="prod[]"]:checked')
+document.querySelectorAll('input[name="prod[]"]:checked') -->
