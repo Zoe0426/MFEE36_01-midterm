@@ -392,23 +392,22 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
         //星期沒有填
 
-        // const weeklyContainer = document.querySelector('.week');
-        // const checkboxes = document.querySelectorAll('input[name="weekly[]"]');
+        const weeklyContainer = document.querySelector('.week');
+        const checkboxes = document.querySelectorAll('input[name="weekly[]"]');
 
-        // checkboxes.forEach((checkbox) => {
-        //     checkbox.addEventListener('change', () => {
-        //         const selectedCheckboxes = document.querySelectorAll('input[name="weekly[]"]:checked');
-        //         if (selectedCheckboxes.length === 0) {
-        //             isPass = false;
-        //             weeklyContainer.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請選擇星期!';
-        //             weeklyContainer.style.color = 'red';
-        //             weeklyContainer.style.paddingLeft = '10px';
-        //         } else {
-        //             isWeekdaySelected = true;
-        //             weeklyContainer.innerHTML = '';
-        //         }
-        //     });
-        // });
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                const selectedCheckboxes = document.querySelectorAll('input[name="weekly[]"]:checked');
+                if (selectedCheckboxes.length === 0) {
+                    isPass = false;
+                    weeklyContainer.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請選擇星期!';
+                    weeklyContainer.style.color = 'red';
+                    weeklyContainer.style.paddingLeft = '10px';
+                } else {
+                    weeklyContainer.innerHTML = '';
+                }
+            });
+        });
 
         //服務沒有填
 
