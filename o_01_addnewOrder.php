@@ -15,11 +15,12 @@ require './partsNOEDIT/connect-db.php' ?>
         display: none;
     }
 
-    .priceInfo {
+    .oPriceInfo {
         position: sticky;
         top: 100px;
         right: 0;
-        height: 500px;
+        height: 350px;
+        border: 2px dashed lightgray;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -45,7 +46,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <button type="submit" class="btn btn-warning ">搜尋</button>
                 </div>
             </div>
-            <div class="col-10 o-mem-table"> </div>
+            <div class="col-10 o-mem-table pt-3"> </div>
         </div>
     </form>
     <!-- =====顯示購物車內容===== -->
@@ -55,15 +56,15 @@ require './partsNOEDIT/connect-db.php' ?>
                 <div class="col-10">
                     <div id="oCartDisplay">
                     </div>
-                    <div id="oPostPayDisplay" class="container-fluid px-0">
+                    <div id="oPostPayDisplay" class="container-fluid px-0 bg-body-secondary">
                     </div>
                 </div>
-                <div id="totalPriceInfo" class="priceInfo col-2 ocd pt-2">
+                <div id="totalPriceInfo" class="oPriceInfo col-2 pt-2">
                     <div>
                         <p>小計</p>
                         <p id="subtotal">$</p>
                         <p>郵寄金額</p>
-                        <p id="post">$</p>
+                        <p id="post">$80元</p>
                         <p>優惠券金額</p>
                         <p id="couponPrice">$</p>
                         <p>總金額</p>
@@ -85,7 +86,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
-                        <button type="submit" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
+                        <button type="button" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
                     </div>
                 </div>
             </div>
@@ -239,7 +240,7 @@ require './partsNOEDIT/connect-db.php' ?>
         let oMemTb = document.querySelector(".o-mem-table");
         oMemTb.innerHTML = `
                 <table class="table">
-                        <thead>
+                        <thead class="bg-warning-subtle">
                             <tr>
                                 <th scope="col">會員編號</th>
                                 <th scope="col">姓名</th>
@@ -278,7 +279,7 @@ require './partsNOEDIT/connect-db.php' ?>
         }
 
         ost.innerHTML = `<table class="ocd table table-border table-striped">
-                <thead>
+                <thead class="bg-danger-subtle">
                     <tr>
                         <th scope="col"><input class="form-check-input" type="checkbox" name="shopAll" onchange="selectAllProducts()"></th>
                         <th scope="col">商品編號</th>
@@ -331,7 +332,7 @@ require './partsNOEDIT/connect-db.php' ?>
 
         oat.innerHTML = `
             <table class="ocd table table-border table-striped">
-                <thead>
+                <thead class="bg-success-subtle">
                     <tr>
                         <th scope="col"><input class="form-check-input" type="checkbox" name="actAll" onchange="selectAllActs()"></th>
                         <th scope="col">活動編號</th>
@@ -375,7 +376,7 @@ require './partsNOEDIT/connect-db.php' ?>
         }
         oct.innerHTML =
             `<table class="ocd table table-border table-striped">
-                        <thead>
+                        <thead class="bg-primary-subtle">
                             <tr>
                                 <th scope="col"></th>
                                 <th scope="col">優惠券編號</th>
@@ -394,11 +395,11 @@ require './partsNOEDIT/connect-db.php' ?>
     function showPostnPay(obj) {
         oPostPayDisplay.innerHTML = ""
         const opp = document.createElement('div');
-        opp.classList.add('ocd');
+        // opp.classList.add('ocd');
         opp.classList.add('px-3');
         opp.innerHTML =
             `<div class="postInfo row g-0 pt-3">
-                <h5 class="text-secondary mb-3">寄送資訊:</h5>
+                <h5 class="fw-bold mb-3">寄送資訊:</h5>
                 <div class="mb-3 col-5 px-0 me-3">
                     <label for="postName" class="form-label">收件人姓名</label>
                     <input type="text" class="form-control" id="postName" name="postName" value="${obj.name}">
@@ -423,7 +424,9 @@ require './partsNOEDIT/connect-db.php' ?>
         <div class="row pt-3 g-0">
             <div class="col-10">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
-                <button type="button" class="btn btn-warning mx-auto" data-bs-target="#oMsgToClient">成立訂單</button>
+                <div class="d-flex justify-content-start px-3">
+                <button type="button" class="btn btn-warning ms-auto" data-bs-target="#oMsgToClient">成立訂單</button>
+                </div>
             </div>
         </div>    
 
