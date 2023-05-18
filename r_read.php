@@ -147,7 +147,7 @@ if ($totalRows) {
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
                         </td>
-                        <td class="text-center align-middle"><a href="javascript: delete_it(<?= $r['rest_sid'] ?>)">
+                        <td class="text-center align-middle"><a href="javascript: delete_it(<?= $r['rest_sid'] ?>, '<?= $r['rest_name'] ?>')">
                                 <i class="fa-solid fa-trash-can text-danger "></i>
                             </a></td>
 
@@ -192,14 +192,33 @@ if ($totalRows) {
     </div>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // 刪除提示
-    function delete_it(sid) {
-        if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'r_delete_api.php?rest_sid=' + sid;
-        }
+    // function delete_it(sid) {
+    //     if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
+    //         location.href = 'r_delete_api.php?rest_sid=' + sid;
+    //     }
+    // }
+
+    function delete_it(sid, rest_name) {
+        Swal.fire({
+            title: '',
+            text: `是否要刪除 "編號${sid} ${rest_name}" 的資料?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#adb5bd',
+            confirmButtonText: '確定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = 'r_delete_api.php?rest_sid=' + sid;
+            }
+        });
     }
+
     // booking順序
     const basc = document.querySelector('#book_asc');
     let isAscending1 = true;
