@@ -50,7 +50,8 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oOrdersTable = document.getElementById('oOrdersTable');
-    // ====顯示所有訂單明細====
+    const oMemTb = document.querySelector(".o-mem-table");
+    // ====顯示所有訂單====
     function showAllOrders(page) {
         console.log(page);
         console.log('showAllOrders clicked');
@@ -66,7 +67,6 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     showAllOrders(1);
     // ====顯示頁數BTN====
-
     function displayPageBtns(obj) {
         console.log(obj);
         let oPageBtns = document.querySelector("#oPageBtns");
@@ -157,6 +157,7 @@ require './partsNOEDIT/connect-db.php' ?>
         const mobileInput = document.getElementById('sbmobile');
         const memsidInput = document.getElementById('sbmemsid');
         oOrdersTable.innerHTML = '';
+        oMemTb.innerHTML = "";
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
             const fd = new FormData(document.getElementById('oGetmem'));
             fetch('o_api02_1_getMemOrders.php', {
@@ -204,7 +205,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示會員資料====
     function showMemInfo(obj) {
-        let oMemTb = document.querySelector(".o-mem-table");
+
         let oMemDetails = '';
         if (obj.getBy == "memName") {
             oMemDetails = obj.name_orders[0];
