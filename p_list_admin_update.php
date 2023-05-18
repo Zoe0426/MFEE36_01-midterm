@@ -6,7 +6,7 @@ $post_sid = isset($_GET['post_sid']) ? intval($_GET['post_sid']) : 0;
 $sql = "SELECT * FROM `post_list_admin` WHERE `post_sid`={$post_sid}";
 
 //按下編輯原始表單內容會出現在表單上
-$upDate = $pdo->query($sql)->fetch(); //如果選到這一條就會post_sid=這個，如選到post_sid=180就會是這選到post_sid=180一整條的東西
+$upDate = $pdo->query($sql)->fetch(); //如果選到這一條就會post_sid=這個，如選到post_sid=180就會是這選到post_sid=180一整條的東西，像是 SELECT * FROM `post_list_admin` WHERE `post_sid`=180;
 // print_r($upDate);
 if (empty($upDate)) {
   header('Location: p_readPost_api.php');

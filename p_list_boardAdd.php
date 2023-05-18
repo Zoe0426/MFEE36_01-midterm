@@ -1,4 +1,5 @@
 <?php
+// require './partsNOEDIT/admin-require.php';
 require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
