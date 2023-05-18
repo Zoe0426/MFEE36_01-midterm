@@ -139,7 +139,7 @@
                 <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt7">
                     訂單系統
                 </a>
-                <div class="collapse w-100" id="collapseBt6">
+                <div class="collapse w-100" id="collapseBt7">
                     <a href="o_01_addnewOrder.php" class="nav-link bg-transparent text-dark ">
                         - 購物車系統
                     </a>
