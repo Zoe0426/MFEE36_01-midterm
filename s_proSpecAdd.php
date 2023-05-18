@@ -183,7 +183,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         infoBar.classList.add('alert-success');
                         infoBar.style.display = 'block'
                         setTimeout(() => {
-                            history.go(-1)
+                            location.href = 's_proAdd.php'
                         }, 2000)
                     } else {
                         infoBar.innerText = '新增失敗';
