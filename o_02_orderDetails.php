@@ -52,6 +52,8 @@ require './partsNOEDIT/connect-db.php' ?>
     const oOrdersTable = document.getElementById('oOrdersTable');
     // ====顯示所有訂單明細====
     function showAllOrders(page) {
+        console.log(page);
+        console.log('showAllOrders clicked');
         fetch(`o_api02_3_showOrders.php?page=${page}`)
             .then(r => r.json())
             .then(obj => {
@@ -75,8 +77,8 @@ require './partsNOEDIT/connect-db.php' ?>
         // //產出有頁碼的按鈕
         let pageBtn = "";
         let page = parseInt(obj.page);
-        let start = page - 2;
-        let size = page + 2;
+        let start = page - 1;
+        let size = page + 1;
 
         for (let i = start; i <= size; i++) {
             let btns = "";
@@ -84,7 +86,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 btns = `<li class="page-item active" ><a class="page-link cPage">${i}</a></li>`;
                 pageBtn += btns;
                 continue;
-            } else if (i >= 1 && i <= obj.totalPage) {
+            } else if (i >= 1 && i <= obj.totalPages) {
                 btns = `<li class="page-item" ><a class="page-link cPage">${i}</a></li>`;
                 pageBtn += btns;
             }
@@ -115,9 +117,11 @@ require './partsNOEDIT/connect-db.php' ?>
         let cPages = document.querySelectorAll(".cPage");
 
         fPage.addEventListener("click", () => {
+            console.log("f clicked");
             showAllOrders(1);
         })
         pPage.addEventListener("click", () => {
+            console.log("p clicked");
             let p = parseInt(obj.page) - 1;
             console.log(p);
             if (p >= 1) {
@@ -125,6 +129,7 @@ require './partsNOEDIT/connect-db.php' ?>
             }
         })
         nPage.addEventListener("click", () => {
+            console.log("n clicked");
             let p = parseInt(obj.page) + 1;
             let totalP = obj.totalPage;
             console.log(p);
@@ -132,6 +137,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 showAllOrders(page + 1);
         })
         lPage.addEventListener("click", () => {
+            console.log("l clicked");
             let p = obj.totalPage;
             showAllOrders(p);
         })
@@ -288,7 +294,7 @@ require './partsNOEDIT/connect-db.php' ?>
             </tbody>
         </table>`;
         oOrdersTable.append(allOrderTable);
-
+        console.log("TableAll finished");
     }
     // ====顯示指定訂單====
     function tableByOrderSid(obj) {
