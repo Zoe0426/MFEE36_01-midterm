@@ -24,6 +24,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <style>
     .s_specTable td:nth-child(2n) {
         background-color: #ffe0b2;
+
     }
 
     .s_specTable th {
@@ -33,12 +34,13 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
     .s_specTable {
         text-align: center;
-        width: 900px
+
+        table-layout: fixed;
     }
 
-    /* .s_specTable td {
-        width: auto;
-    } */
+    .s_specTable td {
+        width: 20%;
+    }
 
     .s_specTable td:hover {
         background-color: #f57f17;
@@ -49,7 +51,13 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     <div class="col-1"></div>
     <div class="col">
         <form class="pt-4" name="s_Form3" onsubmit="checkForm(event)">
-            <h2>新增產品規格</h2>
+            <div class="d-flex align-item-center">
+                <h2 class="me-auto pt-3 m-0">新增產品規格</h2>
+                <div class="mt-3 s_allbtn mb-3">
+                    <button type="submit" class="btn btn-primary">確認新增</button>
+                    <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
+                </div>
+            </div>
             <div class="row pb-3 mt-4" id="s_proDetBox">
                 <div class="col-10 mb-3 s_spec">
                     <div class="row">
@@ -60,7 +68,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                                 <?php foreach ($r_shopSpec as $r) : ?>
                                     <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
                                 <?php endforeach; ?>
-                                <option value="<?= count($r_shopSpec) + 1 ?>">新增</option>
+                                <option value="<?= count($r_shopSpec) + 1 ?>">自訂規格名稱</option>
                             </select>
                         </div>
                         <div class="col-4">
@@ -76,10 +84,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             <table class="table table-bordered s_specTable border-secondary">
             </table>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
-            <div class="mt-3 s_allbtn mb-3">
-                <button type="submit" class="btn btn-primary">確認新增</button>
-                <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
-            </div>
+
         </form>
 
 
@@ -261,7 +266,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         theTh.setAttribute('colspan', '5')
         //theTh.setAttribute("scope", "col")
         //theTh.classList.add('table-primary')
-        theTh.innerHTML = '目前已存在的' + arr[0].spec_name;
+        theTh.innerHTML = '現有' + arr[0].spec_name + '列表';
         theThr.append(theTh)
         theThead.append(theThr)
         theTable.append(theThead)

@@ -133,7 +133,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
         <form class="pt-4 pb-4" name="s_Form3" onsubmit="checkForm(event)">
             <div class="d-flex">
-                <h2 class="me-auto">新增商品</h2>
+                <h2 class="me-auto">編輯商品</h2>
                 <div class="d-flex align-items-end">
                     <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="pro_status" id="on" value="1" <?= $r_shopInfo['pro_status'] == 1 ? "checked" : "" ?>>
