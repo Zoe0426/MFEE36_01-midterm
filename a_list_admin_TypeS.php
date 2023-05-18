@@ -113,7 +113,7 @@ if ($totalRows) {
         <!-- 按照 名稱 搜尋 -->
         <div class="row mb-3 w-50">
             <div class="col-4">
-                <input type="search" class="form-control" id="a_keyword" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
+                <input type="search" class="form-control" id="a_keyword" placeholder="搜尋活動名稱" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
             </div>
             <div class="col-2">
                 <button type="submit" class="btn btn-primary" id="search">搜尋</button>
