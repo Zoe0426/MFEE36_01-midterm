@@ -88,7 +88,7 @@ if ($totalRows) {
         <table class="table table-bordered  table-striped  table-hover ">
             <thead>
                 <tr>
-                    <th class="bg-info-subtle py-3" scope="col">編號 <i class="fa-solid fa-caret-down ms-1 text-primary" id="asc"></i></th>
+                    <th class="bg-info-subtle py-3" scope="col">編號 <i class="asc fa-solid fa-caret-down ms-1 text-primary" id="asc"></i></th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳名稱</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳類別</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳電話</th>
@@ -97,7 +97,7 @@ if ($totalRows) {
                     <th class="bg-info-subtle py-3" scope="col">用餐時間</th>
                     <th class="bg-info-subtle py-3" scope="col">星期</th>
                     <th class="bg-info-subtle py-3" scope="col">人數上限</th>
-                    <th class="bg-info-subtle py-3" scope="col">預約次數 <i class="fa-solid fa-caret-down ms-1 text-primary" id="book_asc"></i></th>
+                    <th class="bg-info-subtle py-3" scope="col">預約次數 <i class="book_asc fa-solid fa-caret-down ms-1 text-primary" id="book_asc"></i></th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">細項</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">編輯</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">刪除</th>
@@ -184,6 +184,7 @@ if ($totalRows) {
 
     basc.addEventListener('click', function() {
         const apiUrlb = isAscending1 ? 'r_book_asc_api.php' : 'r_book_desc_api.php';
+        const caretIcon = document.querySelector('.book_asc');
 
 
         fetch(apiUrlb)
@@ -278,6 +279,9 @@ if ($totalRows) {
 
                         tbody.appendChild(tr);
                     });
+                    isAscending = !isAscending
+                    caretIcon.classList.toggle('fa-caret-up');
+                    caretIcon.classList.toggle('fa-caret-down');
                 } else {
                     console.error(obj.error);
                 }
@@ -296,7 +300,9 @@ if ($totalRows) {
 
     asc.addEventListener('click', function() {
         const apiUrl = isAscending ? 'r_sid_asc_api.php' : 'r_sid_desc_api.php';
-        const caretIcon = document.querySelector('.fa-caret-down');
+        const caretIcon = document.querySelector('.asc');
+
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(obj => {
@@ -305,11 +311,6 @@ if ($totalRows) {
                     const rows = obj.getData;
                     const tbody = document.querySelector('tbody');
                     tbody.innerHTML = '';
-
-
-
-
-
 
                     rows.forEach(row => {
                         const tr = document.createElement('tr');
@@ -393,6 +394,10 @@ if ($totalRows) {
 
                         tbody.appendChild(tr);
                     });
+                    isAscending = !isAscending
+                    caretIcon.classList.toggle('fa-caret-up');
+                    caretIcon.classList.toggle('fa-caret-down');
+
                 } else {
                     console.error(obj.error);
                 }
@@ -400,7 +405,6 @@ if ($totalRows) {
             .catch(ex => {
                 console.log(ex);
             })
-        isAscending = !isAscending;
 
     });
 

@@ -56,9 +56,9 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
     }
 
     #finalImg {
-        border-radius: 6px;
+        border-radius: 4px;
         height: 280px;
-        border: 2px dotted lightgray;
+        background-color: #efefef;
         padding: 0;
     }
 
@@ -97,6 +97,7 @@ $c = $stmt4->fetch(PDO::FETCH_ASSOC);
         <div class="row mb-4 px-3">
             <div class="col-3" onclick="restImg()" id="finalImg">
                 <img src="./r_img/<?= $c['img_name'] ?>" id="imginfo">
+
             </div>
             <input type="text" name="pro_img" id="pro_img" value="<?= $c['img_name'] ?>">
         </div>
