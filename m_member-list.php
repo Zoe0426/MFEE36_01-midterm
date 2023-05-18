@@ -37,7 +37,7 @@ if ($t_rows) {
 
     <div class="container">
         <!-- 頁碼 -->
-        <div class="row">
+        <div class="row py-3">
             <div class="col">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
@@ -84,7 +84,6 @@ if ($t_rows) {
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
                         <th scope="col">#</th>
                         <th scope="col">姓名</th>
                         <th scope="col">email</th>
@@ -92,16 +91,12 @@ if ($t_rows) {
                         <th scope="col">性別</th>
                         <th scope="col">寵物</th>
                         <th scope="col">會員等級</th>
-                        <th scope="col"><i class="fa-solid fa-eye"></i></th>
+                        <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($rows as $r) : ?>
                         <tr>
-                            <td><a href="javascript: delete_it(<?= $r['member_sid'] ?>)">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
-                            </td>
                             <td><?= $r['member_sid'] ?></td>
                             <td><?= $r['member_name'] ?></td>
                             <td><?= $r['member_email'] ?></td>
@@ -109,8 +104,8 @@ if ($t_rows) {
                             <td><?= $r['member_gender'] ?></td>
                             <td><?= $r['member_pet'] ?></td>
                             <td><?= $r['member_level'] ?></td>
-                            <td><a href="edit.php?sid=<?= $r['member_sid'] ?>">
-                                    <i class="fa-solid fa-eye"></i>
+                            <td><a href="m_member_update.php?member_sid=<?= $r['member_sid'] ?>">
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
                         </tr>

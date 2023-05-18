@@ -9,7 +9,6 @@ $stmt->execute();
 $r = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-print_r(date($r['coupon_expDate']));
 ?>
 
 <?php include './partsNOEDIT/html-head.php' ?>
