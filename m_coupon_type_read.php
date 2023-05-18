@@ -5,13 +5,17 @@ require './partsNOEDIT/connect-db.php';
 // $rows = $pdo->query($sql)->fetchAll();
 
 
-$coupon_sid = isset($_GET['coupon_sid']) ? $_GET['coupon_sid'] : '';
+$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+$sql_keyword = "SELECT * FROM `mem_coupon_type` WHERE `coupon_sid` LIKE '%$keyword%' OR `coupon_code` LIKE '%$keyword%' OR `coupon_name` LIKE '%$keyword%' OR `coupon_price` LIKE '%$keyword%' ORDER BY `coupon_sid` ASC";
 
-$sql_cupon_detail = "SELECT * FROM `mem_coupon_type` WHERE coupon_sid =:coupon_sid";
-$stmt_coupon_detail = $pdo->prepare($sql_cupon_detail);
-$stmt_coupon_detail->bindValue(':coupon_sid', $coupon_sid, PDO::PARAM_STR);
-$stmt_coupon_detail->execute();
-$r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
+// $sql_cupon_detail = "SELECT * FROM `mem_coupon_type` WHERE coupon_sid =:coupon_sid";
+// $stmt_coupon_detail = $pdo->prepare($sql_cupon_detail);
+// $stmt_coupon_detail->bindValue(':coupon_sid', $coupon_sid, PDO::PARAM_STR);
+// $stmt_coupon_detail->execute();
+// $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
+
+$stmt_keyword = $pdo->query($sql_keyword)->fetchAll();
+print_r($stmt_keyword);
 
 
 
@@ -28,12 +32,7 @@ print_r($r1);
 <div class="container">
     <div class="row">
         <div class="mb-3">
-            <label for="coupon_name" class="form-label">優惠券名稱</label>
-            <select name="coupon_sid" id="coupon_sid" data-required="1">
-
-                <option value="<?= $r1['coupon_sid'] ?> "><?= $r1['coupon_name'] ?></option>
-
-            </select>
+            <input type="text" placeholder="請輸入關鍵字" id="keyword">
             <div class="btn btn-primary" id="search">搜尋</div>
         </div>
         <table class="table table-bordered table-striped">
@@ -52,16 +51,16 @@ print_r($r1);
             <tbody>
 
                 <tr>
-                    <td><a href="javascript: delete_it('<?= $r1['coupon_sid'] ?>')">
+                    <td><a href="javascript: delete_it('<?= $stmt_keyword['coupon_sid'] ?>')">
                             <i class="fa-solid fa-trash-can"></i>
                         </a>
                     </td>
-                    <td><?= $r1['coupon_sid'] ?></td>
-                    <td><?= $r1['coupon_code'] ?></td>
-                    <td><?= $r1['coupon_name'] ?></td>
-                    <td><?= $r1['coupon_price'] ?></td>
-                    <td><?= $r1['coupon_startDate'] ?></td>
-                    <td><?= $r1['coupon_expDate'] ?></td>
+                    <td><?= $stmt_keyword['coupon_sid'] ?></td>
+                    <td><?= $stmt_keyword['coupon_code'] ?></td>
+                    <td><?= $stmt_keyword['coupon_name'] ?></td>
+                    <td><?= $stmt_keyword['coupon_price'] ?></td>
+                    <td><?= $stmt_keyword['coupon_startDate'] ?></td>
+                    <td><?= $stmt_keyword['coupon_expDate'] ?></td>
                     <td><a href="m_coupon_type_update.php?coupon_sid=<?= $r1['coupon_sid'] ?>">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>

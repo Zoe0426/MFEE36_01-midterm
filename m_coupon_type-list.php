@@ -25,13 +25,7 @@ $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
 <div class="container">
     <div class="row">
         <div class="mb-3">
-            <label for="coupon_name" class="form-label">優惠券名稱</label>
-            <select name="coupon_sid" id="coupon_sid" data-required="1">
-                <option value="">--請選擇--</option>
-                <?php foreach ($rows as $i) : ?>
-                    <option value="<?= $i['coupon_sid'] ?> "><?= $i['coupon_name'] ?></option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" placeholder="請輸入關鍵字" id="keyword">
             <div class="btn btn-primary" id="search">搜尋</div>
         </div>
         <table class="table table-bordered table-striped">
@@ -88,8 +82,8 @@ $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
 
     const search = document.querySelector("#search");
     search.addEventListener("click", function() {
-        const coupon_sid = document.querySelector("#coupon_sid");
-        location.href = `m_coupon_type_read.php?coupon_sid=${coupon_sid.value}`
+        const keyword = document.querySelector("#keyword");
+        location.href = `m_coupon_type_read.php?keyword=${keyword.value}`
     })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
