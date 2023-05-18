@@ -26,4 +26,4 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
 }
 
 header('Location: ' . $comeFrom);
-# 待加： 確認刪除成功，更改success訊息
+# 待加： 確認刪除成功，更改success

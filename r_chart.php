@@ -67,13 +67,28 @@ $arr[] = $stmt_catg_13;
 
 //餐廳預約數排名(前10)
 
-$sqlrestb_1 = "SELECT rest_sid, COUNT(book_sid) AS book_count
-FROM rest_book
-GROUP BY rest_sid
+$sqlrestb_1 = "SELECT ri.rest_name, COUNT(rb.book_sid) AS book_count
+FROM rest_book rb
+JOIN rest_info ri ON ri.rest_sid = rb.rest_sid
+GROUP BY ri.rest_name
 ORDER BY book_count DESC
-LIMIT 10;";
+LIMIT 6;";
+
 $stmt_restb_1 = $pdo->query($sqlrestb_1)->fetchAll();
-$arry[] = $stmt_restb_1;
+$bookCounts = array_column($stmt_restb_1, 'book_count');
+$arry = $bookCounts;
+$labels1 = array();
+
+foreach ($stmt_restb_1 as $row) {
+    $restName = $row['rest_name'];
+    $labels1[] = $restName;
+}
+
+//預約總比數
+
+//餐廳總比數
+$rest_sql = "SELECT COUNT(*) FROM rest_info";
+$rest_row = $pdo->query($rest_sql)->fetchAll();
 
 
 ?>
@@ -87,13 +102,29 @@ $arry[] = $stmt_restb_1;
         height: auto;
     }
 
-    .catg {
+    .r_catg {
         font-weight: 800;
     }
 
-    .book {
+    .r_book {
         font-weight: 800;
         margin-top: 100px;
+    }
+
+    .r_total1,
+    .r_total2 {
+        font-weight: 800;
+        margin-top: 50px;
+        margin-bottom: 10px;
+    }
+
+    .r_content {
+        height: 80px;
+        background-color: #efefef;
+        margin-bottom: 50px;
+        padding: 30px;
+        margin-right: 20px;
+        border-radius: 8px;
 
     }
 </style>
@@ -102,13 +133,23 @@ $arry[] = $stmt_restb_1;
 <?php include './partsNOEDIT/navbar.php' ?>
 
 
-<div class="container pt-5">
+<div class="container pt-5 pb-5">
+    <div class="d-flex">
+        <div class="vstack">
+            <h5 class="r_total1">餐廳總數</h5>
+            <div class="r_content" id="recordCount">200</div>
+        </div>
+        <div class="vstack">
+            <h5 class="r_total2">平台與約總數</h5>
+            <div class="r_content">2000</div>
+        </div>
+    </div>
     <div class="chartBox">
-        <h5 class="catg">餐廳類別</h5>
+        <h5 class="r_catg">餐廳類別</h5>
         <canvas id="myChart"></canvas>
     </div>
     <div class="">
-        <h5 class="book">餐廳預約</h5>
+        <h5 class="r_book">餐廳預約</h5>
         <canvas id="myChart2"></canvas>
     </div>
 
@@ -117,6 +158,13 @@ $arry[] = $stmt_restb_1;
 <?php include './partsNOEDIT/script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    var recordCount = <?php echo $rest_row[0][0]; ?>;
+
+
+    var rContent = document.getElementById('recordCount');
+    rContent.innerText = '總紀錄：' + recordCount;
+
+
     var restaurantCounts = <?= json_encode($arr, JSON_UNESCAPED_UNICODE) ?>;
     var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -128,34 +176,11 @@ $arry[] = $stmt_restb_1;
             label: '餐廳類別統計',
             data: restaurantCounts,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.4)',
+
                 'rgba(255, 159, 64, 0.4)',
-                'rgba(255, 205, 86, 0.4)',
-                'rgba(75, 192, 192, 0.4)',
-                'rgba(54, 162, 235, 0.4)',
-                'rgba(153, 102, 255, 0.4)',
-                'rgba(201, 203, 207, 0.4)',
-                'rgba(255, 99, 132, 0.4)',
-                'rgba(255, 159, 64, 0.4)',
-                'rgba(255, 205, 86, 0.4)',
-                'rgba(75, 192, 192, 0.4)',
-                'rgba(54, 162, 235, 0.4)',
-                'rgba(153, 102, 255, 0.4)'
             ],
             borderColor: [
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)',
-                'rgb(201, 203, 207)',
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)'
+                'rgb(255, 159, 64)'
             ],
             borderWidth: 1.5
         }]
@@ -173,9 +198,13 @@ $arry[] = $stmt_restb_1;
         }
     });
 
-    var bookCounts = <?= json_encode($arry, JSON_UNESCAPED_UNICODE) ?>;
+
+
+    var bookCounts = <?= json_encode($bookCounts, JSON_UNESCAPED_UNICODE) ?>;
     var ctx1 = document.getElementById('myChart2').getContext('2d');
-    const labels1 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    console.log(bookCounts);
+
+    const labels1 = <?= json_encode($labels1, JSON_UNESCAPED_UNICODE) ?>;
     const data1 = {
         labels: labels1,
         datasets: [{
@@ -187,11 +216,7 @@ $arry[] = $stmt_restb_1;
                 'rgba(255, 205, 86, 0.4)',
                 'rgba(75, 192, 192, 0.4)',
                 'rgba(54, 162, 235, 0.4)',
-                'rgba(153, 102, 255, 0.4)',
-                'rgba(201, 203, 207, 0.4)',
-                'rgba(255, 99, 132, 0.4)',
-                'rgba(255, 159, 64, 0.4)',
-                'rgba(255, 205, 86, 0.4)',
+                'rgba(153, 102, 255, 0.4)'
             ],
             borderColor: [
                 'rgb(255, 99, 132)',
@@ -199,11 +224,7 @@ $arry[] = $stmt_restb_1;
                 'rgb(255, 205, 86)',
                 'rgb(75, 192, 192)',
                 'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)',
-                'rgb(201, 203, 207)',
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)'
+                'rgb(153, 102, 255)'
             ],
             borderWidth: 1.5
         }]
@@ -211,7 +232,7 @@ $arry[] = $stmt_restb_1;
 
     var myChart2 = new Chart(ctx1, {
         type: 'bar',
-        data: data,
+        data: data1,
         options: {
             scales: {
                 y: {
