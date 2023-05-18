@@ -212,7 +212,7 @@
                             // infoBar.style.display = 'none';
 
                             //跳轉頁面回去read
-                            location.href = 'http://localhost:8888/MFEE36_01/a_list_admin_TypeS.php';
+                            location.href = 'a_list_admin_TypeS.php';
                         }, 1500);
 
 
