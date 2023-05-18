@@ -37,6 +37,7 @@ if (!empty($code) and !empty($name) and !empty($price) and !empty($startDate) an
         NOW(), NOW()
     )";
 
+
     $stmt2 = $pdo->prepare($sql);
     $stmt2->execute([
         $new_ord_sid,

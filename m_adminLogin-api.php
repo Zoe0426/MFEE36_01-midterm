@@ -33,5 +33,6 @@ if (!empty($_POST['account']) and !empty($_POST['password'])) {
         }
     }
 }
+
 header('Content-Type: application/json');
 echo json_encode($output, JSON_UNESCAPED_UNICODE);

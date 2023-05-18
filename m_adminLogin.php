@@ -32,6 +32,7 @@
     </div>
 </div>
 
+
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const infoBar = document.querySelector('#infoBar');

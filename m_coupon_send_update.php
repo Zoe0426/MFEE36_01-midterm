@@ -22,6 +22,7 @@ $r = $stmt->fetch(PDO::FETCH_ASSOC);
             <input type="text" class="form-control" id="coupon_code" aria-describedby="emailHelp" name="coupon_code" value="<?= $r['coupon_code'] ?>">
             <div id="form-text" class="form-text"></div>
         </div>
+
         <div class="mb-3">
             <label for="coupon_name" class="form-label">優惠券名稱</label>
             <input type="text" class="form-control" id="coupon_name" aria-describedby="emailHelp" name="coupon_name" value="<?= $r['coupon_name'] ?>">

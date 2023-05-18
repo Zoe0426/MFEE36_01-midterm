@@ -47,6 +47,7 @@ $r_coupon_name = $pdo->query($sql_coupon_name)->fetchAll();
             f.nextElementSibling.innerHTML = ''
         }
 
+
         let isPass = true; // 預設值是通過的
 
         // TODO: 檢查欄位資料
