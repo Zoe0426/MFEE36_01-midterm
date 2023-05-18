@@ -167,7 +167,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            //location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);

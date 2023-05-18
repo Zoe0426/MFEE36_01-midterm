@@ -19,7 +19,7 @@ if (isset($_GET['adminName'])) {
     $totalRows->bindValue(':adminName', $adminName, PDO::PARAM_STR);
     $totalRows->execute(); #總筆數
     $r = $totalRows->fetch(PDO::FETCH_NUM)[0];
-    print_r($r);
+    // print_r($r);
     //1. $pdo->query($p_sql)：使用 PDO 對象 $pdo 的 query 方法執行 SQL 查詢語句 $p_sql，並返回一個 PDOStatement 對象。
     //2. ->fetch(PDO::FETCH_NUM)：對 PDOStatement 對象調用 fetch 方法，以數字索引方式讀取該結果集的一行數據，並將其轉化為一個數組。因為在此處沒有指定讀取的欄位名稱，所以 PDO::FETCH_NUM 用於指示以數字索引的方式讀取數據。
     //3. [0]：將讀取到的數組的第一個元素（即第一列第一行的數據）取出，賦值給 $totalRows 變量。這個數值就是符合條件的數據總數。

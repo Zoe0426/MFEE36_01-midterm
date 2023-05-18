@@ -33,7 +33,7 @@ if (empty($upDate)) {
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
                 <label for="board_name">看板名稱：</label>
-                <input type="text" name="board_name" id="board_name" data-required="1" value="">
+                <input type="text" name="board_name" id="board_name" data-required="1" value="<?= $upDate['board_name'] ?>">
                 <div class="form-text"></div>
               </div>
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
@@ -102,7 +102,7 @@ if (empty($upDate)) {
             // }, 2000);
 
             //跳轉頁面回去read
-            location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_%20board.php';
+            location.href = 'p_readPost_board.php';
           })
           .catch(ex => {
             console.log(ex);
