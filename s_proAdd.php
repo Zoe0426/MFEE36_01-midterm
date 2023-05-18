@@ -85,7 +85,12 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         <div id="s_proDetTepImgBox"></div>
 
         <form class="pt-4" name="s_Form3" onsubmit="checkForm(event)">
-            <h2>新增商品</h2>
+            <div class="d-flex align-item-center">
+                <h2 class="me-auto pt-3 m-0">新增商品</h2>
+                <div class="mt-3 s_allbtn mb-3">
+                    <button type="button" class="btn btn-warning" onclick="createSpec()">新增規格</button>
+                </div>
+            </div>
             <div class="row pb-3 border-bottom">
                 <div class="col-5">
                     <div class="w-100 s_ImgBox" onclick="shopAddMainImg()" id="s_proImgBox"><img src="" id="s_imginfo">+</div>
@@ -234,6 +239,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const theDocFrag = document.createDocumentFragment();
+
+    function createSpec() {
+        location.href = 's_proSpecAdd.php'
+    }
 
     function cancelcreate() {
         history.go(-1)

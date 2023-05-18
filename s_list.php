@@ -65,6 +65,7 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
     <div class="row">
         <table id="s_form1" class="table table-bordered table-striped"> </table>
     </div>
+    <div class="row" id="s_result"></div>
     <div class="row">
         <nav id="nav"></nav>
     </div>
@@ -87,33 +88,47 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                 body: fd,
             }).then(r => r.json())
             .then(obj => {
-                let {
-                    perPage,
-                    page,
-                    totalRows,
-                    totalPages,
-                    rows
-                } = obj;
-                create(perPage, page, totalRows, totalPages, rows);
-                let cliK = document.querySelectorAll('.page-link')
-                for (let i = 0, max = cliK.length; i < max; i++) {
-                    cliK[i].addEventListener('click', () => {
-                        let k = cliK[i].innerHTML
-                        //console.log(isNaN(k))
-                        if (i == 0) {
-                            changePage(1)
-                        } else if (i == 1) {
-                            let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) - 1)
-                        } else if (i == cliK.length - 2) {
-                            let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) + 1)
-                        } else if (i == cliK.length - 1) {
-                            changePage(totalPages)
-                        } else {
-                            changePage(Number(k))
-                        }
-                    })
+                const theResult = document.querySelector('#s_result')
+                const theTable = document.querySelector('#s_form1')
+                const theNav = document.querySelector('#nav')
+                if (obj.message) {
+                    theResult.innerHTML = "";
+                    let {
+                        perPage,
+                        page,
+                        totalRows,
+                        totalPages,
+                        rows
+                    } = obj;
+                    create(perPage, page, totalRows, totalPages, rows);
+                    let cliK = document.querySelectorAll('.page-link')
+                    for (let i = 0, max = cliK.length; i < max; i++) {
+                        cliK[i].addEventListener('click', () => {
+                            let k = cliK[i].innerHTML
+                            //console.log(isNaN(k))
+                            if (i == 0) {
+                                changePage(1)
+                            } else if (i == 1) {
+                                let act = document.querySelector('.active').innerHTML
+                                changePage(Number(act) - 1)
+                            } else if (i == cliK.length - 2) {
+                                let act = document.querySelector('.active').innerHTML
+                                changePage(Number(act) + 1)
+                            } else if (i == cliK.length - 1) {
+                                changePage(totalPages)
+                            } else {
+                                changePage(Number(k))
+                            }
+                        })
+                    }
+                } else {
+                    theNav.innerHTML = ""
+                    theTable.innerHTML = ""
+                    const theH1 = document.createElement('h1')
+                    const theTxt = document.createTextNode("查無此項商品")
+                    theH1.append(theTxt);
+                    theResult.append(theH1)
+
                 }
 
             })
@@ -468,7 +483,7 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
 
         createPage();
 
-        console.log(`perPage:${perPage}, page:${page}, totalRows:${totalRows},totalPages:${totalPages}`)
+        //console.log(`perPage:${perPage}, page:${page}, totalRows:${totalRows},totalPages:${totalPages}`)
     }
 
     function changePage(pageNow) {

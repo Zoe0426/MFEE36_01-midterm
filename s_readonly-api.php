@@ -321,8 +321,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             </div>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
             <div class="s_allbtn mt-3">
-                <button type="button" class="btn btn-primary" onclick="backToList()">返回列表</button>
-                <button type="button" class="btn btn-warning ms-3" onclick="toEdit()">編輯商品</button>
+                <button type="button" class="btn btn-secondary" onclick="backToList()">返回列表</button>
+                <button type="button" class="btn btn-primary ms-3" onclick="toEdit()">編輯商品</button>
             </div>
         </form>
 

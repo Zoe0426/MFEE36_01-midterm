@@ -1,165 +1,63 @@
 <?php
 require './partsNOEDIT/connect-db.php';
 
-$perPage = 25;       #顯示幾筆資料
-$page = isset($_POST['page']) ? intval($_POST['page']) : 1;           #用戶要看第幾頁
-if ($page < 1) {
-    header('Location: ?page=1');
-    exit;
-};
+$output = [
+    'success' => false,
+    'postData' => $_POST,       #除錯用
+    'code' => 0,
+    'error' => ""
+];
 
-$searchC = isset($_POST['search_sid']) ? intval($_POST['search_sid']) : "";
-$searchW = "";
+$specSid = isset($_POST['spec_sid']) ? intval($_POST['spec_sid']) : 0;
+if ($specSid > 0) {
+    //目前大規格已經編到幾號了
+    $sql_maxSpecSidNow = "SELECT MAX(`spec_sid`) FROM `shop_spec`";
+    $r_maxSpecSidNow = $pdo->query($sql_maxSpecSidNow)->fetch(PDO::FETCH_NUM)[0];
 
-$sql_searchC = "";
+    $specDetName = htmlentities($_POST['specDet_name']);
 
-switch ($searchC) {
-    case 1:
-        $searchW = $_POST['search_word'];
-        $sql_searchC = "SELECT COUNT(*) 
-        FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_name` LIKE '%$searchW%'";
-        $sql_search = "SELECT * FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_name`LIKE '%{$searchW}%' ORDER BY p.`pro_sid` DESC";
-        break;
-    case 2:
-        $searchW = $_POST['search_word'];
-        $sql_searchC = "SELECT COUNT(*) 
-        FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`catDet_sid`='{$searchW}'";
-        $sql_search = "SELECT * FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`catDet_sid`='{$searchW}' ORDER BY p.`pro_sid` DESC ";
-        break;
-    case 3:
-        $searchW = $_POST['search_word'];
-        $sql_searchC = "SELECT COUNT(*) 
-        FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_for`='{$searchW}'";
-        $sql_search = "SELECT * FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_for`='{$searchW}' ORDER BY p.`pro_sid` DESC ";
-        break;
-    case 4:
-        $searchW = intval($_POST['search_word']);
-        $sql_searchC = "SELECT COUNT(*) 
-        FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE pd.`pro_forAge`='{$searchW}'";
-        $sql_search = "SELECT * FROM `shop_proDet` pd
-        JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND pd.`pro_forAge`='{$searchW}' ORDER BY p.`pro_sid` DESC";
-        break;
-    case 5:
-        $searchW = intval($_POST['search_word']);
-        $sql_searchC = "SELECT COUNT(*) 
-            FROM `shop_proDet` pd
-            JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_status`='{$searchW}'";
-        $sql_search = "SELECT * FROM `shop_proDet` pd
-            JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-            JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_status`='{$searchW}' ORDER BY p.`pro_sid` DESC";
-        break;
-};
+    //如果超出既有大編號，那就要新增大類別名稱
+    if ($specSid > $r_maxSpecSidNow) {
+        $specName = htmlentities($_POST['spec_name']);
+        $sql_intoSpec1 = "INSERT INTO `shop_spec`(
+        `spec_sid`, `specDet_sid`, `spec_name`, `specDet_name`
+        ) VALUES (
+        ?,1,?,?
+        )";
+        $stmt_intospec1 = $pdo->prepare($sql_intoSpec1);
+        $stmt_intospec1->execute([
+            $r_maxSpecSidNow + 1,
+            $specName,
+            $specDetName
+        ]);
+        $output['success'] = !!$stmt_intospec1->rowCount();
+    } else {
+        //新增至既有大規格
+        //1.先搜尋目前細項規格已編到幾號
+        $sql_checkSpecDetSidNow = "SELECT COUNT(*) FROM `shop_spec` WHERE `spec_sid` = {$specSid}";
+        $r_maxSpecDetSidNow = $pdo->query($sql_checkSpecDetSidNow)->fetch(PDO::FETCH_NUM)[0];
+        //2.查詢大規格名稱
+        $sql_checkSpecName = "SELECT `spec_name` FROM `shop_spec` WHERE `spec_sid` = {$specSid} GROUP BY `spec_name`";
+        $r_checkSpecName = $pdo->query($sql_checkSpecName)->fetchColumn();
 
-$totalRows = $pdo->query($sql_searchC)->fetch(PDO::FETCH_NUM)[0];
-
-
-if ($totalRows) {
-    $totalPages = ceil($totalRows / $perPage);
-    if ($page > $totalPages) {
-        header("Location: ?page=$totalPages");
-        exit;
-    };
-    $rows = $pdo->query($sql_search)->fetchAll();
-};
-// header('Content-Type: application/json');
-// print_r($rows);
-// exit;
-
-$filteredArray = array_map(function ($item) {
-    $catDetName = "";
-    $proFor = '';
-    $proForAge = "";
-    switch ($item['catDet_sid']) {
-        case "FE":
-            $catDetName = "飼料";
-            break;
-        case "CA":
-            $catDetName = "罐頭";
-            break;
-        case "SN":
-            $catDetName = "零食";
-            break;
-        case "HE":
-            $catDetName = "保健";
-            break;
-        case "DR":
-            $catDetName = "服飾";
-            break;
-        case "EA":
-            $catDetName = "餐具";
-            break;
-        case "OD":
-            $catDetName = "戶外用品";
-            break;
-        case "TO":
-            $catDetName = "玩具";
-            break;
-        case "CL":
-            $catDetName = "清潔";
-            break;
-        case "OT":
-            $catDetName = "其他";
-            break;
+        $sql_intoSpec2 = "INSERT INTO `shop_spec`(
+        `spec_sid`, `specDet_sid`, `spec_name`, `specDet_name`
+        ) VALUES (
+        ?,?,?,?
+        )";
+        $stmt_intospec2 = $pdo->prepare($sql_intoSpec2);
+        $stmt_intospec2->execute([
+            $specSid,
+            $r_maxSpecDetSidNow + 1,
+            $r_checkSpecName,
+            $specDetName
+        ]);
+        $output['success'] = !!$stmt_intospec2->rowCount();
     }
-    switch ($item['pro_for']) {
-        case "D":
-            $proFor = "狗";
-            break;
-        case "C":
-            $proFor = "貓";
-            break;
-        case "B":
-            $proFor = "皆可";
-            break;
-    }
-    switch ($item['pro_forAge']) {
-        case 1:
-            $proForAge = "幼年";
-            break;
-        case 2:
-            $proForAge = "成年";
-            break;
-        case 3:
-            $proForAge = "高齡";
-            break;
-        case 4:
-            $proForAge = "全齡";
-            break;
-    }
-    return [
-        '商品編號' => $item['pro_sid'],
-        '細項編號' => $item['proDet_sid'],
-        '商品類別' => $catDetName,
-        '適用對象' => $proFor,
-        '適用年齡' => $proForAge,
-        '商品名稱' => $item['pro_name'],
-        '商品價格' => number_format($item['proDet_price']),
-        '商品數量' => number_format($item['proDet_qty']),
-        '商品狀態' => $item['pro_status'] == 1 ? '上架中' : '下架中',
-        '最後編輯' => $item['pro_update']
-    ];
-}, $rows);
-
-// echo json_encode($filteredArray);
-
+} else {
+    $output['error'] = '沒有選到大規格';
+}
 
 
 header('Content-Type: application/json');
-echo json_encode([
-    'perPage' => $perPage,
-    'page' => $page,
-    'totalRows' => $totalRows,
-    'totalPages' => $totalPages,
-    'rows' => $filteredArray
-], JSON_UNESCAPED_UNICODE);
+echo json_encode($output, JSON_UNESCAPED_UNICODE);

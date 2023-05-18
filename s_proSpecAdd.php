@@ -23,27 +23,42 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
     .s_specTable td:nth-child(2n) {
-        background-color: #ffe0b2;
+        background-color: #cddef7;
 
     }
 
     .s_specTable th {
-        background-color: #f57f17;
-        color: white
+        background-color: #3B71CA;
+        color: white;
+        height: 40px;
+        font-size: 20px;
+        font-weight: 800;
+        padding: 0;
+        line-height: 40px;
     }
 
     .s_specTable {
         text-align: center;
-
         table-layout: fixed;
+        border: 1px solid #3B71CA
     }
 
     .s_specTable td {
         width: 20%;
+        height: 40px;
     }
 
     .s_specTable td:hover {
-        background-color: #f57f17;
+        background-color: #8ab1ed;
+        color: #fff;
+    }
+
+    #infoBar {
+        display: none
+    }
+
+    .form-text {
+        color: red
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -55,7 +70,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 <h2 class="me-auto pt-3 m-0">新增產品規格</h2>
                 <div class="mt-3 s_allbtn mb-3">
                     <button type="submit" class="btn btn-primary">確認新增</button>
-                    <button type="submit" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
+                    <button type="button" class="btn btn-danger ms-3" onclick="cancelcreate()">取消新增</button>
                 </div>
             </div>
             <div class="row pb-3 mt-4" id="s_proDetBox">
@@ -63,7 +78,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <div class="row">
                         <div class="col-4">
                             <label class="form-label">規格名稱</label>
-                            <select class="form-select s_spec_sid" name="spec_sid">
+                            <select class="form-select s_spec_sid" name="spec_sid" data-required="1">
                                 <option value="" selected disabled>--請選擇--</option>
                                 <?php foreach ($r_shopSpec as $r) : ?>
                                     <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
@@ -79,16 +94,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <div class="form-text"></div>
                 </div>
             </div>
-
-
             <table class="table table-bordered s_specTable border-secondary">
             </table>
             <div class="alert alert-danger" id="infoBar" role="alert"></div>
-
         </form>
-
-
-
     </div>
     <div class="col-1"></div>
 </div>
@@ -99,30 +108,71 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         history.go(-1)
     }
 
+    // const theput = document.querySelectorAll('.col-4 input')
+    // for (let a of theput) {
+    //     a.addEventListener('click', () => {
+    //         console.log(123)
+    //     })
+    // }
+    // theput.addEventListener('focus', () => {
+    //     console.log(123)
+    // })
+
     function checkForm(event) {
         event.preventDefault()
-        const filedType = document.querySelectorAll('form [data-required="1"]')
-
+        const filedSpec = document.querySelectorAll('form [data-required="1"]')
+        const filedSpecDet = document.querySelectorAll('form [data-required="2"]')
         let isPass = true;
 
         //恢復所有欄位的外觀
-        for (let f of filedType) {
+        for (let f of filedSpec) {
             f.style.border = '1px solid #CCC';
-            f.nextElementSibling.innerText = '';
+            f.closest(".row").nextElementSibling.innerText = '';
+        }
+        for (let f of filedSpecDet) {
+            f.style.border = '1px solid #CCC';
+            f.closest(".row").nextElementSibling.innerText = '';
         }
 
+        const theSpec = <?= json_encode($r_shopSpec, JSON_UNESCAPED_UNICODE) ?>;
+        const thespecDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
         //部分欄位皆必填
-        for (let f of filedType) {
+        for (let f of filedSpecDet) {
             if (!f.value) {
                 isPass = false;
                 f.style.border = '1px solid red';
-                f.nextElementSibling.innerText = '請輸入資料';
+                f.closest(".row").nextElementSibling.innerText = '請輸入資料';
+            }
+            for (let a of thespecDet) {
+                if (f.value == a.specDet_name) {
+                    isPass = false;
+                    f.style.border = '1px solid red';
+                    f.closest(".row").nextElementSibling.innerText = `"${f.value}"已存在`;
+                }
             }
         }
 
+        for (let f of filedSpec) {
+            if (!f.value) {
+                isPass = false;
+                f.style.border = '1px solid red';
+                f.closest(".row").nextElementSibling.innerText = '請輸入資料';
+            }
+            for (let a of theSpec) {
+                if (f.value == a.spec_name) {
+                    isPass = false;
+                    f.style.border = '1px solid red';
+                    f.closest(".row").nextElementSibling.innerText = `"${f.value}"已存在`;
+                }
+            }
+        }
+
+
+        // const specDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
+
         if (isPass) {
             const fd = new FormData(document.s_Form3);
-            fetch('s_proAdd-api.php', {
+            fetch('s_proSpecAdd-api.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())
@@ -133,7 +183,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         infoBar.classList.add('alert-success');
                         infoBar.style.display = 'block'
                         setTimeout(() => {
-                            location.href = 's_list.php'
+                            history.go(-1)
                         }, 2000)
                     } else {
                         infoBar.innerText = '新增失敗';
@@ -194,29 +244,41 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     //     supMIWSel.append(theDocFrag)
     // }
     //====================================
-
+    const theTable = document.querySelector('.s_specTable');
     //==================商品規格自動生成==================
     const specSel = document.querySelector('.s_spec_sid')
+    const counted = <?= json_encode(count($r_shopSpec)) ?>;
     specSel.addEventListener('change', () => {
-        const specSelId = specSel.value;
-        const theLabel = document.createElement('label')
-        theLabel.classList.add('form-label')
-        const theInput = document.createElement('input')
-        if (specSelId != 7) {
-            specSel.closest('.row').children[1].innerHTML = ""
+        const specSelId = specSel.value
+        const theLabel = document.createElement('label');
+        theLabel.classList.add('form-label');
+        const theInput = document.createElement('input');
+        if (specSelId <= counted) {
+            specSel.closest('.row').children[1].innerHTML = "";
             specSel.closest('.row').children[2].innerHTML = "";
             theLabel.textContent = "細項規格"
             theInput.setAttribute('name', 'specDet_name')
             theInput.setAttribute('placeholder', '請輸入細項名稱')
+            theInput.setAttribute('data-required', "2")
             theInput.classList.add('form-control')
             specSel.closest('.row').children[1].append(theLabel, theInput);
             createTable(specSelId)
+            let theput = document.querySelectorAll('.col-4 input')
+            for (let a of theput) {
+                a.addEventListener('focus', () => {
+                    console.log(a)
+                    a.style.border = '1px solid #CCC';
+                    a.closest(".row").nextElementSibling.innerText = ''
+                })
+            }
         } else {
             specSel.closest('.row').children[1].innerHTML = "";
+            theTable.innerHTML = ""
             theLabel.textContent = "空"
             theLabel.style.visibility = 'hidden'
             theInput.setAttribute('name', 'spec_name')
             theInput.setAttribute('placeholder', '請輸入新規格名稱')
+            theInput.setAttribute('data-required', "1")
             theInput.classList.add('form-control')
             specSel.closest('.row').children[1].append(theLabel, theInput);
             const theLabel1 = document.createElement('label')
@@ -226,13 +288,22 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             theInput1.setAttribute('name', 'specDet_name')
             theInput1.setAttribute('placeholder', '請輸入細項名稱')
             theInput1.classList.add('form-control')
+            theInput1.setAttribute('data-required', "2")
             specSel.closest('.row').children[2].append(theLabel1, theInput1);
+            let theput = document.querySelectorAll('.col-4 input')
+            for (let a of theput) {
+                a.addEventListener('focus', () => {
+                    console.log(a)
+                    a.style.border = '1px solid #CCC';
+                    a.closest(".row").nextElementSibling.innerText = ''
+                })
+            }
         };
     })
 
     function createTable(specSelId) {
         const theDocFrag = document.createDocumentFragment();
-        const theTable = document.querySelector('.s_specTable');
+
         theTable.innerHTML = "";
         const specDet = <?= json_encode($r_shopSpecDet, JSON_UNESCAPED_UNICODE) ?>;
         const arr = [];
@@ -259,7 +330,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 }
             })
         };
-        console.log(arr)
+        // console.log(arr)
         const theThead = document.createElement('thead')
         const theThr = document.createElement("tr")
         const theTh = document.createElement("th")
@@ -271,7 +342,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         theThead.append(theThr)
         theTable.append(theThead)
 
-        console.log(theTable)
+        // console.log(theTable)
 
 
         for (let i = 0, imax = arr.length; i < imax; i += 5) {
