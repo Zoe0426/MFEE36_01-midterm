@@ -1,4 +1,5 @@
 <?php
+require './partsNOEDIT/admin-require.php';
 require './partsNOEDIT/connect-db.php';
 $rows = [];
 $sql = "SELECT * FROM `mem_coupon_type`";

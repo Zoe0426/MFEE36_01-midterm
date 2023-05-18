@@ -27,8 +27,7 @@ $stmt_keyword = $pdo->query($sql_keyword)->fetch();
 <div class="container">
     <div class="row">
         <div class="mb-3">
-            <input type="text" placeholder="請輸入關鍵字" id="keyword">
-            <div class="btn btn-primary" id="search">搜尋</div>
+            <div class="btn btn-primary" id="toCouponType_list_php">回種類清單</div>
         </div>
         <table class="table table-bordered table-striped">
             <thead>
@@ -109,10 +108,10 @@ $stmt_keyword = $pdo->query($sql_keyword)->fetch();
         location.href = 'm_coupon_type_add.php';
     })
 
-    const search = document.querySelector("#search");
-    search.addEventListener("click", function() {
-        const coupon_sid = document.querySelector("#coupon_sid");
-        location.href = `m_coupon_type_read.php?coupon_sid=${coupon_sid.value}`
+
+    const toCouponType_list_php = document.querySelector("#toCouponType_list_php");
+    toCouponType_list_php.addEventListener("click", function() {
+        location.href = `m_coupon_type-list.php`
     })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

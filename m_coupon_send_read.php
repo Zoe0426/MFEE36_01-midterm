@@ -111,10 +111,6 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
 <div class="container">
     <div class="row">
         <div class="mb-3">
-            <input type="text" placeholder="請輸入關鍵字" id="keyword">
-            <div class="btn btn-primary" id="search">搜尋</div>
-        </div>
-        <div class="mb-3">
             <div class="btn btn-primary" id="toCouponSend_chart_php">看分析</div>
         </div>
         <nav aria-label="Page navigation example">
@@ -162,7 +158,7 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                     <th scope="col">會員編號</th>
                     <th scope="col">會員姓名</th>
                     <th scope="col">使用狀況</th>
-                    <th scope="col">使用狀況</th>
+                    <th scope="col">使用時間</th>
                     <th scope="col">新增時間</th>
                 </tr>
             </thead>

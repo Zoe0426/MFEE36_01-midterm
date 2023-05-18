@@ -1,6 +1,6 @@
 <?php
 # MVC
-
+require "./partsNOEDIT/connect-db.php";
 $perPage = 25;
 $page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
 if ($page < 1) {
@@ -11,35 +11,34 @@ if ($page < 1) {
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 
 # Get total number of rows
-$countSql = "SELECT COUNT(*) FROM mem_coupon_send AS cs 
-JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
-JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
-WHERE cs.coupon_sid LIKE '%$keyword%' 
-OR cs.member_sid LIKE '%$keyword%' 
-OR cs.coupon_status LIKE '%$keyword%' 
-OR ct.coupon_name LIKE '%$keyword%' 
-OR ct.coupon_price LIKE '%$keyword%' 
-OR mb.member_name LIKE '%$keyword%'";
+$countSql = "SELECT COUNT(*) FROM mem_member 
+WHERE member_sid LIKE '%$keyword%' 
+OR member_name LIKE '%$keyword%' 
+OR member_email LIKE '%$keyword%' 
+OR member_mobile LIKE '%$keyword%' 
+OR member_gender LIKE '%$keyword%' 
+OR member_pet LIKE '%$keyword%'
+OR member_level LIKE '%$keyword%'
+";
 $t_rows = $pdo->query($countSql)->fetchColumn();
 
 # Calculate the total number of pages
 $t_pages = ceil($t_rows / $perPage);
 
 # Fetch data for current page
-$sql = "SELECT cs.*,ct.coupon_name,coupon_price,mb.member_name FROM mem_coupon_send AS cs 
-JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
-JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
-WHERE cs.coupon_sid LIKE '%$keyword%' 
-OR cs.member_sid LIKE '%$keyword%' 
-OR cs.coupon_status LIKE '%$keyword%' 
-OR ct.coupon_name LIKE '%$keyword%' 
-OR ct.coupon_price LIKE '%$keyword%' 
-OR mb.member_name LIKE '%$keyword%' 
-ORDER BY cs.couponSend_sid DESC 
+$sql = "SELECT * FROM mem_member 
+WHERE member_sid LIKE '%$keyword%' 
+OR member_name LIKE '%$keyword%' 
+OR member_email LIKE '%$keyword%' 
+OR member_mobile LIKE '%$keyword%' 
+OR member_gender LIKE '%$keyword%' 
+OR member_pet LIKE '%$keyword%'
+OR member_level LIKE '%$keyword%' 
+ORDER BY member_sid ASC 
 LIMIT " . ($page - 1) * $perPage . ", $perPage";
 $rows = $pdo->query($sql)->fetchAll();
 
-
+// print_r($rows);
 
 ?>
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -55,12 +54,12 @@ $rows = $pdo->query($sql)->fetchAll();
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=1">
+                            <a class="page-link" href="?page=1<?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                                 <i class="fa-solid fa-angles-left"></i>
                             </a>
                         </li>
                         <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page - 1 ?>">
+                            <a class="page-link" href="?page=<?= $page - 1 ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                                 <i class="fa-solid fa-angle-left"></i>
                             </a>
                         </li>
@@ -68,60 +67,31 @@ $rows = $pdo->query($sql)->fetchAll();
                             if ($i >= 1 and $i <= $t_pages) :
                         ?>
                                 <li class="page-item <?= $i == $page ? "active" : "" ?>">
-                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                    <a class="page-link" href="?page=<?= $i ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>"><?= $i ?></a>
                                 </li>
                         <?php endif;
                         endfor; ?>
                         <li class="page-item <?= $t_pages == $page ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page + 1 ?>">
+                            <a class="page-link" href="?page=<?= $page + 1 ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                                 <i class="fa-solid fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="page-item <?= $t_pages == $page ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $t_pages ?>">
+                            <a class="page-link" href="?page=<?= $t_pages ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
                         </li>
                     </ul>
                 </nav>
             </div>
-            <!-- 篩選器 -->
-            <div class="col">
-                <div class="drop-box d-flex justify-content-start">
-                    <div class="dropdown me-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            會員等級
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">金牌</a></li>
-                            <li><a class="dropdown-item">銀牌</a></li>
-                            <li><a class="dropdown-item">銅牌</a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown me-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            寵物類別
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">狗</a></li>
-                            <li><a class="dropdown-item">貓</a></li>
-                            <li><a class="dropdown-item">其他</a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown me-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            性別
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">男</a></li>
-                            <li><a class="dropdown-item">女</a></li>
-                            <li><a class="dropdown-item">其他</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
+            <div class="mb-3">
+                <div class="btn btn-primary" id="toCouponSend_chart_php">看分析</div>
+            </div>
+            <div class="mb-3">
+                <div class="btn btn-primary" id="toMember_list_php">回會員資料</div>
+            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -174,7 +144,11 @@ $rows = $pdo->query($sql)->fetchAll();
         if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
             location.href = 'delete.php?sid=' + sid;
         }
-
     }
+
+    const toMember_list_php = document.querySelector("#toMember_list_php");
+    toMember_list_php.addEventListener("click", function() {
+        location.href = `m_member-list.php`
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

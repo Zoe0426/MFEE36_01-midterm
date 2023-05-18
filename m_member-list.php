@@ -135,5 +135,10 @@ if ($t_rows) {
         }
 
     }
+    const search = document.querySelector("#search");
+    search.addEventListener("click", function() {
+        const keyword = document.querySelector("#keyword");
+        location.href = `m_member_read.php?keyword=${keyword.value}`
+    })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

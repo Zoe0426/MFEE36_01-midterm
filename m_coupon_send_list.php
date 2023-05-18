@@ -1,4 +1,5 @@
 <?php
+require './partsNOEDIT/admin-require.php';
 require "./partsNOEDIT/connect-db.php";
 
 $perPage = 25; # 每頁最多幾筆
