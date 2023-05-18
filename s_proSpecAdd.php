@@ -105,7 +105,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     function cancelcreate() {
-        history.go(-1)
+        location.href = "s_proAdd.php"
     }
 
     // const theput = document.querySelectorAll('.col-4 input')

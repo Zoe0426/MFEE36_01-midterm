@@ -410,7 +410,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         infoBar.classList.add('alert-success');
                         infoBar.style.display = 'block';
                         setTimeout(() => {
-                            history.go(-1)
+                            location.href = 's_list.php'
                         }, 2000)
                     } else {
                         infoBar.innerText = '資料沒有編輯';
@@ -641,6 +641,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     }
     //====================================
 
+
     //==================商品規格自動生成==================
     function createProDetBox(k) {
         const spec = <?= json_encode($r_shopSpec, JSON_UNESCAPED_UNICODE) ?>;
@@ -649,7 +650,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         const specDetSel1 = document.querySelectorAll(".s_specDet_sid1")
         const specSel2 = document.querySelectorAll('.s_spec_sid2')
         const specDetSel2 = document.querySelectorAll(".s_specDet_sid2")
-
+        console.log(specSel2)
         for (let a = 0, amax = specSel1.length; a < amax; a++) {
             specSel1[a].addEventListener('change', () => {
                 const specSelId = specSel1[a].value;
@@ -659,6 +660,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 // while (specDetSel2[a].hasChildNodes()) {
                 //     specDetSel2[a].remove(specDetSel2[a].lastChild)
                 // }
+                console.log(a)
+                console.log(specSelId)
             })
         }
 
@@ -670,8 +673,8 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         }
 
         function createSpec2(specSelId, a) {
-            console.log(123)
-            //specSel2[a].removeAttribute('disabled')
+            //console.log(123)
+            specSel2[a].removeAttribute('disabled')
             specSel2[a].innerHTML = ""
             // while (specSel2[a].hasChildNodes()) {
             //     specSel2[a].remove(specSel2[a].lastChild)
@@ -696,6 +699,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             // removeChild(specDetSel2[index])
             createSpecDet(specSelId)
             specDetSel2[index].append(theDocFrag)
+            console.log(specDetSel2[index])
         }
 
         function createSpecDet1(specSelId, index) {
