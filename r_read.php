@@ -224,7 +224,7 @@ if ($totalRows) {
     let isAscending1 = true;
 
     basc.addEventListener('click', function() {
-        const apiUrlb = isAscending1 ? 'r_book_asc_api.php' : 'r_book_desc_api.php';
+        const apiUrlb = isAscending1 ? 'r_book_desc_api.php' : 'r_book_asc_api.php';
         const caretIcon = document.querySelector('.book_asc');
 
 
