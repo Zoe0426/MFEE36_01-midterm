@@ -26,7 +26,8 @@ if (!empty($_POST['searchBy'])) {
             FROM `ord_order` oo 
                 JOIN mem_member mm 
                 ON oo.member_sid = mm.member_sid 
-            WHERE oo.`order_sid`=?";
+            WHERE oo.`order_sid`=? 
+            ORDER BY oo.`modDt` DESC";
         $stm = $pdo->prepare($sqlorder);
         $stm->execute([$sbOrder]);
         $data = $stm->fetch();
@@ -54,7 +55,8 @@ if (!empty($_POST['searchBy'])) {
             FROM `ord_order` oo 
                 JOIN mem_member mm 
                 ON oo.member_sid = mm.member_sid 
-            WHERE mm.`member_name`=?";
+            WHERE mm.`member_name`=?
+            ORDER BY oo.`modDt` DESC";
         $stm = $pdo->prepare($sqlname);
         $stm->execute([$sbname]);
         $data = $stm->fetchAll();
@@ -73,7 +75,8 @@ if (!empty($_POST['searchBy'])) {
             FROM `ord_order` oo 
                 JOIN mem_member mm 
                 ON oo.member_sid = mm.member_sid 
-            WHERE mm.`member_mobile`=?";
+            WHERE mm.`member_mobile`=?
+            ORDER BY oo.`modDt` DESC";
         $stm = $pdo->prepare($sqlmobile);
         $stm->execute([$sbmobile]);
         $data = $stm->fetchAll();
@@ -92,7 +95,8 @@ if (!empty($_POST['searchBy'])) {
         FROM `ord_order` oo 
             JOIN mem_member mm 
             ON oo.member_sid = mm.member_sid 
-        WHERE mm.`member_sid`=?";
+        WHERE mm.`member_sid`=?
+        ORDER BY oo.`modDt` DESC";
         $stm = $pdo->prepare($sqlmem);
         $stm->execute([$sbmemsid]);
         $data = $stm->fetchAll();

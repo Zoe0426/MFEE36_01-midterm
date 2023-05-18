@@ -17,7 +17,12 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
             <div class="row g-0">
-                <p class="fs-5 fw-bold text-secondary">訂單管理系統</p>
+
+                <div class="d-flex align-items-start">
+                    <p class="fs-5 fw-bold text-secondary pe-3">訂單管理系統</p>
+                    <button type="button" class="btn btn-outline-info" id="allOrderBtn">所有訂單</button>
+                </div>
+
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">訂單編號</option>
@@ -51,10 +56,13 @@ require './partsNOEDIT/connect-db.php' ?>
 <script>
     const oOrdersTable = document.getElementById('oOrdersTable');
     const oMemTb = document.querySelector(".o-mem-table");
+    const allOrderBtn = document.querySelector('#allOrderBtn');
+    allOrderBtn.addEventListener('click', () => {
+        showAllOrders(1);
+    });
     // ====顯示所有訂單====
     function showAllOrders(page) {
-        // console.log(page);
-        // console.log('showAllOrders clicked');
+
         fetch(`o_api02_3_showOrders.php?page=${page}`)
             .then(r => r.json())
             .then(obj => {
@@ -447,7 +455,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     obj.adultQty == null ? adQty = 0 : adQty = obj.adultQty;
                     obj.childAmount == null ? kidAmount = 0 : kidAmount = obj.childAmount;
                     obj.childQty == null ? kidQty = 0 : kidQty = obj.childQty;
-                    dRowsTd += `<tr class="border border-dark">
+                    dRowsTd += `<tr class="border border-bottom border-dark">
                             <td>${rel_type}</td>
                             <td>${obj.rel_sid}</td>
                             <td>${obj.rel_seq_sid}</td>
@@ -481,10 +489,11 @@ require './partsNOEDIT/connect-db.php' ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="bg-body-tertiary">
+                                   ${dRowsTd}
+                                   <tr class="bg-body-tertiary">
                                     <td colspan="3" class="bg-white">姓名： <span class="fw-bold">${objectD.order_details[0].member_name}</span></td> 
                                     <td colspan="3" class="bg-white">電話： <span class="fw-bold">${objectD.order_details[0].member_mobile}</span></td>
-                                    <td colspan="6" class="bg-white">生日： <span class="fw-bold">${objectD.order_details[0].member_birth}</span></td>                                 
+                                    <td colspan="6" class="bg-white">郵寄費用： <span class="fw-bold">$${objectD.order_details[0].postAmount}</span></td>                                 
                                     </tr>
                                     <tr class="bg-body-tertiary">
                                     <td colspan="12" class="bg-white">地址：<span class="fw-bold">${objectD.order_details[0].postAddress}</span> </td>        
@@ -493,9 +502,6 @@ require './partsNOEDIT/connect-db.php' ?>
                                     <td colspan="4" class="bg-white">優惠券編號：<span class="fw-bold">${objectD.order_details[0].coupon_sid}</span> </td>        
                                     <td colspan="8" class="bg-white">優惠券金額：<span class="fw-bold">$${objectD.order_details[0].couponAmount}</span> </td>        
                                     </tr>
-                                    
-                                   ${dRowsTd}
-                                 
                                 </tbody>
                             </table>
                         </td>`;
