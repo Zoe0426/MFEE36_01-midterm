@@ -21,13 +21,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
     #rest_f_img,
     #pro_img {
         display: none;
+
     }
 
     #finalImg {
-        border-radius: 6px;
+        border-radius: 4px;
         height: 280px;
-        border: 2px dotted lightgray;
-        background-color: #ededed;
+        background-color: #efefef;
         padding: 0;
     }
 
@@ -82,6 +82,7 @@ $ritems = $pdo->query($rsql)->fetchAll();
                         <option value="<?= $i['catg_sid'] ?>"><?= $i['catg_name'] ?></option>
                     <?php endforeach ?>
                 </select>
+                <div class="form-text"></div>
             </div>
             <!-- <div class="col-3">
                 <label for="rest_menu" class="form-label">菜單上傳</label>
@@ -215,8 +216,11 @@ $ritems = $pdo->query($rsql)->fetchAll();
                 <div class="form-text"></div>
             </div>
             <!-- 用餐時間 -->
-            <div class="col-6 ">
-                <label for="" class="form-label">用餐時間</label>
+            <div class="col-6 " id="ml_time">
+                <div class="d-flex align-item-center">
+                    <label for="" class="form-label">用餐時間</label>
+                    <div class="form-text ml_text"></div>
+                </div>
                 <div class="d-flex pt-2">
                     <div class=" form-check me-5">
                         <input class="form-check-input" type="radio" name="ml_time" id="60min" value="60">
@@ -238,10 +242,14 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- 星期幾 -->
         <div class="row mt-4">
-            <label for="" class="form-label">星期幾</label>
+            <div class="d-flex align-items-center">
+                <label for="" class="form-label">星期幾</label>
+                <div class="form-text week"></div>
+            </div>
             <div class="d-flex pt-2">
                 <div class="form-check me-5">
                     <input class="form-check-input" type="checkbox" value="0" id="sunday" name="weekly[]">
@@ -293,9 +301,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
     <!-- 服務/規範 -->
 
     <div class="mt-2 pt-4 mb-4 px-3">
-        <label for="" class="form-label">
-            <h3>服務項目</h3>
-        </label>
+        <div class="d-flex">
+            <label for="" class="form-label">
+                <h3>服務項目</h3>
+            </label>
+            <div class="form-text svc_items"></div>
+        </div>
         <div class="d-flex ">
             <?php foreach ($sitems as $k => $j) : ?>
                 <div class="form-check me-5">
@@ -309,9 +320,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
     </div>
 
     <div class="mb-3 mt-5 pt-2 px-3">
-        <label for="" class="form-label">
-            <h3>攜帶規則</h3>
-        </label>
+        <div class="d-flex">
+            <label for="" class="form-label">
+                <h3>攜帶規則</h3>
+            </label>
+            <div class="form-text rule_items"></div>
+        </div>
         <div class="d-flex ">
             <?php foreach ($ritems as $k => $r) : ?>
                 <div class="form-check me-5">
@@ -340,6 +354,8 @@ $ritems = $pdo->query($rsql)->fetchAll();
         const fields = document.querySelectorAll('form *[data-required="1"]');
         const name = document.querySelector('#rest_name');
         const catg = document.querySelector('#catg_sid');
+        const selectedOption = catg.options[catg.selectedIndex];
+        const selectedValue = selectedOption.value;
         const phone = document.querySelector('#rest_phone');
         const address = document.querySelector('#rest_address');
         const info = document.querySelector('#rest_info');
@@ -351,9 +367,67 @@ $ritems = $pdo->query($rsql)->fetchAll();
         const n_end = document.querySelector('#n_end');
         const infoBar = document.querySelector('#infoBar');
 
-
-
         let isPass = true;
+
+
+
+        //用餐時間沒有填
+        const mlTimeContainer = document.querySelector('.ml_text');
+        const mlTimeRadios = document.querySelectorAll('input[name="ml_time"]');
+        let isMlTimeSelected = false;
+
+        mlTimeRadios.forEach(radio => {
+            if (radio.checked) {
+                isMlTimeSelected = true;
+            }
+        });
+
+        if (!isMlTimeSelected) {
+            isPass = false;
+            mlTimeContainer.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請選擇用餐時間';
+            mlTimeContainer.style.color = 'red';
+            mlTimeContainer.style.paddingLeft = '10px';
+        }
+
+
+        //星期沒有填
+
+        const weeklyContainer = document.querySelector('.week');
+        const checkboxes = document.querySelectorAll('input[name="weekly[]"]');
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                const selectedCheckboxes = document.querySelectorAll('input[name="weekly[]"]:checked');
+                if (selectedCheckboxes.length === 0) {
+                    isPass = false;
+                    weeklyContainer.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請選擇星期!';
+                    weeklyContainer.style.color = 'red';
+                    weeklyContainer.style.paddingLeft = '10px';
+                } else {
+                    weeklyContainer.innerHTML = '';
+                }
+            });
+        });
+
+        //服務沒有填
+
+        // const svcItemsContainer = document.querySelector('.svc_items');
+        // const checkboxes = document.querySelectorAll('input[name="rest_svc[]"]');
+
+
+        // checkboxes.forEach((checkbox) => {
+        //     checkbox.addEventListener('change', () => {
+        //         const selectedCheckboxes = document.querySelectorAll('input[name="rest_svc[]"]:checked');
+        //         if (selectedCheckboxes.length === 0) {
+        //             isPass = false;
+        //             svcItemsContainer.innerHTML = '<i class="fas fa-exclamation-circle"></i> 请选择服务项目！';
+        //             svcItemsContainer.style.color = 'red';
+        //         } else {
+        //             isSvcItemSelected = true;
+        //             svcItemsContainer.innerHTML = '';
+        //         }
+        //     });
+        // });
 
         for (let f of fields) {
             f.style.border = '1px solid #ccc';
@@ -362,6 +436,11 @@ $ritems = $pdo->query($rsql)->fetchAll();
 
         name.style.border = '1px solid #ccc';
         name.nextElementSibling.innerHTML = '';
+
+
+        catg.style.border = '1px solid #ccc';
+        catg.nextElementSibling.innerHTML = '';
+
 
         //完全沒有輸入的情況
         for (let f of fields) {
@@ -375,6 +454,18 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     block: 'center'
                 });
             }
+        }
+        //餐廳類別沒有篩選
+
+        if (selectedValue == "") {
+            isPass = false;
+            catg.style.border = '1px solid red';
+            catg.nextElementSibling.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請選擇餐廳類別!';
+            catg.nextElementSibling.style.color = 'red';
+            catg.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
 
         // 餐廳名稱格式
