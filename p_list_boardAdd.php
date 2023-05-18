@@ -10,11 +10,11 @@ require './partsNOEDIT/connect-db.php' ?>
 
 <?php include './partsNOEDIT/navbar.php' ?>
 
-<div class="col-auto col-md-10 mt-3">
-  <div class="container">
+<div class="col-auto col-md-10 mt-5">
+  <div class="container mt-5">
     <div class="row">
       <div class="col-6">
-        <div class="card">
+        <div class="card mt-3">
           <div class="card-body">
 
             <h5 class="card-title">新增文章公告</h5>

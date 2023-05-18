@@ -8,7 +8,7 @@ $output = [
     'error' => [],
 ];
 
-if (!empty($_POST['post_title']) and !empty($_POST['post_sid'])) { #若符合某些條件，則可以往下走
+if (!empty($_POST['post_title']) and !empty($_POST['post_sid']) and !empty($_POST['board_sid'])) { #若符合某些條件，則可以往下走
 
     $isPass = true;
     #TODO:檢查欄位資料，判斷格式錯，isPass設為false (MUST)
@@ -37,7 +37,7 @@ if (!empty($_POST['post_title']) and !empty($_POST['post_sid'])) { #若符合某
             $_POST['post_sid'],
         ]);
 
-        $output['success'] = $stmt->rowCount();
+        $output['success'] = !!$stmt->rowCount();
     }
 }
 

@@ -45,7 +45,7 @@ if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，
     <div class="p_readHead">
         <div class="row p_page">
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
+                <ul class="pagination mt-3">
                     <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
                         <a class="page-link" href="?page=1">
                             <i class="fa-solid fa-angles-left"></i>
@@ -79,46 +79,44 @@ if ($totalRows) { //判斷符合條件的數據總數 $totalRows 是否存在，
         </div>
         <div class="p_search">
             <!-- <label for="search">關鍵字搜尋：</label> -->
-            <div class="input-group flex-nowrap">
+            <div class="input-group flex-nowrap w-100">
                 <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="search" class="form-control" id="keyword" placeholder="關鍵字查詢" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
+                <input type="search" class="form-control col-xs-4" id="keyword" placeholder="關鍵字查詢" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>">
+                <button type="submit" class="p_searchBtn btn btn-warning" id="search">搜尋</button>
             </div>
-            <!-- <input type="search" id="keyword" placeholder="" style="height:28px" value="<?= isset($_GET['text']) ? $_GET['text'] : "" ?>"> -->
-
-        </div>
-        <div>
-            <button type="submit" class="p_searchBtn btn btn-warning" id="search">搜尋</button>
         </div>
 
     </div>
     <div class="row">
-        <table class="table table-bordered table-striped" id="post-list">
-            <thead>
-                <tr>
-                    <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
-                    <th scope="col">看板編號</th>
-                    <th scope="col">看板名稱</th>
-                    <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($rows as $r) : ?>
+        <div class="container">
+            <table class="table table-bordered table-striped mt-3" id="post-list">
+                <thead>
                     <tr>
-                        <td><a href="javascript: p_delete(<?= $r['board_sid'] ?>)">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </a></td>
-                        <td><?= $r['board_sid'] ?></td>
-                        <td><?= $r['board_name'] ?></td>
-                        <td><a href="p_list_boardAdd_update.php?board_sid=<?= $r['board_sid'] ?>">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
+                        <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
+                        <th scope="col">看板編號</th>
+                        <th scope="col">看板名稱</th>
+                        <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows as $r) : ?>
+                        <tr>
+                            <td><a href="javascript: p_delete(<?= $r['board_sid'] ?>)">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a></td>
+                            <td><?= $r['board_sid'] ?></td>
+                            <td><?= $r['board_name'] ?></td>
+                            <td><a href="p_list_boardAdd_update.php?board_sid=<?= $r['board_sid'] ?>">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
 
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

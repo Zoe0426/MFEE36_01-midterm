@@ -34,16 +34,17 @@ $r_post = $stmt->fetchAll();
 // print_r($r_post);
 // var_dump($r_post);
 ?>
-<div class="col-auto col-md-10 mt-3">
-  <div class="container">
+<div class="col-auto col-md-10 mt-5">
+  <div class="container p-form mt-5">
     <div class="row">
       <div class="col-6">
-        <div class="card">
+        <div class="card mt-3">
           <div class="card-body">
 
             <h5 class="card-title">編輯文章公告</h5>
             <form name="form1" onsubmit="checkForm(event)">
               <div class="mb-3">
+                <input type="text" style="display:none" name="post_sid" value="<?= "$post_sid" ?>">
                 <label for="admin_name">管理者名稱：</label>
                 <select name="admin_name" id="admin_name" data-required="1">
                   <option selected value="--請選擇--">--請選擇--</option>
@@ -57,8 +58,8 @@ $r_post = $stmt->fetchAll();
                 <div class="form-text"></div>
               </div>
               <div class="mb-3">
-                <label for="board_name">看板：</label>
-                <select name="board_name" id="board_name" data-required="1">
+                <label for="board_sid">看板：</label>
+                <select name="board_sid" id="board_sid" data-required="1">
                   <?php foreach ($r_post as $r) : ?>
                     <!-- <option selected value="</option> -->
                     <option value="<?= $r['board_sid'] ?>" <?= $upDate['board_sid'] == $r['board_sid'] ? "selected" : "" ?>> <?= $r['board_name'] ?></option>
@@ -80,7 +81,6 @@ $r_post = $stmt->fetchAll();
                 <textarea name="post_content" id="post_content" cols="30" rows="10" data-required="1"><?= $upDate['post_content'] ?></textarea>
                 <div class="form-text"></div>
               </div>
-              <!-- 這個需要隱藏，這是上傳圖片用的form -->
               <div class="mb-3">
                 <label for="file" class="form-label">檔案：</label>
                 <input type="file" name="file" accept="image/jpeg" id="file">
@@ -88,7 +88,7 @@ $r_post = $stmt->fetchAll();
 
               <div class="alert alert-danger" role="alert" id="infoBar" style="display: none"></div>
 
-              <button type="submit" class="btn btn-primary">新增</button>
+              <button type="submit" class="btn btn-primary">確定</button>
             </form>
           </div>
         </div>
@@ -99,7 +99,7 @@ $r_post = $stmt->fetchAll();
   <?php include './partsNOEDIT/script.php' ?>
   <script>
     const admin_name = document.querySelector('#admin_name');
-    const board_name = document.querySelector('#board_name');
+    const board_sid = document.querySelector('#board_sid');
     const post_title = document.querySelector('#post_title');
     const post_content = document.querySelector('#post_content');
     const infoBar = document.querySelector('#infoBar');
@@ -137,17 +137,17 @@ $r_post = $stmt->fetchAll();
         admin_name.nextElementSibling.innerHTML = '請選擇';
       }
 
-      if (board_name.value === "--請選擇--") {
+      if (board_sid.value === "--請選擇--") {
         isPass = false;
-        board_name.style.border = '1px solid red';
-        board_name.nextElementSibling.innerHTML = '請選擇';
+        board_sid.style.border = '1px solid red';
+        board_sid.nextElementSibling.innerHTML = '請選擇';
       }
 
       if (isPass) {
         const fd = new FormData(document.form1); //沒有外觀的表單
 
         //infobar的東西
-        fetch("p_addPost-api.php", {
+        fetch("p_update_api.php", {
             method: "POST",
             body: fd, // Content-Type 省略, multipart/form-data
           })
@@ -159,12 +159,12 @@ $r_post = $stmt->fetchAll();
             if (obj.success) {
               infoBar.classList.remove("alert-danger");
               infoBar.classList.add("alert-success");
-              infoBar.innerHTML = "新增成功";
+              infoBar.innerHTML = "編輯成功";
               infoBar.style.display = "block";
             } else {
               infoBar.classList.remove("alert-success");
               infoBar.classList.add("alert-danger");
-              infoBar.innerHTML = "新增失敗";
+              infoBar.innerHTML = "編輯失敗";
               infoBar.style.display = "block";
             }
             // setTime(() => {
@@ -178,7 +178,7 @@ $r_post = $stmt->fetchAll();
             console.log(ex);
             infoBar.classList.remove('alert-success');
             infoBar.classList.add('alert-danger');
-            infoBar.innerHTML = '新增發生錯誤';
+            infoBar.innerHTML = '編輯發生錯誤';
             infoBar.style.display = 'block';
             // setTimeout(() => {
             //     infoBar.style.display = 'none';
@@ -198,7 +198,7 @@ $r_post = $stmt->fetchAll();
           event.target.nextElementSibling.textContent = "請選擇";
         }
       })
-      board_name.addEventListener('input', (event) => {
+      board_sid.addEventListener('input', (event) => {
         if (event.target.value != "--請選擇--") {
           event.target.style.border = '1px solid #ccc';
           event.target.nextElementSibling.textContent = "";
