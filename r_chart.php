@@ -126,14 +126,19 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
 
     }
 
-    .r_content {
+    .r_content1,
+    .r_content2 {
         height: 90px;
-        background-color: rgba(255, 205, 86, 0.2);
+        background-color: #FFF7D4;
+        border: 2px solid #FFE194;
         margin-bottom: 50px;
         padding: 30px;
-        margin-right: 20px;
         border-radius: 6px;
         font-size: 20px;
+    }
+
+    .r_content1 {
+        margin-right: 40px;
     }
 </style>
 
@@ -141,15 +146,15 @@ $rest_row = $pdo->query($rest_sql)->fetchColumn();
 <?php include './partsNOEDIT/navbar.php' ?>
 
 
-<div class="container pt-5 pb-5">
+<div class="r-con container pt-5 pb-5 ">
     <div class="d-flex">
         <div class="vstack">
             <h5 class="r_total1">平台餐廳總數</h5>
-            <div class="r_content vertical-middle" id="recordCount"></div>
+            <div class="r_content1 vertical-middle" id="recordCount"></div>
         </div>
         <div class="vstack">
             <h5 class="r_total2">平台預約總數</h5>
-            <div class="r_content vertical-middle" id="bookCount"></div>
+            <div class="r_content2 vertical-middle" id="bookCount"></div>
         </div>
     </div>
     <div class="chartBox">

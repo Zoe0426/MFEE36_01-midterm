@@ -50,6 +50,28 @@ if ($totalRows) {
         width: 100%;
         padding: 0 40px;
     }
+
+    .r_th {
+        background-color: #FFF7D4 !important;
+    }
+
+    .r_underline {
+        border-bottom: 2.5px solid #FFD95A;
+    }
+
+    .asc,
+    .book_asc {
+        color: #FFB84C;
+        cursor: pointer;
+    }
+
+    /* .r_thover:hover {
+        background-color: #ffefb3 !important;
+    } */
+
+    /* .r_table {
+        border: 1px solid #B7C4CF;
+    } */
 </style>
 
 <div class="t_row pt-4">
@@ -74,7 +96,7 @@ if ($totalRows) {
             </div>
         </form>
         <form name="reset" onsubmit="checkForm1(event)">
-            <button type="submit" class="search btn btn-light me-2">重置</button>
+            <button type="submit" class="reset btn btn-light me-2">重置</button>
         </form>
 
 
@@ -85,27 +107,27 @@ if ($totalRows) {
 
 
     <div class="row">
-        <table class="table table-bordered  table-striped  table-hover ">
-            <thead>
+        <table class="r_table table table-striped table-hover">
+            <thead class="r_underline">
                 <tr>
-                    <th class="bg-info-subtle py-3" scope="col">編號 <i class="asc fa-solid fa-caret-down ms-1 text-primary" id="asc"></i></th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳名稱</th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳類別</th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳電話</th>
-                    <th class="bg-info-subtle py-3" scope="col">早上開始時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">晚上結束時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">用餐時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">星期</th>
-                    <th class="bg-info-subtle py-3" scope="col">人數上限</th>
-                    <th class="bg-info-subtle py-3" scope="col">預約次數 <i class="book_asc fa-solid fa-caret-down ms-1 text-primary" id="book_asc"></i></th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">細項</th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">編輯</th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">刪除</th>
+                    <th class="r_th py-3" scope="col">編號 <i class="asc fa-solid fa-caret-down ms-1" id="asc"></i></th>
+                    <th class="r_th py-3" scope="col">餐廳名稱</th>
+                    <th class="r_th py-3" scope="col">餐廳類別</th>
+                    <th class="r_th py-3" scope="col">餐廳電話</th>
+                    <th class="r_th py-3" scope="col">早上開始時間</th>
+                    <th class="r_th py-3" scope="col">晚上結束時間</th>
+                    <th class="r_th py-3" scope="col">用餐時間</th>
+                    <th class="r_th py-3" scope="col">星期</th>
+                    <th class="r_th py-3" scope="col">人數上限</th>
+                    <th class="r_th py-3" scope="col">預約次數 <i class="book_asc fa-solid fa-caret-down ms-1 " id="book_asc"></i></th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">細項</th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">編輯</th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">刪除</th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider">
+            <tbody>
                 <?php foreach ($rows as $r) : ?>
-                    <tr>
+                    <tr class="r_thover">
 
                         <td class="py-3"><?= $r['rest_sid'] ?></td>
                         <td class="py-3"><?= $r['rest_name'] ?></td>
