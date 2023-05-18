@@ -230,7 +230,7 @@ $r_post = $stmt->fetchAll();
                         <td><?= $r['post_content'] ?></td>
                         <td><?= $r['post_date'] ?></td>
                         <td><?= $r['update_date'] ?></td>
-                        <td><a href="try_p_list_admin_update.php?post_sid=<?= $r['post_sid'] ?>">
+                        <td><a href="p_list_admin_update.php?post_sid=<?= $r['post_sid'] ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </td>

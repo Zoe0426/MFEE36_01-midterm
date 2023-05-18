@@ -6,7 +6,7 @@ $post_sid = isset($_GET['post_sid']) ? intval($_GET['post_sid']) : 0;
 $sql = "SELECT * FROM `post_list_admin` WHERE `post_sid`={$post_sid}";
 
 //按下編輯原始表單內容會出現在表單上
-$upDate = $pdo->query($sql)->fetch();
+$upDate = $pdo->query($sql)->fetch(); //如果選到這一條就會post_sid=這個，如選到post_sid=180就會是這選到post_sid=180一整條的東西
 // print_r($upDate);
 if (empty($upDate)) {
   header('Location: p_readPost_api.php');
@@ -47,21 +47,21 @@ $r_post = $stmt->fetchAll();
                 <label for="admin_name">管理者名稱：</label>
                 <select name="admin_name" id="admin_name" data-required="1">
                   <option selected value="--請選擇--">--請選擇--</option>
-                  <option value="Lilian">Lilian</option>
-                  <option value="Jenny">Jenny</option>
-                  <option value="Gabrielle">Gabrielle</option>
-                  <option value="Lily">Lily</option>
-                  <option value="Jill">Jill</option>
-                  <option value="Shu yi">Shu yi</option>
+                  <option value="Lilian" <?= $upDate['admin_name'] == "Lilian" ? "selected" : "" ?>>Lilian</option>
+                  <option value="Jenny" <?= $upDate['admin_name'] == "Jenny" ? "selected" : "" ?>>Jenny</option>
+                  <option value="Gabrielle" <?= $upDate['admin_name'] == "Gabrielle" ? "selected" : "" ?>>Gabrielle</option>
+                  <option value="Lily" <?= $upDate['admin_name'] == "Lily" ? "selected" : "" ?>>Lily</option>
+                  <option value="Jill" <?= $upDate['admin_name'] == "Jill" ? "selected" : "" ?>>Jill</option>
+                  <option value="Shu yi" <?= $upDate['admin_name'] == "Shu yi" ? "selected" : "" ?>>Shu yi</option>
                 </select>
                 <div class="form-text"></div>
               </div>
               <div class="mb-3">
                 <label for="board_name">看板：</label>
-                <select name="board_name" id="board_name" data-required="1" value="<?= $upDate['board_name'] ?>">
-                  <option selected value="--請選擇--">--請選擇--</option>
+                <select name="board_name" id="board_name" data-required="1">
                   <?php foreach ($r_post as $r) : ?>
-                    <option value="<?= $r['board_sid'] ?>"><?= $r['board_name'] ?></option>
+                    <!-- <option selected value="</option> -->
+                    <option value="<?= $r['board_sid'] ?>" <?= $upDate['board_sid'] == $r['board_sid'] ? "selected" : "" ?>> <?= $r['board_name'] ?></option>
                   <?php endforeach; ?>
                 </select>
                 <div class="form-text"></div>
