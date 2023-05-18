@@ -1,26 +1,101 @@
 <?php
-require './partsNOEDIT/admin-require.php';
 require "./partsNOEDIT/connect-db.php";
 
-$perPage = 25; # 每頁最多幾筆
-$page = isset($_GET["page"]) ? intval($_GET["page"]) : 1; # 用戶要看第幾頁
+// $perPage = 25; # 每頁最多幾筆
+// $page = isset($_GET["page"]) ? intval($_GET["page"]) : 1; # 用戶要看第幾頁
 
+// if ($page < 1) {
+//     header('Location: ?page=1');
+//     exit;
+// }
+
+// $t_sql = "SELECT COUNT(1) FROM mem_coupon_send";
+// $t_rows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
+// $t_pages = ceil($t_rows / $perPage);
+// $rows = [];
+
+// if ($t_rows) {
+
+
+//     $sql = sprintf("SELECT cs.*,ct.`coupon_name`,`coupon_price`,mb.`member_name` FROM `mem_coupon_send` AS cs JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid` JOIN `mem_member` AS mb ON`cs`.`member_sid`=`mb`.`member_sid` ORDER BY cs.couponSend_sid DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
+//     $rows = $pdo->query($sql)->fetchAll();
+// }
+
+// $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+// $sql_keyword = "SELECT cs.*,ct.`coupon_name`,`coupon_price`,mb.`member_name` 
+// FROM `mem_coupon_send` AS cs 
+// JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid` 
+// JOIN `mem_member` AS mb ON`cs`.`member_sid`=`mb`.`member_sid` 
+// WHERE cs.`coupon_sid` LIKE '%$keyword%' 
+// OR cs.`member_sid` LIKE '%$keyword%' 
+// OR cs.`coupon_status` LIKE '%$keyword%' 
+// OR ct.`coupon_name` LIKE '%$keyword%' 
+// OR ct.`coupon_price` LIKE '%$keyword%' 
+// OR mb.`member_name` LIKE '%$keyword%' 
+// ORDER BY cs.couponSend_sid DESC";
+// // echo $sql_keyword;
+// $stmt_keyword = $pdo->query($sql_keyword)->fetchAll();
+// print_r($stmt_keyword);
+
+
+// $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+// $page = isset($_GET['page']) ? $_GET['page'] : 1;
+// $perPage = 25; // 每頁顯示的數量
+
+// $offset = ($page - 1) * $perPage;
+// $sql_keyword = sprintf("SELECT cs.*, ct.coupon_name, ct.coupon_price, mb.member_name 
+// FROM mem_coupon_send AS cs 
+// JOIN mem_coupon_type AS ct ON cs.coupon_sid = ct.coupon_sid 
+// JOIN mem_member AS mb ON cs.member_sid = mb.member_sid 
+// WHERE cs.coupon_sid LIKE '%%%s%%' 
+// OR cs.member_sid LIKE '%%%s%%' 
+// OR cs.coupon_status LIKE '%%%s%%' 
+// OR ct.coupon_name LIKE '%%%s%%' 
+// OR ct.coupon_price LIKE '%%%s%%' 
+// OR mb.member_name LIKE '%%%s%%' 
+// ORDER BY cs.couponSend_sid DESC 
+// LIMIT %d, %d", $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $offset, $perPage);
+
+// // echo $sql_keyword;
+// $stmt_keyword = $pdo->query($sql_keyword)->fetchAll();
+
+$perPage = 25;
+$page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
 if ($page < 1) {
     header('Location: ?page=1');
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM mem_coupon_send";
-$t_rows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
+$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+
+# Get total number of rows
+$countSql = "SELECT COUNT(*) FROM mem_coupon_send AS cs 
+JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
+JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
+WHERE cs.coupon_sid LIKE '%$keyword%' 
+OR cs.member_sid LIKE '%$keyword%' 
+OR cs.coupon_status LIKE '%$keyword%' 
+OR ct.coupon_name LIKE '%$keyword%' 
+OR ct.coupon_price LIKE '%$keyword%' 
+OR mb.member_name LIKE '%$keyword%'";
+$t_rows = $pdo->query($countSql)->fetchColumn();
+
+# Calculate the total number of pages
 $t_pages = ceil($t_rows / $perPage);
-$rows = [];
 
-if ($t_rows) {
-
-
-    $sql = sprintf("SELECT cs.*,ct.`coupon_name`,`coupon_price`,mb.`member_name` FROM `mem_coupon_send` AS cs JOIN `mem_coupon_type` AS ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid` JOIN `mem_member` AS mb ON`cs`.`member_sid`=`mb`.`member_sid` ORDER BY cs.couponSend_sid DESC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
-    $rows = $pdo->query($sql)->fetchAll();
-}
+# Fetch data for current page
+$sql = "SELECT cs.*,ct.coupon_name,coupon_price,mb.member_name FROM mem_coupon_send AS cs 
+JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
+JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
+WHERE cs.coupon_sid LIKE '%$keyword%' 
+OR cs.member_sid LIKE '%$keyword%' 
+OR cs.coupon_status LIKE '%$keyword%' 
+OR ct.coupon_name LIKE '%$keyword%' 
+OR ct.coupon_price LIKE '%$keyword%' 
+OR mb.member_name LIKE '%$keyword%' 
+ORDER BY cs.couponSend_sid DESC 
+LIMIT " . ($page - 1) * $perPage . ", $perPage";
+$rows = $pdo->query($sql)->fetchAll();
 
 ?>
 <!-- SELECT cs.*,ct.`coupon_name`,`coupon_price` FROM `mem_coupon_send` cs JOIN `mem_coupon_type` ct ON `cs`.`coupon_sid`=`ct`.`coupon_sid`; 
@@ -36,21 +111,17 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
 <div class="container">
     <div class="row">
         <div class="mb-3">
-            <input type="text" placeholder="請輸入關鍵字" id="keyword">
-            <div class="btn btn-primary" id="search">搜尋</div>
-        </div>
-        <div class="mb-3">
             <div class="btn btn-primary" id="toCouponSend_chart_php">看分析</div>
         </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=1">
+                    <a class="page-link" href="?page=1<?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                         <i class="fa-solid fa-angles-left"></i>
                     </a>
                 </li>
                 <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $page - 1 ?>">
+                    <a class="page-link" href="?page=<?= $page - 1 ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                         <i class="fa-solid fa-angle-left"></i>
                     </a>
                 </li>
@@ -58,17 +129,17 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                     if ($i >= 1 and $i <= $t_pages) :
                 ?>
                         <li class="page-item <?= $i == $page ? "active" : "" ?>">
-                            <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            <a class="page-link" href="?page=<?= $i ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>"><?= $i ?></a>
                         </li>
                 <?php endif;
                 endfor; ?>
                 <li class="page-item <?= $t_pages == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $page + 1 ?>">
+                    <a class="page-link" href="?page=<?= $page + 1 ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                         <i class="fa-solid fa-angle-right"></i>
                     </a>
                 </li>
                 <li class="page-item <?= $t_pages == $page ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $t_pages ?>">
+                    <a class="page-link" href="?page=<?= $t_pages ?><?= isset($_GET['keyword']) ? '&keyword=' . $_GET['keyword'] : '' ?>">
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </li>
@@ -87,7 +158,7 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
                     <th scope="col">會員編號</th>
                     <th scope="col">會員姓名</th>
                     <th scope="col">使用狀況</th>
-                    <th scope="col">使用狀況</th>
+                    <th scope="col">使用時間</th>
                     <th scope="col">新增時間</th>
                 </tr>
             </thead>

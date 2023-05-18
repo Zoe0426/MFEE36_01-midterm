@@ -1,4 +1,5 @@
 <?php
+require './partsNOEDIT/admin-require.php';
 require './partsNOEDIT/connect-db.php';
 $rows = [];
 $sql = "SELECT * FROM `mem_coupon_type`";
@@ -32,7 +33,7 @@ $r1 = $stmt_coupon_detail->fetch(PDO::FETCH_ASSOC);
             <thead>
                 <tr>
                     <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
-                    <th scope="col">#</th>
+                    <th scope="col">優惠券編號</th>
                     <th scope="col">優惠券代碼</th>
                     <th scope="col">優惠券名稱</th>
                     <th scope="col">優惠券金額</th>

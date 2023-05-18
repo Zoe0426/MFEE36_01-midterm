@@ -85,7 +85,7 @@ print_r(date($r['coupon_expDate']));
                 if (obj.success) {
                     infoBar.classList.remove('alert-danger');
                     infoBar.classList.add('alert-success');
-                    infoBar.innerHTML = '新增成功';
+                    infoBar.innerHTML = '編輯成功';
                     infoBar.style.display = 'block';
                     setTimeout(() => {
                         location.href = 'm_coupon_type-list.php';
