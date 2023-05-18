@@ -85,8 +85,8 @@ require './partsNOEDIT/connect-db.php' ?>
         // //產出有頁碼的按鈕
         let pageBtn = "";
         let page = parseInt(obj.page);
-        let start = page - 1;
-        let size = page + 1;
+        let start = page;
+        let size = page;
 
         for (let i = start; i <= size; i++) {
             let btns = "";
