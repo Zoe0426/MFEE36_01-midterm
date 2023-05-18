@@ -9,6 +9,7 @@ $output = [
     'error' => [],
 ];
 
+
 //父表格變數
 $admin_name = isset($_POST['admin_name']) ? $_POST['admin_name'] : " ";
 $board_sid = isset($_POST['board_name']) ? intval($_POST['board_name']) : 0;

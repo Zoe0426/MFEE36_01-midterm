@@ -28,6 +28,6 @@ if(!empty($_GET['post_sid'])){
 
 
 
+
 header('Content-Type: application/json');
 echo json_encode($_GET['post_sid'], JSON_UNESCAPED_UNICODE);
-?>
