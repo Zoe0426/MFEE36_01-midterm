@@ -187,7 +187,6 @@ require './partsNOEDIT/connect-db.php' ?>
             }
         }
     }
-
     // ====CREATE ORDER====
     function createOrder(e) {
         e.preventDefault();
