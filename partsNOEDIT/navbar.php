@@ -137,14 +137,14 @@
                 <!-- 購物車 -->
             <li class="nav-item">
                 <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt7">
-                    購物車
+                    訂單系統
                 </a>
-                <div class="collapse w-100" id="collapseBt7">
-                    <a href="./index_noEdit.php" class="nav-link bg-transparent text-dark ">
-                        - 購物車資料
+                <div class="collapse w-100" id="collapseBt6">
+                    <a href="o_01_addnewOrder.php" class="nav-link bg-transparent text-dark ">
+                        - 購物車系統
                     </a>
-                    <a href="./o_order_details.php" class="nav-link bg-transparent  text-dark ">
-                        - 購物車資料
+                    <a href="o_02_orderDetails.php" class="nav-link bg-transparent  text-dark ">
+                        - 訂單管理系統
                     </a>
                 </div>
         </ul>

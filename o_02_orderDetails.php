@@ -17,7 +17,7 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
             <div class="row g-0">
-                <p class="fs-5 fw-bold">訂單管理系統</p>
+                <p class="fs-5 fw-bold text-secondary">訂單管理系統</p>
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">訂單編號</option>
@@ -47,6 +47,18 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oOrdersTable = document.getElementById('oOrdersTable');
+    // ====顯示所有訂單明細====
+    function showAllOrders() {
+        fetch('o_api02_3_showOrders.php?page=1')
+            .then(r => r.json())
+            .then(obj => {
+                tableAll(obj);
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
+    }
+    showAllOrders();
     // ====取得訂單資料====
     function getMemOrd(e) {
         e.preventDefault();
@@ -57,7 +69,7 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.innerHTML = '';
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
             const fd = new FormData(document.getElementById('oGetmem'));
-            fetch('o-api02_1_getMemOrders.php', {
+            fetch('o_api02_1_getMemOrders.php', {
                     method: 'POST',
                     body: fd,
                 }).then(r => r.json())
@@ -134,6 +146,66 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tbody>
                     </table>`;
     }
+    // ====顯示全部訂單====
+    function tableAll(obj) {
+        oOrdersTable.innerHTML = "";
+        const allOrderTable = document.createElement('div');
+        const displayItems = obj.rows;
+        let orderStatus = "";
+        let post_Status = "";
+        let post_type = "";
+        let items = "";
+
+        for (let i = 0, len = displayItems.length; i < len; i++) {
+
+            displayItems[i].order_status == 0 ? orderStatus = "未付款" : orderStatus = "已付款";
+            displayItems[i].postType == 1 ? post_type = "寄送到府" : post_type = "超市領取";
+            if (displayItems[i].postStatus == 0) {
+                post_Status = '已領取';
+            } else if (displayItems[i].postStatus == 1) {
+                post_Status = '備貨中';
+            } else if (displayItems[i].postStatus == 2) {
+                post_Status = '運送中';
+            } else if (displayItems[i].postStatus == 3) {
+                post_Status = '貨到超商';
+            } else if (displayItems[i].postStatus == 4) {
+                post_Status = '未領取';
+            } else {
+                console.log('postStatus unknown');
+            }
+            items += `<tr">
+            <th scope="row">${displayItems[i].order_sid}</th>
+            <td>${displayItems[i].member_sid}</td>
+            <td>${orderStatus}</td>
+            <td>${displayItems[i].coupon_sid}</td>
+            <td>${post_type}</td>
+            <td>${post_Status}</td>
+            <td>${displayItems[i].createDt}</td>
+            <td><i class="fa-regular fa-file-lines text-success" onclick="showDetails('${displayItems[i].order_sid}', this)"></i></td>
+        </tr>
+        <tr style="display:none;"></tr>`;
+        }
+        allOrderTable.innerHTML = `<table class="table ocd">
+    <thead>
+        <tr>
+            <th scope="col">訂單編號</th>
+            <th scope="col">會員編號</th>
+            <th scope="col">訂單狀態</th>
+            <th scope="col">優惠券編號</th>
+            <th scope="col">寄送方式</th>
+            <th scope="col">寄送狀態</th>
+            <th scope="col">訂單成立時間</th>
+            <th scope="col"><i class="fa-regular fa-file-lines"></i></th>
+        </tr>
+    </thead>
+    <tbody>
+        ${items}
+    
+    </tbody>
+</table>`;
+        oOrdersTable.append(allOrderTable);
+
+    }
     // ====顯示指定訂單====
     function tableByOrderSid(obj) {
         const orderSidTable = document.createElement('div');
@@ -192,7 +264,7 @@ require './partsNOEDIT/connect-db.php' ?>
     function tableByMemInfo(obj) {
         const mixTable = document.createElement('div');
         // mixTable.classList.add('test');
-        let displayItems; //所有訂單的容(父)
+        let displayItems = ""; //所有訂單的容(父)
         if (obj.getBy == "memName") {
             displayItems = obj.name_orders;
         } else if (obj.getBy == "memMobile") {
@@ -257,7 +329,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     // ====顯示訂單明細====
     function showDetails(ord, x) {
-        fetch(`o-api02_2_getOrderDetails.php?orderSid=${ord}`)
+        fetch(`o_api02_2_getOrderDetails.php?orderSid=${ord}`)
             .then(r => r.json())
             .then(objectD => {
                 let objArray = objectD.order_details;

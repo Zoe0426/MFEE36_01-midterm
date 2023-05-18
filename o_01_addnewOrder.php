@@ -18,7 +18,8 @@ require './partsNOEDIT/connect-db.php' ?>
     .priceInfo {
         position: sticky;
         top: 100px;
-        height: 250px;
+        right: 0;
+        height: 500px;
     }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -57,34 +58,48 @@ require './partsNOEDIT/connect-db.php' ?>
                     <div id="oPostPayDisplay" class="container-fluid px-0">
                     </div>
                 </div>
-                <div class="priceInfo col-2 o-d-none ocd"></div>
+                <div id="totalPriceInfo" class="priceInfo col-2 ocd pt-2">
+                    <div>
+                        <p>小計</p>
+                        <p id="subtotal">$</p>
+                        <p>郵寄金額</p>
+                        <p id="post">$</p>
+                        <p>優惠券金額</p>
+                        <p id="couponPrice">$</p>
+                        <p>總金額</p>
+                        <p id="showTotal">$</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Send New Order -->
+        <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="oCnewOdLabel">訂單成立</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        前往訂單列表？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
+                        <button type="submit" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
-    <!-- Modal Send New Order -->
-    <div class="modal fade" id="oConfirmNewOrder" tabindex="-1" aria-labelledby="oCnewOdLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="oCnewOdLabel">訂單成立</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    前往訂單列表？
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">留在此頁面</button>
-                    <button type="button" class="btn btn-warning" onclick="toOrderDetailsPage()">前往訂單列表</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oCartDisplay = document.getElementById("oCartDisplay");
     const oPostPayDisplay = document.querySelector('#oPostPayDisplay');
     const send = document.createElement('div');
+    const totalPriceInfo = document.querySelector('#totalPriceInfo')
+
     // ====GET DATA,CART,COUPON====
     function getMemCart(e) {
         e.preventDefault();
@@ -104,18 +119,21 @@ require './partsNOEDIT/connect-db.php' ?>
                     showMemInfo(obj);
 
                     if (obj.shoplist !== 'noShopItems') {
-                        console.log("showShop");
+                        // console.log("showShop");
                         showShopList(obj);
                     }
                     if (obj.actlist !== 'noActItems') {
-                        console.log("showAct");
+                        // console.log("showAct");
                         showActList(obj);
                     }
                     if (obj.coupons !== 'noCoupons') {
-                        console.log("showCoupon");
+                        // console.log("showCoupon");
                         showCoupon(obj);
                     }
                     showPostnPay(obj);
+                    const createOrderBtn = document.querySelector('.btn[data-bs-target="#oMsgToClient"]');
+                    createOrderBtn.addEventListener('click', handleCreateOrder);
+                    // showTotalPriceInfo();
                 })
                 .catch(ex => {
                     console.log(ex);
@@ -126,62 +144,79 @@ require './partsNOEDIT/connect-db.php' ?>
         }
 
     }
-    // ====CREATE ORDER====
-    function createOrder(e) {
-        e.preventDefault();
+
+    function handleCreateOrder() {
         let isPass = true;
         const InfoBar = document.querySelector("#oInfoBar");
         const oMemTable = document.querySelector(".o-mem-table");
         const newodfd = new FormData(document.getElementById("oGetItemsForm"));
-        //沒有選任何商品就報錯
         let prods = newodfd.getAll("prod[]").length;
         let acts = newodfd.getAll("act[]").length;
+        let postFormInputs = document.querySelectorAll(".postInfo input");
+
+        //若沒選商品，就不過
         if (prods === 0 && acts === 0) {
             isPass = false;
-            oInfoBar.style.display = "block";
-            oInfoBar.innerHTML = "請選擇至少一件商品或活動";
-            setTimeout(() => {
-                oInfoBar.style.display = "none";
-            }, 3000);
         }
-
-        let postFormInputs = document.querySelectorAll(".postInfo input");
+        //若沒填內容，就不過
         for (let i of postFormInputs) {
             if ((i.value).trim() === '') {
                 isPass = false;
-                i.style.border = '1px solid red';
-                i.style.display = 'block';
-                i.nextElementSibling.display = "block";
-                i.nextElementSibling.innerHTML = '此欄位必需填寫';
-                oInfoBar.innerHTML = '寄送資訊欄位不可空白';
-                setTimeout(() => {
-                    i.style.border = "1px solid #ccc";
-                    i.nextElementSibling.innerHTML = '';
-                    i.nextElementSibling.display = "none";
-                }, 3000);
             }
         }
 
-        if (isPass) {
-            fetch('o_api01_2_newOrder.php', {
-                    method: 'POST',
-                    body: newodfd,
-                }).then(r => r.json())
-                .then(obj => {
-                    console.log(obj);
-                    if (obj.orderSuccess == true) {
-                        oCartDisplay.innerHTML = '';
-                        oPostPayDisplay.innerHTML = '';
-                        oMemTable.innerHTML = '';
-                        // oGetItemsForm.remove(send);
-                    }
-                })
-                .catch(ex => {
-                    console.log(ex);
-                })
+        if (isPass) { //若過了，觸發modal
+            const modal = new bootstrap.Modal(document.getElementById('oMsgToClient'));
+            modal.show();
+        } else { //若不過，顯示訊息
+            if (prods === 0 && acts === 0) {
+                oInfoBar.style.display = "block";
+                oInfoBar.innerHTML = "請選擇至少一件商品或活動";
+                setTimeout(() => {
+                    oInfoBar.style.display = "none";
+                }, 3000);
+            }
+            for (let i of postFormInputs) {
+                if ((i.value).trim() === '') {
+                    i.style.border = '1px solid red';
+                    i.style.display = 'block';
+                    i.nextElementSibling.display = "block";
+                    i.nextElementSibling.innerHTML = '此欄位必需填寫';
+                    oInfoBar.innerHTML = '寄送資訊欄位不可空白';
+                    setTimeout(() => {
+                        i.style.border = "1px solid #ccc";
+                        i.nextElementSibling.innerHTML = '';
+                        i.nextElementSibling.display = "none";
+                    }, 3000);
+                }
+            }
         }
-        send.innerHTML = '';
     }
+
+    // ====CREATE ORDER====
+    function createOrder(e) {
+        e.preventDefault();
+        const newodfd = new FormData(document.getElementById("oGetItemsForm"));
+        fetch('o_api01_2_newOrder.php', {
+                method: 'POST',
+                body: newodfd,
+            }).then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+                if (obj.orderSuccess == true) {
+                    oCartDisplay.innerHTML = '';
+                    oPostPayDisplay.innerHTML = '';
+                    oMemTable.innerHTML = '';
+                    // oGetItemsForm.remove(send);
+                }
+            })
+            .catch(ex => {
+                console.log(ex);
+            })
+        send.innerHTML = '';
+        totalPriceInfo.style.display = "none";
+    }
+
     // ====搜尋顯示哪種input====
     function searchm(e) {
         const sbname = document.getElementById("sbname");
@@ -224,15 +259,9 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示商城商品
     function showShopList(obj) {
-        // console.log('shopListobj');
-        // console.log(obj);
         let ost = document.createElement("div");
         let sData = obj.shoplist;
-        // console.log('sData');
-        // console.log(sData);
-
         let shopContent = "";
-
         for (let i = 0; i < sData.length; i++) {
             shopContent +=
                 `<tr>
@@ -240,14 +269,12 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${sData[i].pro_sid}-${sData[i].proDet_sid}</td>
                     <td>${sData[i].pro_name}</td>
                     <td>${sData[i].proDet_name}</td>
-                    <td><input type="number" min="0" value="${sData[i].prodQty}" onchange="sChangeStock(event,this)"></td>
+                    <td><input type="number" min="0" value="${sData[i].prodQty}" class="sProdQty"></td>
                     <td>${sData[i].proDet_price}</td>
                     <td totalStock="${sData[i].proDet_qty}" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" class="text-secondary">${(sData[i].proDet_qty)-(sData[i].prodQty)}</td>
 
                     <td class="text-end" proSid="${sData[i].pro_sid}" proDet="${sData[i].proDet_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${sData[i].pro_sid}','${sData[i].proDet_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
-            // console.log(i);
-            // console.log(shopContent);
         }
 
         ost.innerHTML = `<table class="ocd table table-border table-striped">
@@ -267,11 +294,13 @@ require './partsNOEDIT/connect-db.php' ?>
                 ${shopContent}
                 </tbody>
             </table>`;
-        // console.log('ost.innerHTML');
-        // console.log(ost.innerHTML);
         oCartDisplay.append(ost);
-        console.log('oCartDisplay.innerHTML');
-        console.log(oCartDisplay.innerHTML);
+        const sProdQties = document.querySelectorAll('.sProdQty');
+        // console.log(sProdQties);
+        for (let i of sProdQties) {
+            i.addEventListener('change', sChangeStock);
+            i.addEventListener('change', totalAmount);
+        }
     }
     //====顯示活動
     function showActList(obj) {
@@ -287,15 +316,16 @@ require './partsNOEDIT/connect-db.php' ?>
                     <td>${aData[i].act_name}</td>
                     <td>${aData[i].group_date}</td>
 
-                    <td rel="aduQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].adultQty}" ></td>
+                    <td rel="aduQty"><input type="number" min="0" class="aProdQty" value="${aData[i].adultQty}" ></td>
 
                     <td>${aData[i].price_adult}</td>
 
-                    <td rel="kidQty"><input type="number" min="0" onchange="aChangeStock(event,this)" value="${aData[i].childQty}" ></td>
+                    <td rel="kidQty"><input type="number" min="0" class="aProdQty" value="${aData[i].childQty}" ></td>
 
                     <td>${aData[i].price_kid}</td>
                     <td totalStock="${aData[i].ppl_max}" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" class="text-secondary">${astock}</td>
-                    <td class="text-end"><i class="fa-solid fa-trash-can text-body-tertiary" ></i></td>
+
+                    <td class="text-end" proSid="${aData[i].act_sid}" proDet="${aData[i].group_sid}" mem="${obj.sid}" onclick="deleteCartItem('${obj.sid}','${aData[i].act_sid}','${aData[i].group_sid}',this)"><i class="fa-solid fa-trash-can text-body-tertiary"></i></td>
                 </tr>`;
         }
 
@@ -320,8 +350,15 @@ require './partsNOEDIT/connect-db.php' ?>
                 </tbody>
             </table>`;
         oCartDisplay.append(oat);
+
+        const aProdQties = document.querySelectorAll('.aProdQty');
+        // console.log(aProdQties);
+        for (let i of aProdQties) {
+            i.addEventListener('change', aChangeStock);
+            i.addEventListener('change', totalAmount);
+        }
     }
-    //====顯示coupon
+    //====顯示coupon====
     function showCoupon(obj) {
         let oct = document.createElement("div");
         let cData = obj.coupons;
@@ -353,7 +390,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </table>`;
         oCartDisplay.append(oct);
     }
-    //====顯示地址及付款方式
+    //====顯示地址及付款方式及送出BTN====
     function showPostnPay(obj) {
         oPostPayDisplay.innerHTML = ""
         const opp = document.createElement('div');
@@ -384,10 +421,13 @@ require './partsNOEDIT/connect-db.php' ?>
         const oGetItemsForm = document.getElementById('oGetItemsForm');
         send.innerHTML = `        
         <div class="row pt-3 g-0">
+            <div class="col-10">
                 <div class="alert alert-danger text-center o-d-none" role="alert" id="oInfoBar"></div>
-                <button type="button" class="btn btn-warning mx-auto" data-bs-toggle="modal" data-bs-target="#oMsgToClient">成立訂單</button>
-            
+                <button type="button" class="btn btn-warning mx-auto" data-bs-target="#oMsgToClient">成立訂單</button>
+            </div>
         </div>    
+
+
         <!-- Modal Msg for client -->
         <div class="modal fade" id="oMsgToClient" tabindex="-1" aria-labelledby="oCMsgLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -408,6 +448,12 @@ require './partsNOEDIT/connect-db.php' ?>
             </div>
         </div>`;
         oGetItemsForm.append(send);
+
+    }
+    //====顯示總金額====
+    function showTotalPriceInfo() {
+        totalPriceInfo.style.display = "block";
+        let priceBlock = document.createElement('div');
 
     }
     //====選擇所有商品====
@@ -444,9 +490,10 @@ require './partsNOEDIT/connect-db.php' ?>
         window.location.href = "o_02_orderDetails.php";
     }
     //====更新商品庫存,Cart Qty====
-    function sChangeStock(e, x) {
+    function sChangeStock(e) {
         console.log('change');
-        let qtyParent = x.closest('tr');
+        let tdself = e.target; //本身
+        let qtyParent = tdself.closest('tr');
         let lastTd = qtyParent.querySelector('td:last-child');
         let sQty = lastTd.previousElementSibling;
         let stock = parseInt(sQty.getAttribute('totalStock'));
@@ -462,11 +509,19 @@ require './partsNOEDIT/connect-db.php' ?>
                 }
             })
             .catch(ex => console.log(ex))
+        let checkboxVal = qtyParent.querySelector('td:first-child');
+        let encodedString = checkboxVal.childNodes[0];
+        const decodedString = JSON.parse(decodeURIComponent(encodedString.value));
+        decodedString.prodQty = updatedQty;
+        const updatedString = encodeURIComponent(JSON.stringify(decodedString));
+        encodedString.value = updatedString;
+
     }
     //====更新活動庫存,Cart Qty===
-    function aChangeStock(e, x) {
+    function aChangeStock(e) {
         console.log('change');
-        let qtyParent = x.closest('tr'); //<tr>
+        let tdself = e.target; //本身
+        let qtyParent = tdself.closest('tr'); //<tr>
         let lastTd = qtyParent.querySelector('td:last-child');
         let aQty = lastTd.previousElementSibling; //顯示庫存的td
         let stock = parseInt(aQty.getAttribute('totalStock')); //總庫存量
@@ -481,6 +536,18 @@ require './partsNOEDIT/connect-db.php' ?>
             .then(r => r.json())
             .then(obj => console.log(obj))
             .catch(ex => console.log(ex))
+
+        let checkboxVal = qtyParent.querySelector('td:first-child');
+        let encodedString = checkboxVal.querySelector('input:first-child');
+        const decodedString = JSON.parse(decodeURIComponent(encodedString.value));
+        let adOrkid = e.target.parentElement.getAttribute('rel');
+        if (adOrkid === 'kidQty') {
+            decodedString.childQty = kidQty;
+        } else {
+            decodedString.adultQty = aduQty;
+        }
+        const updatedString = encodeURIComponent(JSON.stringify(decodedString));
+        encodedString.value = updatedString;
     }
     //====刪除購物車內容====
     function deleteCartItem(mem, pro, prod, x) {
@@ -501,6 +568,25 @@ require './partsNOEDIT/connect-db.php' ?>
                 }
             })
             .catch(ex => console.log(ex))
+    }
+    //====更新數量時, 更新總金額====
+    function totalAmount() {
+        let allSubTotal = [];
+        const sProdQties = document.querySelectorAll('.sProdQty');
+        for (let s of sProdQties) {
+            let sprice = parseInt(s.parentElement.nextElementSibling.innerHTML);
+            let sqty = parseInt(s.value);
+            allSubTotal.push(sprice * sqty);
+        }
+        const aProdQties = document.querySelectorAll('.aProdQty');
+        for (let a of aProdQties) {
+            let aprice = parseInt(a.parentElement.nextElementSibling.innerHTML);
+            let aqty = parseInt(a.value);
+            allSubTotal.push(aprice * aqty);
+        }
+
+        const totalPrice = allSubTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        console.log(totalPrice);
     }
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
