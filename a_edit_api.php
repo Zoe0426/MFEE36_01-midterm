@@ -54,6 +54,7 @@ if (!empty($_POST['act_name']) and !empty($_POST['act_sid'])) {
 
     $stmtChild = $pdo->prepare($sqlChild);
 
+
     $stmtChild->execute([
         $parentSid,
         $_POST['group_date'],
