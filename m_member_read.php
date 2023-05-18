@@ -1,30 +1,43 @@
 <?php
 # MVC
 
-$pageName = "list";
-$title = "會員清單";
-require './partsNOEDIT/admin-require.php';
-require "./partsNOEDIT/connect-db.php";
-
-$perPage = 25; # 每頁最多幾筆
-$page = isset($_GET["page"]) ? intval($_GET["page"]) : 1; # 用戶要看第幾頁
-
+$perPage = 25;
+$page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
 if ($page < 1) {
     header('Location: ?page=1');
     exit;
 }
 
-$t_sql = "SELECT COUNT(1) FROM mem_member";
-$t_rows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; #總筆數
+$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+
+# Get total number of rows
+$countSql = "SELECT COUNT(*) FROM mem_coupon_send AS cs 
+JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
+JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
+WHERE cs.coupon_sid LIKE '%$keyword%' 
+OR cs.member_sid LIKE '%$keyword%' 
+OR cs.coupon_status LIKE '%$keyword%' 
+OR ct.coupon_name LIKE '%$keyword%' 
+OR ct.coupon_price LIKE '%$keyword%' 
+OR mb.member_name LIKE '%$keyword%'";
+$t_rows = $pdo->query($countSql)->fetchColumn();
+
+# Calculate the total number of pages
 $t_pages = ceil($t_rows / $perPage);
-$rows = [];
 
-if ($t_rows) {
-
-
-    $sql = sprintf("SELECT * FROM mem_member ORDER BY `mem_member`.`member_sid` ASC LIMIT %s,%s", ($page - 1) * $perPage, $perPage);
-    $rows = $pdo->query($sql)->fetchAll();
-}
+# Fetch data for current page
+$sql = "SELECT cs.*,ct.coupon_name,coupon_price,mb.member_name FROM mem_coupon_send AS cs 
+JOIN mem_coupon_type AS ct ON cs.coupon_sid=ct.coupon_sid 
+JOIN mem_member AS mb ON cs.member_sid=mb.member_sid 
+WHERE cs.coupon_sid LIKE '%$keyword%' 
+OR cs.member_sid LIKE '%$keyword%' 
+OR cs.coupon_status LIKE '%$keyword%' 
+OR ct.coupon_name LIKE '%$keyword%' 
+OR ct.coupon_price LIKE '%$keyword%' 
+OR mb.member_name LIKE '%$keyword%' 
+ORDER BY cs.couponSend_sid DESC 
+LIMIT " . ($page - 1) * $perPage . ", $perPage";
+$rows = $pdo->query($sql)->fetchAll();
 
 
 
@@ -72,15 +85,43 @@ if ($t_rows) {
                     </ul>
                 </nav>
             </div>
+            <!-- 篩選器 -->
+            <div class="col">
+                <div class="drop-box d-flex justify-content-start">
+                    <div class="dropdown me-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            會員等級
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item">金牌</a></li>
+                            <li><a class="dropdown-item">銀牌</a></li>
+                            <li><a class="dropdown-item">銅牌</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown me-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            寵物類別
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item">狗</a></li>
+                            <li><a class="dropdown-item">貓</a></li>
+                            <li><a class="dropdown-item">其他</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown me-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            性別
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item">男</a></li>
+                            <li><a class="dropdown-item">女</a></li>
+                            <li><a class="dropdown-item">其他</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
-            <div class="mb-3">
-                <input type="text" placeholder="請輸入關鍵字" id="keyword">
-                <div class="btn btn-primary" id="search">搜尋</div>
-            </div>
-            <div class="mb-3">
-                <div class="btn btn-primary" id="toCouponSend_chart_php">看分析</div>
-            </div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

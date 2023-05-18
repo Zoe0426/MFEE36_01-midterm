@@ -59,26 +59,29 @@
                 f.nextElementSibling.innerHTML = '請填入資料'
             }
         }
-        const fd = new FormData(document.m_coupon_add);
-        fetch('m_coupon_type_add-api.php', {
-                method: 'POST',
-                body: fd,
-            }).then(r => r.json())
-            .then(obj => {
-                console.log(obj);
-                if (obj.success) {
-                    infoBar.classList.remove('alert-danger');
-                    infoBar.classList.add('alert-success');
-                    infoBar.innerHTML = '新增成功';
-                    infoBar.style.display = 'block';
-                    setTimeout(() => {
-                        location.href = 'm_coupon_type-list.php';
-                    }, 1000)
-                } else {
+        if (isPass) {
+            const fd = new FormData(document.m_coupon_add);
+            fetch('m_coupon_type_add-api.php', {
+                    method: 'POST',
+                    body: fd,
+                }).then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    if (obj.success) {
+                        infoBar.classList.remove('alert-danger');
+                        infoBar.classList.add('alert-success');
+                        infoBar.innerHTML = '新增成功';
+                        infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            location.href = 'm_coupon_type-list.php';
+                        }, 1000)
+                    } else {
 
-                }
-            })
+                    }
+                })
+        }
     }
+
 
     function setMinEndDate() {
         // 獲取開始日期元素
