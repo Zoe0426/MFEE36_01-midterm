@@ -12,7 +12,7 @@ $output = [
 if (!empty($_FILES['tempImg'])) {
     $filename = sha1($_FILES['tempImg']['name'] . uniqid()) . '.jpg';
 
-    if (move_uploaded_file($_FILES['tempImg']['tmp_name'], "./imgs/{$filename}")) {
+    if (move_uploaded_file($_FILES['tempImg']['tmp_name'], "./r_img/{$filename}")) {
         $output['filename'] = $filename;
     } else {
         $output['error'] = 'cannot move files';

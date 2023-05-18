@@ -41,6 +41,12 @@ if ($totalRows) {
     $rows = $pdo->query($sql)->fetchAll();
 }
 
+$sid = isset($_GET['rest_sid']) ? intval($_GET['rest_sid']) : 0;
+$sql4 = "SELECT * FROM `rest_img` WHERE rest_sid = {$sid}";
+$stmt4 = $pdo->prepare($sql4);
+$stmt4->execute();
+$c = $stmt4->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <?php include './partsNOEDIT/html-head.php' ?>
@@ -97,7 +103,8 @@ if ($totalRows) {
         <table class="table table-bordered  table-striped  table-hover ">
             <thead>
                 <tr>
-                    <th class="bg-info-subtle py-3" scope="col">編號 <i class="fa-solid fa-caret-down ms-1" id="asc"></i></th>
+                    <th class="bg-info-subtle py-3" scope="col">編號 <a href=""><i class="fa-solid fa-caret-down ms-1"></i></a></th>
+                    <th class="bg-info-subtle py-3" scope="col">餐廳照片</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳名稱</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳類別</th>
                     <th class="bg-info-subtle py-3" scope="col">餐廳電話</th>
@@ -106,7 +113,7 @@ if ($totalRows) {
                     <th class="bg-info-subtle py-3" scope="col">用餐時間</th>
                     <th class="bg-info-subtle py-3" scope="col">星期</th>
                     <th class="bg-info-subtle py-3" scope="col">人數上限</th>
-                    <th class="bg-info-subtle py-3" scope="col">預約次數 <a href=""><i class="fa-solid fa-caret-down ms-1"></i></a></th>
+                    <th class="bg-info-subtle py-3" scope="col">預約次數<a href=""><i class="fa-solid fa-caret-down ms-1"></th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">細項</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">編輯</th>
                     <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">刪除</th>
@@ -117,6 +124,7 @@ if ($totalRows) {
                     <tr>
 
                         <td class="py-3"><?= $r['rest_sid'] ?></td>
+                        <td class="py-3"><img src="./r_img/<?= $c['img_name'] ?>"></td>
                         <td class="py-3"><?= $r['rest_name'] ?></td>
                         <td class="py-3"><?= $r['catg_name'] ?></td>
                         <td class="py-3"><?= $r['rest_phone'] ?></td>
@@ -187,122 +195,6 @@ if ($totalRows) {
             location.href = 'r_delete_api.php?rest_sid=' + sid;
         }
     }
-
-    // 商品編號順序
-    const asc = document.querySelector('#asc');
-    const caretDown = document.querySelector('.fa-caret-down')
-
-    asc.addEventListener('click', function() {
-        fetch('r_sid_asc_api.php')
-            .then(response => response.json())
-            .then(obj => {
-                console.log(obj);
-                if (obj.success) {
-
-                    const rows = obj.getData;
-                    const tbody = document.querySelector('tbody');
-                    tbody.innerHTML = '';
-
-                    rows.forEach(row => {
-                        const tr = document.createElement('tr');
-
-                        // 建立各個欄位的儲存格
-                        const td1 = document.createElement('td');
-                        td1.classList.add('py-3');
-                        td1.textContent = row.rest_sid;
-                        tr.appendChild(td1);
-
-                        const td2 = document.createElement('td');
-                        td2.classList.add('py-3');
-                        td2.textContent = row.rest_name;
-                        tr.appendChild(td2);
-
-                        const td3 = document.createElement('td');
-                        td3.classList.add('py-3');
-                        td3.textContent = row.catg_name;
-                        tr.appendChild(td3);
-
-                        const td4 = document.createElement('td');
-                        td4.classList.add('py-3');
-                        td4.textContent = row.rest_phone;
-                        tr.appendChild(td4);
-
-                        const td5 = document.createElement('td');
-                        td5.textContent = row.m_start;
-                        td5.classList.add('py-3');
-                        tr.appendChild(td5);
-
-                        const td6 = document.createElement('td');
-                        td6.textContent = row.n_end;
-                        td6.classList.add('py-3');
-                        tr.appendChild(td6);
-
-                        const td7 = document.createElement('td');
-                        td7.textContent = row.ml_time;
-                        td7.classList.add('py-3');
-                        tr.appendChild(td7);
-
-                        const td8 = document.createElement('td');
-                        td8.textContent = row.weekly;
-                        td8.classList.add('py-3');
-                        tr.appendChild(td8);
-
-                        const td9 = document.createElement('td');
-                        td9.textContent = row.p_max;
-                        td9.classList.add('py-3');
-                        tr.appendChild(td9);
-
-                        const td91 = document.createElement('td');
-                        td91.textContent = row.book_count;
-                        td91.classList.add('py-3');
-                        tr.appendChild(td91);
-
-                        const td10 = document.createElement('td');
-                        td10.classList.add('text-center');
-                        td10.classList.add('align-middle');
-                        const link1 = document.createElement('a');
-                        link1.href = 'r_formbrowse.php?rest_sid=' + row.rest_sid;
-                        link1.innerHTML = '<i class="fa-solid fa-circle-info text-primary"></i>';
-                        td10.appendChild(link1);
-                        tr.appendChild(td10);
-
-                        const td11 = document.createElement('td');
-                        td11.classList.add('text-center');
-                        td11.classList.add('align-middle');
-                        const link2 = document.createElement('a');
-                        link2.href = 'r_formedit.php?rest_sid=' + row.rest_sid;
-                        link2.innerHTML = '<i class="fa-solid fa-pen-to-square text-success"></i>';
-                        td11.appendChild(link2);
-                        tr.appendChild(td11);
-
-                        const td12 = document.createElement('td');
-                        td12.classList.add('text-center');
-                        td12.classList.add('align-middle');
-                        const link3 = document.createElement('a');
-                        link3.href = 'javascript: delete_it(' + row.rest_sid + ')';
-                        link3.innerHTML = '<i class="fa-solid fa-trash-can text-danger"></i>';
-                        td12.appendChild(link3);
-                        tr.appendChild(td12);
-
-                        tbody.appendChild(tr);
-                    });
-                } else {
-                    console.error(obj.error);
-                }
-            })
-            .catch(ex => {
-                console.log(ex);
-            })
-    });
-
-
-
-
-
-
-
-
-
     //RESET
 
     function checkForm1(event) {

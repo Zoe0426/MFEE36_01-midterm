@@ -79,12 +79,10 @@
                     餐廳
                 </a>
                 <div class="collapse w-100" id="collapseBt3">
-                    <a href="#" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
+                    <a href="../r_read.php" class="nav-link bg-transparent text-dark " data-bs-toggle="collapse">
                         - 餐廳資料
                     </a>
-                    <a href="#" class="nav-link bg-transparent  text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
-                        - 餐廳資料
-                    </a>
+
                 </div>
                 <!-- 活動 -->
             <li class="nav-item">

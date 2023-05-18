@@ -7,23 +7,64 @@ $output = [
     'error' => [],
 ];
 
-// $rest_sid = isset($_POST['rest_sid']) ? intval($_POST['rest_sid']) : 0;
 
-
-
-/*  -- `rest_menu`=?,
-    -- `rest_f_img`=?,
-    -- `ml_time`=?,
-    -- `weekly`=?,*/
-
-/* // $_POST['rest_menu'],
-   // $_POST['rest_f_img'],
-   // $_POST['ml_time'],
-   // $_POST['weekly'],
-   */
 
 if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
+    $isPass = true;
+    // 用餐時間更新
+    $selectedValue = $_POST['ml_time'];
+    $sid = $_POST['rest_sid'];
+
+    // 執行 SQL 語句來更新特定資料列
+    $sql = "UPDATE rest_info SET ml_time = :selectedValue WHERE rest_sid = :sid";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':selectedValue', $selectedValue, PDO::PARAM_STR);
+    $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+    $stmt->execute();
+
+
+    // 星期更新
+    $wselectedValues = $_POST['weekly'];
+
+    // 將所有的 checkbox 值合併為一個字串，以逗號分隔
+    $selectedString = implode(',', $wselectedValues);
+
+    // 執行 SQL 語句來刪除舊值並更新資料表
+    $sql = "UPDATE `rest_info` SET weekly = :selectedString WHERE rest_sid = :sid";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':selectedString', $selectedString, PDO::PARAM_STR);
+    $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+    $stmt->execute();
+
+
+    // 空值設定
+    $dateEnd =  $_POST['date_end'];
+    if (empty($dateEnd)) {
+        $dateEnd = NULL;
+    }
+
+    $m_end =  $_POST['m_end'];
+    if (empty($m_end)) {
+        $m_end = NULL;
+    }
+
+    $e_start = $_POST['e_start'];
+    if (empty($e_start)) {
+        $e_start = NULL;
+    }
+
+    $e_end = $_POST['e_end'];
+    if (empty($e_end)) {
+        $e_end = NULL;
+    }
+
+    $n_start = $_POST['n_start'];
+    if (empty($n_start)) {
+        $n_start = NULL;
+    }
+
+    // rest_info 資料更新
     $isPass = true;
     $sqlParent = "UPDATE `rest_info` 
     SET 
@@ -37,6 +78,7 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
     `rest_f_title`=?,
     `rest_f_ctnt`=?,
+    `rest_f_img`=?,
     `date_start`=?,
 
     `date_end`=?,
@@ -57,7 +99,6 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
 
     $stmt = $pdo->prepare($sqlParent);
-    $weeklyString = implode(',', $_POST['weekly']);
 
 
     $stmt->execute([
@@ -71,15 +112,16 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
 
         $_POST['rest_f_title'],
         $_POST['rest_f_ctnt'],
+        $_POST['rest_f_img'],
         $_POST['date_start'],
 
-        $_POST['date_end'],
+        $dateEnd,
         $_POST['m_start'],
-        $_POST['m_end'],
+        $m_end,
 
-        $_POST['e_start'],
-        $_POST['e_end'],
-        $_POST['n_start'],
+        $e_start,
+        $e_end,
+        $n_start,
 
         $_POST['n_end'],
         $_POST['p_max'],
@@ -118,6 +160,24 @@ if (!empty($_POST['rest_name']) and !empty($_POST['rest_sid'])) {
         foreach ($restSvc as $sSid) {
             $sstmInsert->execute(['restSid' => $delSid, 'sSid' => $sSid]);
         }
+
+        // $isqlDelete = "DELETE FROM rest_img WHERE rest_sid = :restSid";
+        // $istmDelete = $pdo->prepare($isqlDelete);
+        // $istmDelete->execute(['restSid' => $delSid]);
+
+        // $restImg = $_POST['pro_img'];
+        // $isqlInsert = "INSERT INTO rest_img (`rest_sid`,`img_name`) VALUES (:restSid, ?)";
+        // $istmInsert = $pdo->prepare($isqlInsert);
+        // $istmInsert->execute();
+
+
+
+        // $sqlChild3 = "INSERT INTO  `rest_img` (`rest_sid`,`img_name` ) VALUES (?,?)";
+        // $stmt3 = $pdo->prepare($sqlChild3);
+        // $stmt3->execute([
+        //     $parentSid,
+        //     $_POST['pro_img'],
+        // ]);
 
         $output['success'] = true;
     }
