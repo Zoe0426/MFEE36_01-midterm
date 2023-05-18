@@ -97,7 +97,7 @@
                 <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt4">
                     餐廳
                 </a>
-                <div class="collapse w-100" id="collapseBt3">
+                <div class="collapse w-100" id="collapseBt4">
                     <a href="./r_read.php" class="nav-link bg-transparent text-dark">
                         - 餐廳資料
                     </a>
