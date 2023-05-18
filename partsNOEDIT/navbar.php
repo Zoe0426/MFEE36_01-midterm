@@ -82,7 +82,7 @@
                 <a href="#" class="nav-link text-dark " data-bs-toggle="collapse" data-bs-target="#collapseBt3">
                     商城
                 </a>
-                <div class="collapse w-100" id="collapseBt2">
+                <div class="collapse w-100" id="collapseBt3">
                     <a href="./s_list.php" class="nav-link bg-transparent text-dark">
                         - 商品管理
                     </a>
