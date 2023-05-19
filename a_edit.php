@@ -128,7 +128,7 @@ $groupList = $pdo->query($sql3)->fetch();
 
                     <div class="alert alert-danger" role="alert" id="infoBar" style="display:none"></div>
 
-                    <button type="submit" class="btn btn-primary">編輯</button>
+                    <button type="submit" class="btn btn-primary">送出</button>
                 </form>
             </div>
         </div>
@@ -241,7 +241,7 @@ $groupList = $pdo->query($sql3)->fetch();
 
                         infoBar.classList.remove('alert-danger')
                         infoBar.classList.add('alert-success')
-                        infoBar.innerHTML = '新增成功'
+                        infoBar.innerHTML = '編輯成功'
                         infoBar.style.display = 'block';
                         setTimeout(() => {
                             // infoBar.style.display = 'none';
@@ -255,7 +255,7 @@ $groupList = $pdo->query($sql3)->fetch();
                     } else {
                         infoBar.classList.remove('alert-success')
                         infoBar.classList.add('alert-danger')
-                        infoBar.innerHTML = '新增失敗'
+                        infoBar.innerHTML = '編輯失敗'
                         infoBar.style.display = 'block';
                     }
                 })
