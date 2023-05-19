@@ -1,6 +1,6 @@
 <?php
-require './partsNOEDIT/connect-db.php';
-
+require './partsNOEDIT/admin-require.php';
+require "./partsNOEDIT/connect-db.php";
 //下拉的供應商列表
 $sql_shopSup = "SELECT distinct `sup_sid`, `sup_name` FROM `shop_sup` ORDER BY `sup_name`";
 $r_shopSup = $pdo->query($sql_shopSup)->fetchAll();

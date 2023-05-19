@@ -1,5 +1,6 @@
 <?php
-require './partsNOEDIT/connect-db.php';
+require './partsNOEDIT/admin-require.php';
+require "./partsNOEDIT/connect-db.php";
 //取得catg分別的總數（餐廳類別排名）
 $sqlcatg_1 = "SELECT COUNT(catg_sid) FROM `rest_info` WHERE catg_sid='1'"; //取出11
 $stmt_catg_1 = $pdo->query($sqlcatg_1)->fetchColumn();

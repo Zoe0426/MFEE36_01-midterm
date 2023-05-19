@@ -10,7 +10,7 @@ $r = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
 ?>
-
+<?php echo $_SESSION ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
 <style>

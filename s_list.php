@@ -1,5 +1,6 @@
 <?php
-require './partsNOEDIT/connect-db.php';
+require './partsNOEDIT/admin-require.php';
+require "./partsNOEDIT/connect-db.php";
 
 $sql_shopCatDet = "SELECT * FROM `shop_cat` ORDER BY `catDet_num` ";
 $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();

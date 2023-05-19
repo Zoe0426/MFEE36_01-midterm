@@ -1,13 +1,14 @@
-<?php include './partsNOEDIT/html-head.php' ?>
+<?php
+require './partsNOEDIT/admin-require.php';
+require "./partsNOEDIT/connect-db.php";
+?>
 <style>
     .form-text {
         color: red;
     }
 </style>
+<?php include './partsNOEDIT/html-head.php' ?>
 <?php include './partsNOEDIT/navbar.php' ?>
-
-
-
 
 <div class="card col-6">
     <div class="card-body">

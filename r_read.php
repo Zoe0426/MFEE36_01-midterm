@@ -1,6 +1,7 @@
 <?php
 
-require './partsNOEDIT/connect-db.php';
+require './partsNOEDIT/admin-require.php';
+require "./partsNOEDIT/connect-db.php";
 
 $perPage = 20; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
