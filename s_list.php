@@ -31,7 +31,8 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
         width: 100px;
     }
 
-    #s_search_sid {
+    #s_search_sid,
+    #s_search_rank {
         width: 200px
     }
 
@@ -44,7 +45,7 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
 
 <div class="container p-3 mt-5">
     <div class="d-flex my-3 px-0">
-        <form name="s_formS" class="me-auto s_formS">
+        <form name="s_formS" class="me-auto s_formS d-flex justify-content-between">
             <div class="hstack align-items-end">
                 <label class="form-label s_label" for="pro_name" id="s_searchway"> 商品搜尋：</label>
                 <select class="form-select me-3" name="search_sid" id="s_search_sid">
@@ -57,7 +58,18 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                 </select>
                 <div id="s_searchBar"></div>
                 <button type="button" class="btn btn-primary ms-3 me-3" onclick="search()" disabled><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button type="button" class="btn btn-danger" onclick="reSet(event)" disabled><i class="fa-solid fa-rotate-right"></i></button>
+                <button type="button" class="btn btn-danger me-auto" onclick="reSet(event)" disabled><i class="fa-solid fa-rotate-right"></i></button>
+
+            </div>
+            <div class="hstack align-items-end ps-3">
+                <label class="form-label s_label" for="search_rank" id="s_searchway"> 排序方式:</label>
+                <select class="form-select me-3" name="search_rank" id="s_search_rank">
+                    <option value="" selected disabled>--請選擇--</option>
+                    <option value="1">價格由高到低</option>
+                    <option value="2">價格由低到高</option>
+                    <option value="3">編輯時間</option>
+                    <option value="4">商品編號</option>
+                </select>
             </div>
         </form>
         <button type="button" class="btn btn-warning" onclick="createItem()">新增商品</button>
@@ -78,6 +90,17 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
     let docFrag = document.createDocumentFragment();
     const searchID = document.querySelector('#s_search_sid')
     const searchBar = document.querySelector('#s_searchBar')
+    const searchRank = document.querySelector('#s_search_rank')
+
+    searchRank.addEventListener('change', () => {
+        const r = searchRank.value
+        if (searchID.value == 0) {
+            changePage(1, r);
+        } else {
+            search()
+        }
+
+    })
 
     function search() {
         const searchSel = searchID.value;
@@ -486,8 +509,8 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
         //console.log(`perPage:${perPage}, page:${page}, totalRows:${totalRows},totalPages:${totalPages}`)
     }
 
-    function changePage(pageNow) {
-        fetch(`s_list-api.php?page=${pageNow}`)
+    function changePage(pageNow, rankNow) {
+        fetch(`s_list-api.php?page=${pageNow}&search_rank=${rankNow}`)
             .then(r => r.json())
             .then(obj => {
                 let {
@@ -497,7 +520,8 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                     totalPages,
                     rows
                 } = obj;
-
+                const searchRank = document.querySelector('#s_search_rank').value
+                console.log(searchRank)
                 create(perPage, page, totalRows, totalPages, rows);
                 let cliK = document.querySelectorAll('.page-link')
                 for (let i = 0, max = cliK.length; i < max; i++) {
@@ -505,22 +529,22 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                         let k = cliK[i].innerHTML
                         //console.log(isNaN(k))
                         if (i == 0) {
-                            changePage(1)
+                            changePage(1, searchRank)
                         } else if (i == 1) {
                             let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) - 1)
+                            changePage((Number(act) - 1), searchRank)
                         } else if (i == cliK.length - 2) {
                             let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) + 1)
+                            changePage((Number(act) + 1), searchRank)
                         } else if (i == cliK.length - 1) {
-                            changePage(totalPages)
+                            changePage(totalPages, searchRank)
                         } else {
-                            changePage(Number(k))
+                            changePage((Number(k)), searchRank)
                         }
                     })
                 }
             })
     }
-    changePage(1);
+    changePage(1, 4);
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

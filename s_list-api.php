@@ -14,6 +14,27 @@ FROM `shop_proDet` pd
 JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid`";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0];
 
+$searchR = isset($_GET['search_rank']) ? intval($_GET['search_rank']) : 0;
+
+$searchRank = '';
+switch ($searchR) {
+    case 0:
+        $searchRank = "";
+        break;
+    case 1:
+        $searchRank = 'ORDER BY pd.`proDet_price` DESC';
+        break;
+    case 2:
+        $searchRank = 'ORDER BY pd.`proDet_price` ASC';
+        break;
+    case 3:
+        $searchRank = 'ORDER BY p.`pro_update` DESC';
+        break;
+    case 4:
+        $searchRank = 'ORDER BY p.`pro_sid` DESC';
+        break;
+}
+
 if ($totalRows) {
     $totalPages = ceil($totalRows / $perPage);
     if ($page > $totalPages) {
@@ -22,12 +43,14 @@ if ($totalRows) {
     };
     $sql = sprintf('SELECT * FROM `shop_proDet` pd
     JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 ORDER BY p.`pro_sid` DESC LIMIT %s, %s', ($page - 1) * $perPage, $perPage);
+    JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 %s LIMIT %s, %s', $searchRank, ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
 };
 // header('Content-Type: application/json');
 // print_r($rows);
 // exit;
+
+
 
 $filteredArray = array_map(function ($item) {
     $catDetName = "";

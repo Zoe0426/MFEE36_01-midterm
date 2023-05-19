@@ -87,10 +87,10 @@ if (!empty($_POST['pro_name'])) {
         $stmt_spec = $pdo->query($sql_spec)->fetchAll();
         //2. 依據輸入的大類與小類別規格，將其變成品項名稱
         //2-1 
-        $spec_sid1 = $_POST['spec_sid1'];
-        $specDet_sid1 = $_POST['specDet_sid1'];
-        $spec_sid2 = $_POST['spec_sid2'];
-        $specDet_sid2 = $_POST['specDet_sid2'];
+        $spec_sid1 = empty($_POST['spec_sid1']) ? [] : $_POST['spec_sid1'];
+        $specDet_sid1 = empty($_POST['specDet_sid1']) ? [] : $_POST['specDet_sid1'];
+        $spec_sid2 = empty($_POST['spec_sid2']) ? [] : $_POST['spec_sid2'];
+        $specDet_sid2 = empty($_POST['specDet_sid2']) ? [] : $_POST['spec_sid2'];
 
         $proDet_name = [];
         for ($i = 0, $max = count($spec_sid1); $i < $max; $i++) {
@@ -148,13 +148,15 @@ if (!empty($_POST['pro_name'])) {
                 $_POST['specDet_sid1'][$k]
             ]);
         }
-        foreach ($proNewArr['proDet_sid'] as $k => $v) {
-            $stmt_proSpec->execute([
-                $_POST['pro_sid'],
-                sprintf('%02d', $v),
-                $_POST['spec_sid2'][$k],
-                $_POST['specDet_sid2'][$k]
-            ]);
+        if (!empty($_POST['specDet_sid2'])) {
+            foreach ($proNewArr['proDet_sid'] as $k => $v) {
+                $stmt_proSpec->execute([
+                    $_POST['pro_sid'],
+                    sprintf('%02d', $v),
+                    $_POST['spec_sid2'][$k],
+                    $_POST['specDet_sid2'][$k]
+                ]);
+            }
         }
         $output['success'] = !!$stmt_proSpec->rowCount();
     }

@@ -94,6 +94,9 @@
                     <a href="./s_proSpecAdd.php" class="nav-link bg-transparent  text-dark">
                         - 規格管理
                     </a>
+                    <a href="./s_dataAnalysis.php" class="nav-link bg-transparent  text-dark">
+                        - 商品分析
+                    </a>
                 </div>
             </li>
 

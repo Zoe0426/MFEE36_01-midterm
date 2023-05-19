@@ -73,6 +73,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         display: flex;
         justify-content: end;
     }
+
+    .form-text {
+        color: red;
+    }
 </style>
 
 <?php include './partsNOEDIT/navbar.php' ?>
@@ -105,7 +109,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <div class="mb-3">
                         <label class="form-label">適用對象</label>
                         <div class="d-flex">
-                            <select class="form-select" name="pro_for" id="shopForSel">
+                            <select class="form-select" name="pro_for" id="shopForSel" data-required="1">
                                 <option value="" selected disabled>--請選擇--</option>
                                 <option value="D">狗</option>
                                 <option value="C">貓</option>
@@ -118,7 +122,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label" for="s_sup_sid">產品類別</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select" name="cat_sid" id="s_cat_sid">
+                                <select class="form-select" name="cat_sid" id="s_cat_sid" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopCat as $r) : ?>
                                         <option value="<?= $r['cat_sid'] ?>"><?= $r['cat_name'] ?></option>
@@ -135,7 +139,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label" for="s_sup_sid">供應商</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select" name="sup_sid" id="s_sup_sid">
+                                <select class="form-select" name="sup_sid" id="s_sup_sid" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopSup as $r) : ?>
                                         <option value="<?= $r['sup_sid'] ?>"><?= $r['sup_name'] ?></option>
@@ -168,7 +172,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label">規格一</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select s_spec_sid1" name="spec_sid1[]">
+                                <select class="form-select s_spec_sid1" name="spec_sid1[]" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopSpec as $r) : ?>
                                         <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
@@ -208,7 +212,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <div class="mb-3">
                         <label class="form-label">適用年齡</label>
                         <div class="d-flex">
-                            <select class="form-select" name="pro_forAge[]">
+                            <select class="form-select" name="pro_forAge[]" data-required="1">
                                 <option value="" selected disabled>--請選擇--</option>
                                 <option value="1">幼年</option>
                                 <option value="2">成年</option>
@@ -245,8 +249,50 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
     }
 
     function cancelcreate() {
-        history.go(-1)
+        location.href = 's_list.php'
     }
+
+    function resetRemind() {
+        const filedall = document.querySelectorAll('form [data-required="1"]')
+        const spec2 = document.querySelectorAll('.s_spec_sid2')
+        const specDet1 = document.querySelectorAll('.s_specDet_sid1')
+        const specDet2 = document.querySelectorAll('.s_specDet_sid2')
+        const spec1 = document.querySelectorAll('.s_spec_sid1')
+        for (let fa of filedall) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of spec1) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of spec2) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of specDet1) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of specDet2) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+
+    }
+    resetRemind()
+
+
 
     function checkForm(event) {
         event.preventDefault()
@@ -257,7 +303,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         //恢復所有欄位的外觀
         for (let f of filedType) {
             f.style.border = '1px solid #CCC';
-            f.nextElementSibling.innerText = '';
+            f.closest('.mb-3').lastChild.textContent = '';
         }
 
         //部分欄位皆必填
@@ -265,8 +311,49 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             if (!f.value) {
                 isPass = false;
                 f.style.border = '1px solid red';
-                f.nextElementSibling.innerText = '請輸入資料';
+                f.closest('.mb-3').lastChild.textContent = '* 請輸入資料';
             }
+        }
+
+        const spec1 = document.querySelectorAll('.s_spec_sid1')
+        const spec2 = document.querySelectorAll('.s_spec_sid2')
+        const specDet1 = document.querySelectorAll('.s_specDet_sid1')
+        const specDet2 = document.querySelectorAll('.s_specDet_sid2')
+        const combinations = [];
+
+        // 遍历每一组下拉选项
+        for (let i = 0; i < spec1.length; i++) {
+            const combination = [spec1[i].value, spec2[i].value, specDet1[i].value, specDet2[i].value];
+
+            // 将四列的值组成一个排列组合
+            combinations.push(combination.join('-'));
+        }
+
+        const isDuplicateCombination = (arr) => new Set(arr).size !== arr.length;
+
+        if (isDuplicateCombination(combinations)) {
+            // 存在相同的排列组合
+            isPass = false;
+
+            spec1.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            spec2.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            specDet1.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            specDet2.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
         }
 
         if (isPass) {
@@ -328,7 +415,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <label class="form-label">規格一</label>
                         <div class="row">
                             <div class="col-6">
-                                <select class="form-select s_spec_sid1" name="spec_sid1[]">
+                                <select class="form-select s_spec_sid1" name="spec_sid1[]" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopSpec as $r) : ?>
                                         <option value="<?= $r['spec_sid'] ?>"><?= $r['spec_name'] ?></option>
@@ -368,7 +455,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                     <div class="mb-3">
                         <label class="form-label">適用年齡</label>
                         <div class="d-flex">
-                            <select class="form-select" name="pro_forAge[]">
+                            <select class="form-select" name="pro_forAge[]" data-required="1">
                                 <option value="" selected disabled>--請選擇--</option>
                                 <option value="1">幼年</option>
                                 <option value="2">成年</option>
@@ -386,6 +473,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
             createProDetBox()
             createproDetImgBox(index + 1)
+            resetRemind()
         }
         if (target.classList.contains('s_del')) {
             event.target.closest('.col-3').remove()
