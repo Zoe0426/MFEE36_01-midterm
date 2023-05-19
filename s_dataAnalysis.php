@@ -8,9 +8,9 @@ require './partsNOEDIT/connect-db.php'
 
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
-    /* .dataA {
+    .dataA {
         width: 80%;
-    } */
+    }
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container mt-5 pt-5">
@@ -23,12 +23,12 @@ require './partsNOEDIT/connect-db.php'
             </div>
 
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
             <h1 class="mb-4">前五大銷售額</h1>
             <div class="dataA">
                 <canvas id="myChart2"></canvas>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
@@ -54,11 +54,11 @@ require './partsNOEDIT/connect-db.php'
                 const arrName = [];
                 const arrNum = [];
                 for (let t of top5) {
-                    let sNum = t.slaeAmount
+                    let sNum = t.saleQty
                     otherNum += parseInt(sNum)
                     arrNum.push(sNum)
                     arrName.push(`(${t.cat})   ${t.proName}`)
-
+                    console.log(t.saleQty)
                     // arrQ.push((t.slaeAmount / salesQtyAmount.total_sales_amount))
                     // arrN.push(t.proName)
                     // sumQ += parseInt(t.slaeAmount)
@@ -66,6 +66,7 @@ require './partsNOEDIT/connect-db.php'
                 arrNum.push(otherNum)
                 arrName.push('其他')
                 // console.log(arrQ)
+                console.log(otherNum)
                 console.log(arrNum)
                 const dataDNchart = new Chart(document.querySelector('#myChart'), {
                     type: 'doughnut',
@@ -115,25 +116,25 @@ require './partsNOEDIT/connect-db.php'
     getData()
 
 
-    const ctx = document.getElementById('myChart2');
+    // const ctx = document.getElementById('myChart2');
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+    // new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [12, 19, 3, 5, 2, 3],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             y: {
+    //                 beginAtZero: true
+    //             }
+    //         }
+    //     }
+    // });
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

@@ -7,7 +7,7 @@ $sql_top5 = "SELECT p.`pro_sid`, p.`cat_sid`,p.`catDet_sid`, p.`pro_for`, p.`pro
 FROM `shop_pro` p
 JOIN `shop_prodet` pd ON pd.`pro_sid`=p.`pro_sid`
 JOIN `shop_sup` s ON s.`sup_sid`=p.`sup_sid`
-LEFT JOIN `ord_cart` c ON c.`rel_sid`=pd.`pro_sid` AND c.`rel_seqNum_sid`=pd.`proDet_sid` GROUP BY p.`pro_sid` ORDER BY `sales_amount` DESC LIMIT 5";
+LEFT JOIN `ord_cart` c ON c.`rel_sid`=pd.`pro_sid` AND c.`rel_seqNum_sid`=pd.`proDet_sid` GROUP BY p.`pro_sid` ORDER BY `sales_qty` DESC LIMIT 5";
 
 
 $sql_salesQM = "SELECT SUM(c.`prodQty`) AS total_sales_quantity, SUM(pd.`proDet_price`*c.`prodQty`) total_sales_amount

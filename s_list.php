@@ -61,7 +61,7 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                 <button type="button" class="btn btn-danger me-auto" onclick="reSet(event)" disabled><i class="fa-solid fa-rotate-right"></i></button>
 
             </div>
-            <div class="hstack align-items-end">
+            <div class="hstack align-items-end ps-3">
                 <label class="form-label s_label" for="search_rank" id="s_searchway"> 排序方式:</label>
                 <select class="form-select me-3" name="search_rank" id="s_search_rank">
                     <option value="" selected disabled>--請選擇--</option>
@@ -520,7 +520,8 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                     totalPages,
                     rows
                 } = obj;
-
+                const searchRank = document.querySelector('#s_search_rank').value
+                console.log(searchRank)
                 create(perPage, page, totalRows, totalPages, rows);
                 let cliK = document.querySelectorAll('.page-link')
                 for (let i = 0, max = cliK.length; i < max; i++) {
@@ -528,17 +529,17 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                         let k = cliK[i].innerHTML
                         //console.log(isNaN(k))
                         if (i == 0) {
-                            changePage(1)
+                            changePage(1, searchRank)
                         } else if (i == 1) {
                             let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) - 1)
+                            changePage((Number(act) - 1), searchRank)
                         } else if (i == cliK.length - 2) {
                             let act = document.querySelector('.active').innerHTML
-                            changePage(Number(act) + 1)
+                            changePage((Number(act) + 1), searchRank)
                         } else if (i == cliK.length - 1) {
-                            changePage(totalPages)
+                            changePage(totalPages, searchRank)
                         } else {
-                            changePage(Number(k))
+                            changePage((Number(k)), searchRank)
                         }
                     })
                 }
