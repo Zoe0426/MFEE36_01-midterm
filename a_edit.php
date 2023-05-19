@@ -256,10 +256,17 @@ $groupList = $pdo->query($sql3)->fetch();
 
 
                     } else {
-                        infoBar.classList.remove('alert-success')
-                        infoBar.classList.add('alert-danger')
-                        infoBar.innerHTML = '編輯失敗'
+                        infoBar.classList.remove('alert-danger')
+                        infoBar.classList.add('alert-success')
+                        infoBar.innerHTML = '編輯成功'
                         infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            // infoBar.style.display = 'none';
+
+                            //跳轉頁面回去read
+                            location.href = 'a_list_admin_TypeS.php';
+                        }, 1500);
+
                     }
                 })
                 .catch(ex => {
