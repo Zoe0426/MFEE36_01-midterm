@@ -109,12 +109,6 @@ require './partsNOEDIT/connect-db.php'
                     }
                 })
 
-                // const databar = new chart(document.querySelector("#myChart2"), {
-                //     type: 'bar',
-                //     data:
-
-                // })
-
             })
     }
 

@@ -254,14 +254,45 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
     function resetRemind() {
         const filedall = document.querySelectorAll('form [data-required="1"]')
+        const spec2 = document.querySelectorAll('.s_spec_sid2')
+        const specDet1 = document.querySelectorAll('.s_specDet_sid1')
+        const specDet2 = document.querySelectorAll('.s_specDet_sid2')
+        const spec1 = document.querySelectorAll('.s_spec_sid1')
         for (let fa of filedall) {
             fa.addEventListener('blur', () => {
                 fa.style.border = '1px solid #CCC';
                 fa.closest('.mb-3').lastChild.textContent = '';
             })
         }
+        for (let fa of spec1) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of spec2) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of specDet1) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+        for (let fa of specDet2) {
+            fa.addEventListener('blur', () => {
+                fa.style.border = '1px solid #CCC';
+                fa.closest('.mb-3').lastChild.textContent = '';
+            })
+        }
+
     }
     resetRemind()
+
+
 
     function checkForm(event) {
         event.preventDefault()
@@ -282,6 +313,47 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                 f.style.border = '1px solid red';
                 f.closest('.mb-3').lastChild.textContent = '* 請輸入資料';
             }
+        }
+
+        const spec1 = document.querySelectorAll('.s_spec_sid1')
+        const spec2 = document.querySelectorAll('.s_spec_sid2')
+        const specDet1 = document.querySelectorAll('.s_specDet_sid1')
+        const specDet2 = document.querySelectorAll('.s_specDet_sid2')
+        const combinations = [];
+
+        // 遍历每一组下拉选项
+        for (let i = 0; i < spec1.length; i++) {
+            const combination = [spec1[i].value, spec2[i].value, specDet1[i].value, specDet2[i].value];
+
+            // 将四列的值组成一个排列组合
+            combinations.push(combination.join('-'));
+        }
+
+        const isDuplicateCombination = (arr) => new Set(arr).size !== arr.length;
+
+        if (isDuplicateCombination(combinations)) {
+            // 存在相同的排列组合
+            isPass = false;
+
+            spec1.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            spec2.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            specDet1.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
+
+            specDet2.forEach((element) => {
+                element.style.border = '1px solid red';
+                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+            });
         }
 
         if (isPass) {
@@ -401,6 +473,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 
             createProDetBox()
             createproDetImgBox(index + 1)
+            resetRemind()
         }
         if (target.classList.contains('s_del')) {
             event.target.closest('.col-3').remove()

@@ -8,8 +8,27 @@ if ($page < 1) {
     exit;
 };
 
-$searchC = isset($_POST['search_sid']) ? intval($_POST['search_sid']) : "";
+$searchC = isset($_POST['search_sid']) ? intval($_POST['search_sid']) : 0;
 $searchW = "";
+$searchR = isset($_POST['search_rank']) ? intval($_POST['search_rank']) : 0;
+$searchRank = '';
+switch ($searchR) {
+    case 0:
+        $searchRank = "";
+        break;
+    case 1:
+        $searchRank = 'ORDER BY pd.`proDet_price` DESC';
+        break;
+    case 2:
+        $searchRank = 'ORDER BY pd.`proDet_price` ASC';
+        break;
+    case 3:
+        $searchRank = 'ORDER BY p.`pro_update` DESC';
+        break;
+    case 4:
+        $searchRank = 'ORDER BY p.`pro_sid` DESC';
+        break;
+}
 
 $sql_searchC = "";
 
@@ -21,7 +40,7 @@ switch ($searchC) {
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_name` LIKE '%$searchW%'";
         $sql_search = "SELECT * FROM `shop_proDet` pd
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_name`LIKE '%{$searchW}%' ORDER BY p.`pro_sid` DESC";
+        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_name`LIKE '%{$searchW}%' $searchRank";
         break;
     case 2:
         $searchW = $_POST['search_word'];
@@ -30,7 +49,7 @@ switch ($searchC) {
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`catDet_sid`='{$searchW}'";
         $sql_search = "SELECT * FROM `shop_proDet` pd
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`catDet_sid`='{$searchW}' ORDER BY p.`pro_sid` DESC ";
+        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`catDet_sid`='{$searchW}' $searchRank";
         break;
     case 3:
         $searchW = $_POST['search_word'];
@@ -39,7 +58,7 @@ switch ($searchC) {
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_for`='{$searchW}'";
         $sql_search = "SELECT * FROM `shop_proDet` pd
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_for`='{$searchW}' ORDER BY p.`pro_sid` DESC ";
+        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_for`='{$searchW}' $searchRank";
         break;
     case 4:
         $searchW = intval($_POST['search_word']);
@@ -48,7 +67,7 @@ switch ($searchC) {
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE pd.`pro_forAge`='{$searchW}'";
         $sql_search = "SELECT * FROM `shop_proDet` pd
         JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND pd.`pro_forAge`='{$searchW}' ORDER BY p.`pro_sid` DESC";
+        JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND pd.`pro_forAge`='{$searchW}' $searchRank";
         break;
     case 5:
         $searchW = intval($_POST['search_word']);
@@ -57,7 +76,7 @@ switch ($searchC) {
             JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` WHERE p.`pro_status`='{$searchW}'";
         $sql_search = "SELECT * FROM `shop_proDet` pd
             JOIN `shop_pro` p ON pd.`pro_sid`=p.`pro_sid` 
-            JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_status`='{$searchW}' ORDER BY p.`pro_sid` DESC";
+            JOIN `shop_cat` c ON p.`cat_sid`=c.`cat_sid` and p.`catDet_sid` =c.`catDet_sid` WHERE p.`pro_status` !=3 AND p.`pro_status`='{$searchW}' $searchRank";
         break;
 };
 
