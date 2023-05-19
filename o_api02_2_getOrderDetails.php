@@ -9,7 +9,11 @@ $output = [
 $ordSid = isset($_GET['orderSid']) ? $_GET['orderSid'] : '';
 
 if (!empty($ordSid)) {
-    $sqlDetails = "SELECT * FROM `ord_details` WHERE order_sid = ?;";
+    $sqlDetails = "SELECT od.*, oo.*, mm.member_name ,mm.member_mobile, mm.member_birth FROM `ord_details` od 
+    JOIN ord_order oo ON od.order_sid = oo.order_sid 
+    JOIN mem_member mm ON oo.member_sid = mm.member_sid 
+    WHERE oo.order_sid = ?; ";
+
     $stm = $pdo->prepare($sqlDetails);
     $stm->execute([$ordSid]);
     $data = $stm->fetchAll();

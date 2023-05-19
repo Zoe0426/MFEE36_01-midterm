@@ -17,7 +17,12 @@ require './partsNOEDIT/connect-db.php' ?>
     <form id="oGetmem" onsubmit="getMemOrd(event)">
         <div class="container-fluid">
             <div class="row g-0">
-                <p class="fs-5 fw-bold text-secondary">訂單管理系統</p>
+
+                <div class="d-flex align-items-start">
+                    <p class="fs-5 fw-bold text-secondary pe-3">訂單管理系統</p>
+                    <button type="button" class="btn btn-outline-info" id="allOrderBtn">所有訂單</button>
+                </div>
+
                 <div class="col-4">
                     <select class="form-select" aria-label="Default select example" name="searchBy" onchange="searchm(event)">
                         <option selected value="1">訂單編號</option>
@@ -50,8 +55,14 @@ require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const oOrdersTable = document.getElementById('oOrdersTable');
-    // ====顯示所有訂單明細====
+    const oMemTb = document.querySelector(".o-mem-table");
+    const allOrderBtn = document.querySelector('#allOrderBtn');
+    allOrderBtn.addEventListener('click', () => {
+        showAllOrders(1);
+    });
+    // ====顯示所有訂單====
     function showAllOrders(page) {
+
         fetch(`o_api02_3_showOrders.php?page=${page}`)
             .then(r => r.json())
             .then(obj => {
@@ -64,7 +75,6 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     showAllOrders(1);
     // ====顯示頁數BTN====
-
     function displayPageBtns(obj) {
         console.log(obj);
         let oPageBtns = document.querySelector("#oPageBtns");
@@ -75,8 +85,8 @@ require './partsNOEDIT/connect-db.php' ?>
         // //產出有頁碼的按鈕
         let pageBtn = "";
         let page = parseInt(obj.page);
-        let start = page - 2;
-        let size = page + 2;
+        let start = page;
+        let size = page;
 
         for (let i = start; i <= size; i++) {
             let btns = "";
@@ -84,7 +94,7 @@ require './partsNOEDIT/connect-db.php' ?>
                 btns = `<li class="page-item active" ><a class="page-link cPage">${i}</a></li>`;
                 pageBtn += btns;
                 continue;
-            } else if (i >= 1 && i <= obj.totalPage) {
+            } else if (i >= 1 && i <= obj.totalPages) {
                 btns = `<li class="page-item" ><a class="page-link cPage">${i}</a></li>`;
                 pageBtn += btns;
             }
@@ -119,20 +129,18 @@ require './partsNOEDIT/connect-db.php' ?>
         })
         pPage.addEventListener("click", () => {
             let p = parseInt(obj.page) - 1;
-            console.log(p);
             if (p >= 1) {
                 showAllOrders(p);
             }
         })
         nPage.addEventListener("click", () => {
             let p = parseInt(obj.page) + 1;
-            let totalP = obj.totalPage;
-            console.log(p);
+            let totalP = obj.totalPages;
             if (p <= totalP)
-                showAllOrders(page + 1);
+                showAllOrders(p + 1);
         })
         lPage.addEventListener("click", () => {
-            let p = obj.totalPage;
+            let p = obj.totalPages;
             showAllOrders(p);
         })
 
@@ -151,6 +159,7 @@ require './partsNOEDIT/connect-db.php' ?>
         const mobileInput = document.getElementById('sbmobile');
         const memsidInput = document.getElementById('sbmemsid');
         oOrdersTable.innerHTML = '';
+        oMemTb.innerHTML = "";
         if (nameInput.value || mobileInput.value || memsidInput.value || orderSidInput) {
             const fd = new FormData(document.getElementById('oGetmem'));
             fetch('o_api02_1_getMemOrders.php', {
@@ -198,7 +207,7 @@ require './partsNOEDIT/connect-db.php' ?>
     }
     //====顯示會員資料====
     function showMemInfo(obj) {
-        let oMemTb = document.querySelector(".o-mem-table");
+
         let oMemDetails = '';
         if (obj.getBy == "memName") {
             oMemDetails = obj.name_orders[0];
@@ -230,9 +239,10 @@ require './partsNOEDIT/connect-db.php' ?>
                         </tbody>
                     </table>`;
     }
-    // ====顯示全部訂單====
+    // ====顯示全部訂單orders====
     function tableAll(obj) {
         oOrdersTable.innerHTML = "";
+        oMemTb.innerHTML = "";
         const allOrderTable = document.createElement('div');
         const displayItems = obj.rows;
         let orderStatus = "";
@@ -257,7 +267,7 @@ require './partsNOEDIT/connect-db.php' ?>
             } else {
                 console.log('postStatus unknown');
             }
-            items += `<tr">
+            items += `<tr class="bg-light">
             <th scope="row">${displayItems[i].order_sid}</th>
             <td>${displayItems[i].member_sid}</td>
             <td>${orderStatus}</td>
@@ -270,7 +280,7 @@ require './partsNOEDIT/connect-db.php' ?>
         <tr style="display:none;"></tr>`;
         }
         allOrderTable.innerHTML = `<table class="table ocd">
-            <thead>
+            <thead class="bg-danger-subtle">
                 <tr>
                     <th scope="col">訂單編號</th>
                     <th scope="col">會員編號</th>
@@ -288,7 +298,6 @@ require './partsNOEDIT/connect-db.php' ?>
             </tbody>
         </table>`;
         oOrdersTable.append(allOrderTable);
-
     }
     // ====顯示指定訂單====
     function tableByOrderSid(obj) {
@@ -313,7 +322,7 @@ require './partsNOEDIT/connect-db.php' ?>
         }
 
         orderSidTable.innerHTML = `<table class="table ocd">
-                <thead>
+                <thead class="bg-danger-subtle">
                     <tr>
                         <th scope="col">訂單編號</th>
                         <th scope="col">會員編號</th>
@@ -326,7 +335,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr class="bg-light">
                         <th scope="row">${obj.order_sid}</th>
                         <td>${obj.member_sid}</td>
                         <td>${orderStatus}</td>
@@ -344,7 +353,7 @@ require './partsNOEDIT/connect-db.php' ?>
         oOrdersTable.append(orderSidTable);
 
     }
-    // ====顯示某員的所有訂單====
+    // ====顯示某員的所有訂單orders-member====
     function tableByMemInfo(obj) {
         const mixTable = document.createElement('div');
         // mixTable.classList.add('test');
@@ -379,7 +388,7 @@ require './partsNOEDIT/connect-db.php' ?>
             } else {
                 console.log('postStatus unknown');
             }
-            items += `<tr">
+            items += `<tr class="bg-light">
                         <th scope="row">${displayItems[i].order_sid}</th>
                         <td>${displayItems[i].member_sid}</td>
                         <td>${orderStatus}</td>
@@ -392,7 +401,7 @@ require './partsNOEDIT/connect-db.php' ?>
                     <tr style="display:none;"></tr>`;
         }
         mixTable.innerHTML = `<table class="table ocd">
-                <thead>
+                <thead class="bg-danger-subtle">
                     <tr>
                         <th scope="col">訂單編號</th>
                         <th scope="col">會員編號</th>
@@ -411,20 +420,18 @@ require './partsNOEDIT/connect-db.php' ?>
             </table>`;
         oOrdersTable.append(mixTable);
     }
-    // ====顯示訂單明細====
+    // ====顯示訂單明細 order Details====
     function showDetails(ord, x) {
         fetch(`o_api02_2_getOrderDetails.php?orderSid=${ord}`)
             .then(r => r.json())
             .then(objectD => {
+                console.log(objectD);
                 let objArray = objectD.order_details;
                 let detailsRow = x.parentElement.parentElement.nextElementSibling;
 
                 if (detailsRow.innerHTML !== "") {
                     detailsRow.innerHTML = "";
                 }
-                console.log('detailsRow:');
-                console.log(detailsRow);
-
 
                 let dRowsTd = ""
                 for (let obj of objArray) {
@@ -448,25 +455,25 @@ require './partsNOEDIT/connect-db.php' ?>
                     obj.adultQty == null ? adQty = 0 : adQty = obj.adultQty;
                     obj.childAmount == null ? kidAmount = 0 : kidAmount = obj.childAmount;
                     obj.childQty == null ? kidQty = 0 : kidQty = obj.childQty;
-                    dRowsTd += `<tr>
+                    dRowsTd += `<tr class="border border-bottom border-dark">
                             <td>${rel_type}</td>
                             <td>${obj.rel_sid}</td>
                             <td>${obj.rel_seq_sid}</td>
                             <td>${obj.relName}</td>
                             <td>${obj.rel_seqName}</td>
-                            <td>${pAmount}</td>
+                            <td>$${pAmount}</td>
                             <td>${qty}</td>
-                            <td>${adAmount}</td>
+                            <td>$${adAmount}</td>
                             <td>${adQty}</td>
-                            <td>${kidAmount}</td>
+                            <td>$${kidAmount}</td>
                             <td>${kidQty}</td>
-                            <td>${obj.amount}</td>
+                            <td>$${obj.amount}</td>
                         </tr>`
                 }
                 detailsRow.innerHTML += `<td colspan="8">
-                        <table class="table table-bordered table-light">
-                                <thead>
-                                    <tr>
+                        <table class="table table-bordered">
+                                <thead class="bg-warning-subtle">
+                                    <tr >
                                         <th scope="col">明細來源</th>
                                         <th scope="col">產品編號</th>
                                         <th scope="col">品項編號</th>
@@ -483,6 +490,18 @@ require './partsNOEDIT/connect-db.php' ?>
                                 </thead>
                                 <tbody>
                                    ${dRowsTd}
+                                   <tr class="bg-body-tertiary">
+                                    <td colspan="3" class="bg-white">姓名： <span class="fw-bold">${objectD.order_details[0].member_name}</span></td> 
+                                    <td colspan="3" class="bg-white">電話： <span class="fw-bold">${objectD.order_details[0].member_mobile}</span></td>
+                                    <td colspan="6" class="bg-white">郵寄費用： <span class="fw-bold">$${objectD.order_details[0].postAmount}</span></td>                                 
+                                    </tr>
+                                    <tr class="bg-body-tertiary">
+                                    <td colspan="12" class="bg-white">地址：<span class="fw-bold">${objectD.order_details[0].postAddress}</span> </td>        
+                                    </tr>
+                                    <tr class="bg-body-tertiary">
+                                    <td colspan="4" class="bg-white">優惠券編號：<span class="fw-bold">${objectD.order_details[0].coupon_sid}</span> </td>        
+                                    <td colspan="8" class="bg-white">優惠券金額：<span class="fw-bold">$${objectD.order_details[0].couponAmount}</span> </td>        
+                                    </tr>
                                 </tbody>
                             </table>
                         </td>`;
