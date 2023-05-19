@@ -8,9 +8,19 @@ $output = [
 ];
 
 
+$perPage = 20; # 每頁最多幾筆
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
+
+if ($page < 1) {
+    header('Location: ?page=1');
+    exit;
+}
+
+
 
 if (isset($_POST['keyword'])) {
     $keyword = $_POST['keyword'];
+    $offset = ($page - 1) * $perPage;
 
     $stmt = "SELECT ri.*, rc.catg_name, COALESCE(rb.book_count, 0) AS book_count
     FROM rest_info ri
@@ -20,7 +30,8 @@ if (isset($_POST['keyword'])) {
         FROM rest_book
         GROUP BY rest_sid
     ) rb ON ri.rest_sid = rb.rest_sid
-    WHERE rest_name LIKE '%$keyword%'";
+    WHERE rest_name LIKE '%$keyword%'
+    LIMIT $offset, $perPage ";
 
     $data = $pdo->query($stmt)->fetchAll();
 
@@ -31,7 +42,7 @@ if (isset($_POST['keyword'])) {
     $output['code'] = 0;
     $output['error'] = [];
 } else {
-    // 沒有 'keyword' 索引，回傳錯誤訊息
+
     $output['success'] = false;
     $output['error'] = 'Missing keyword parameter';
 }

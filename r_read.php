@@ -2,7 +2,7 @@
 
 require './partsNOEDIT/connect-db.php';
 
-$perPage = 25; # 每頁最多幾筆
+$perPage = 20; # 每頁最多幾筆
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1; # 用戶要看第幾頁
 
 if ($page < 1) {
@@ -10,7 +10,7 @@ if ($page < 1) {
     exit;
 }
 
-
+// $catg_sid = isset($_GET['catg_sid']) ? $_GET['catg_sid'] : '';
 
 $t_sql = "SELECT COUNT(1) FROM rest_info";
 $totalRows = $pdo->query($t_sql)->fetch(PDO::FETCH_NUM)[0]; # 總筆數
@@ -173,7 +173,7 @@ if ($totalRows) {
                     if ($i >= 1 and $i <= $totalPages) :
                 ?>
                         <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                            <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            <a class="page-link" href="?page=<?= $i ?><?= isset($_GET['catg_sid']) ? '&catg_sid=' . $_GET['catg_sid'] : '' ?>"><?= $i ?></a>
                         </li>
                 <?php endif;
                 endfor; ?>
@@ -786,5 +786,11 @@ if ($totalRows) {
                 console.log(ex);
             })
     });
+    // const catg_sid = document.querySelector("#catg_sid");
+    // catg_sid.addEventListener("change", function() {
+    //     const catg_sidVal = catg_sid.value;
+    //     console.log(catg_sidVal);
+    //     location.href = `r_read.php?catg_sid=${catg_sidVal}`;
+    // })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
