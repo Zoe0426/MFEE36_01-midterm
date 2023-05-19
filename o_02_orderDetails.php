@@ -76,7 +76,7 @@ require './partsNOEDIT/connect-db.php' ?>
     showAllOrders(1);
     // ====顯示頁數BTN====
     function displayPageBtns(obj) {
-        // console.log(obj);
+        console.log(obj);
         let oPageBtns = document.querySelector("#oPageBtns");
         //若原本有內容就清掉
         if (oPageBtns.innerHTML) {
@@ -129,19 +129,18 @@ require './partsNOEDIT/connect-db.php' ?>
         })
         pPage.addEventListener("click", () => {
             let p = parseInt(obj.page) - 1;
-
             if (p >= 1) {
                 showAllOrders(p);
             }
         })
         nPage.addEventListener("click", () => {
             let p = parseInt(obj.page) + 1;
-            let totalP = obj.totalPage;
+            let totalP = obj.totalPages;
             if (p <= totalP)
-                showAllOrders(page + 1);
+                showAllOrders(p + 1);
         })
         lPage.addEventListener("click", () => {
-            let p = obj.totalPage;
+            let p = obj.totalPages;
             showAllOrders(p);
         })
 
@@ -243,6 +242,7 @@ require './partsNOEDIT/connect-db.php' ?>
     // ====顯示全部訂單orders====
     function tableAll(obj) {
         oOrdersTable.innerHTML = "";
+        oMemTb.innerHTML = "";
         const allOrderTable = document.createElement('div');
         const displayItems = obj.rows;
         let orderStatus = "";

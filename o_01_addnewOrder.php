@@ -260,9 +260,15 @@ require './partsNOEDIT/connect-db.php' ?>
 
         prodSubtotal.innerHTML = calProdTotalPrice();
         actSubtotal.innerHTML = calActTotalPrice();
-        post.innerHTML = '80';
+        if (prodSubtotal.innerHTML == 0) {
+            post.innerHTML = '0';
+        } else {
+            post.innerHTML = '80';
+        }
         couponPrice.innerHTML = calCouponPrice();
-        total.innerHTML = calProdTotalPrice() + calActTotalPrice() + 80 - calCouponPrice();
+        total.innerHTML = calProdTotalPrice() + calActTotalPrice() + (parseInt(post.innerHTML)) - calCouponPrice();
+
+
     }
     //====顯示總金額block====
     function showTotalPriceInfo() {
@@ -617,9 +623,7 @@ require './partsNOEDIT/connect-db.php' ?>
         decodedString.prodQty = updatedQty;
         const updatedString = encodeURIComponent(JSON.stringify(decodedString));
         encodedString.value = updatedString;
-
-
-
+        calAllTotalPrice();
     }
     //====更新活動庫存,Cart Qty===
     function aChangeStock(e) {
@@ -652,6 +656,7 @@ require './partsNOEDIT/connect-db.php' ?>
         }
         const updatedString = encodeURIComponent(JSON.stringify(decodedString));
         encodedString.value = updatedString;
+        calAllTotalPrice();
     }
     //====刪除購物車內容====
     function deleteCartItem(mem, pro, prod, x) {
