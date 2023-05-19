@@ -32,60 +32,31 @@ $stmt_keyword = $pdo->query($sql_keyword)->fetch();
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
                     <th scope="col">#</th>
                     <th scope="col">優惠券代碼</th>
                     <th scope="col">優惠券名稱</th>
                     <th scope="col">優惠券金額</th>
                     <th scope="col">開始日</th>
                     <th scope="col">結束日</th>
-                    <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                 </tr>
             </thead>
             <?php if ($stmt_keyword) {
                 echo "<tbody>
 
                 <tr>
-                    <td><a href=\"javascript: delete_it('{$stmt_keyword['coupon_sid']}')\">
-                            <i class=\"fa-solid fa-trash-can\"></i>
-                        </a>
-                    </td>
                     <td> {$stmt_keyword['coupon_sid']}</td>
                     <td> {$stmt_keyword['coupon_code']} </td>
                     <td> {$stmt_keyword['coupon_name']}</td>
                     <td> {$stmt_keyword['coupon_price']}</td>
                     <td> {$stmt_keyword['coupon_startDate']} </td>
                     <td> {$stmt_keyword['coupon_expDate']}</td>
-                    <td><a href=\"m_coupon_type_update.php?coupon_sid= {$stmt_keyword['coupon_sid']}\">
-                            <i class=\"fa-solid fa-pen-to-square\"></i>
-                        </a>
-                    </td>
                 </tr>
 
             </tbody>";
             } else {
                 echo "沒資料";
             } ?>
-            <!-- <tbody>
 
-                <tr>
-                    <td><a href="javascript: delete_it('<?= $stmt_keyword['coupon_sid'] ?>')">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </a>
-                    </td>
-                    <td><?= isset($stmt_keyword['coupon_sid']) ? 1 : '' ?></td>
-                    <td><?= $stmt_keyword['coupon_code'] ?></td>
-                    <td><?= $stmt_keyword['coupon_name'] ?></td>
-                    <td><?= $stmt_keyword['coupon_price'] ?></td>
-                    <td><?= $stmt_keyword['coupon_startDate'] ?></td>
-                    <td><?= $stmt_keyword['coupon_expDate'] ?></td>
-                    <td><a href="m_coupon_type_update.php?coupon_sid=<?= $stmt_keyword['coupon_sid'] ?>">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </a>
-                    </td>
-                </tr>
-
-            </tbody> -->
         </table>
     </div>
     <button id="toCouponAdd_php">新增優惠券</button>

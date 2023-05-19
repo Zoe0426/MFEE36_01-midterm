@@ -113,6 +113,9 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
         <div class="mb-3">
             <div class="btn btn-primary" id="toCouponSend_chart_php">看分析</div>
         </div>
+        <div class="mb-3">
+            <div class="btn btn-primary" id="toCouponSend_list_php">回發送紀錄</div>
+        </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
@@ -205,10 +208,9 @@ ORDER BY `mem_coupon_send`.`couponSend_sid`
         location.href = 'm_coupon_send_chart.php';
     })
 
-    const search = document.querySelector("#search");
-    search.addEventListener("click", function() {
-        const keyword = document.querySelector("#keyword");
-        location.href = `m_coupon_send_read.php?keyword=${keyword.value}`
+    const toCouponSend_list_php = document.querySelector("#toCouponSend_list_php");
+    toCouponSend_list_php.addEventListener("click", function() {
+        location.href = `m_coupon_send_list.php`
     })
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
