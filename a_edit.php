@@ -3,10 +3,13 @@
 require './partsNOEDIT/connect-db.php';
 
 $act_sid = isset($_GET['act_sid']) ? intval($_GET['act_sid']) : 0;
-$sql = "SELECT `act_sid`, `type_sid`, `act_name`, `act_content`, `act_policy`, `act_city`, `act_area`, `act_address`, `act_pic_sid`, `act_pet_type`, `act_from`, `post_status` FROM `act_info` WHERE act_sid={$act_sid}";
+$sql = "SELECT ai.`act_sid`, ai.`type_sid`, ai.`act_name`, ai.`act_content`, ai.`act_policy`, ai.`act_city`, ai.`act_area`, ai.`act_address`, ai.`act_pic_sid`, ai.`act_pet_type`, ai.`act_from`, ai. `post_status` , ag.`group_sid`, ag.`group_date`, ag.`group_time`, ag.`price_adult`, ag.`price_kid`, ag.`ppl_max` 
+FROM `act_info` ai  
+JOIN `act_group` ag ON ai.act_sid = ag.act_sid
+WHERE ai.act_sid={$act_sid}";
 
 $r = $pdo->query($sql)->fetch();
-//echo print_r($r);
+// print_r($r);
 if (empty($r)) {
     header('Location: a_list_admin.php');
     exit;
@@ -44,7 +47,7 @@ $groupList = $pdo->query($sql3)->fetch();
 
         <div class="card col-6">
             <div class="card-body">
-                <h2>新增活動</h2>
+                <h2>編輯活動</h2>
                 <form name="form1" onsubmit="checkForm(event)">
                     <input type="hidden" name="act_sid" value="<?= $r['act_sid'] ?>">
                     <div class="mb-3">
@@ -65,7 +68,7 @@ $groupList = $pdo->query($sql3)->fetch();
                     </div>
                     <div class="mb-3">
                         <label for="ppl_max" class="form-label">人數上限</label>
-                        <input type="text" class="form-control" id="ppl_max" name="ppl_max" data-required="1" value="<?= $groupList['ppl_max'] ?>">
+                        <input type="text" class="form-control" id="ppl_max" name="ppl_max" data-required="1" value="<?= $r['ppl_max'] ?>">
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
@@ -253,10 +256,17 @@ $groupList = $pdo->query($sql3)->fetch();
 
 
                     } else {
-                        infoBar.classList.remove('alert-success')
-                        infoBar.classList.add('alert-danger')
-                        infoBar.innerHTML = '編輯失敗'
+                        infoBar.classList.remove('alert-danger')
+                        infoBar.classList.add('alert-success')
+                        infoBar.innerHTML = '編輯成功'
                         infoBar.style.display = 'block';
+                        setTimeout(() => {
+                            // infoBar.style.display = 'none';
+
+                            //跳轉頁面回去read
+                            location.href = 'a_list_admin_TypeS.php';
+                        }, 1500);
+
                     }
                 })
                 .catch(ex => {
