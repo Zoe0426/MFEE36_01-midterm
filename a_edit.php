@@ -44,7 +44,7 @@ $groupList = $pdo->query($sql3)->fetch();
 
         <div class="card col-6">
             <div class="card-body">
-                <h2>新增活動</h2>
+                <h2>編輯活動</h2>
                 <form name="form1" onsubmit="checkForm(event)">
                     <input type="hidden" name="act_sid" value="<?= $r['act_sid'] ?>">
                     <div class="mb-3">
