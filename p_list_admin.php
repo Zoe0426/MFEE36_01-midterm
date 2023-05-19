@@ -1,4 +1,5 @@
 <?php
+// require './partsNOEDIT/admin-require.php';
 require './partsNOEDIT/connect-db.php' ?>
 <?php include './partsNOEDIT/html-head.php' ?>
 <style>
@@ -19,11 +20,11 @@ $r_post = $stmt->fetchAll();
 
 
 ?>
-<div class="col-auto col-md-10 mt-3">
-  <div class="container">
+<div class="col-auto col-md-10 mt-5">
+  <div class="container mt-5">
     <div class="row">
       <div class="col-6">
-        <div class="card">
+        <div class="card mt-3">
           <div class="card-body">
 
             <h5 class="card-title">新增文章公告</h5>
@@ -95,12 +96,12 @@ $r_post = $stmt->fetchAll();
     const postContent = document.querySelector('#post_content');
     const infoBar = document.querySelector('#infoBar');
 
-    console.log(adminName);
-    console.log(boardName);
-    console.log(postTitle);
-    console.log(adminName);
-    console.log(adminName);
-    console.log(adminName);
+    // console.log(adminName);
+    // console.log(boardName);
+    // console.log(postTitle);
+    // console.log(adminName);
+    // console.log(adminName);
+    // console.log(adminName);
     // 取得必填欄位
     const fields = document.querySelectorAll('form *[data-required="1"]');
 
@@ -167,7 +168,7 @@ $r_post = $stmt->fetchAll();
             // }, 2000);
 
             //跳轉頁面回去read
-            //location.href = 'http://localhost:8888/project-forum/MFEE36_01/p_readPost_api.php';
+            location.href = 'p_readPost_api.php';
           })
           .catch(ex => {
             console.log(ex);

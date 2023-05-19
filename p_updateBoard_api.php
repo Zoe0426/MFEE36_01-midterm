@@ -19,14 +19,14 @@ if (!empty($_POST['board_name'])) { #若符合某些條件，則可以往下走
     #TODO:整理變數，轉換資料格式
 
     $sql = "UPDATE `post_board` SET
-    `board_name`=?,
-    WHERE `board_sid`=?";
+    `board_name`=? WHERE `board_sid`=?";
 
     $stmt = $pdo->prepare($sql);
 
     if ($isPass) {
         $stmt->execute([
-            $_POST['board_name']
+            $_POST['board_name'],
+            $_POST['board_sid']
         ]);
 
         $output['success'] = $stmt->rowCount();

@@ -32,10 +32,10 @@ if (isset($_GET['adminName'])) {
         }
 
         if (isset($_GET['text']) && $_GET['text'] !== "") {
-            echo "text";
+            // echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            echo "notext";
+            // echo "notext";
             $sql = sprintf('SELECT * FROM `post_list_admin` pa
             JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
             WHERE pa.admin_name = ?
@@ -56,10 +56,10 @@ if (isset($_GET['adminName'])) {
             exit;
         }
         if (isset($_GET['text']) && $_GET['text'] !== "") {
-            echo "text";
+            // echo "text";
             $sql = "SELECT * FROM `post_list_admin` JOIN `post_board` ON `post_list_admin`.`board_sid` = `post_board`.`board_sid` WHERE `post_content` LIKE '%$text%' OR `post_title` LIKE '%$text%' OR `board_name` LIKE '%$text%' ORDER BY `post_sid` ASC";
         } else {
-            echo "notext";
+            // echo "notext";
             $sql = sprintf('SELECT * FROM `post_list_admin` pa
             JOIN `post_board` pb ON pa.`board_sid` = pb.`board_sid` 
             WHERE pa.admin_name = ?
@@ -218,44 +218,46 @@ $r_post = $stmt->fetchAll();
 
     </div>
     <div class="row">
-        <table class="table table-bordered table-striped" id="post-list">
-            <thead>
-                <tr>
-                    <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
-                    <th scope="col">#</th>
-                    <th scope="col">管理者名稱</th>
-                    <th scope="col">看板名稱</th>
-                    <th scope="col">文章標題</th>
-                    <th scope="col">文章內容</th>
-                    <th scope="col">貼文日期</th>
-                    <th scope="col">更新日期</th>
-                    <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($rows as $r) : ?>
+        <div class="container">
+            <table class="table table-bordered table-striped" id="post-list">
+                <thead>
                     <tr>
-                        <td><a href="javascript: p_delete(<?= $r['post_sid'] ?>)">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </a></td>
-                        <td><?= $r['post_sid'] ?></td>
-                        <td><?= $r['admin_name'] ?></td>
-                        <!-- <td><?= $r['board_sid'] ?></td> -->
-                        <td><?= $r['board_name'] ?></td>
-                        <td><?= $r['post_title'] ?></td>
-                        <td><?= $r['post_content'] ?></td>
-                        <td><?= $r['post_date'] ?></td>
-                        <td><?= $r['update_date'] ?></td>
-                        <td><a href="p_list_admin_update.php?post_sid=<?= $r['post_sid'] ?>">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
+                        <th scope="col"><i class="fa-solid fa-trash-can"></i></th>
+                        <th scope="col">#</th>
+                        <th scope="col">管理者名稱</th>
+                        <th scope="col">看板名稱</th>
+                        <th scope="col">文章標題</th>
+                        <th scope="col">文章內容</th>
+                        <th scope="col">貼文日期</th>
+                        <th scope="col">更新日期</th>
+                        <th scope="col"><i class="fa-solid fa-pen-to-square"></i></th>
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows as $r) : ?>
+                        <tr>
+                            <td><a href="javascript: p_delete(<?= $r['post_sid'] ?>)">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a></td>
+                            <td><?= $r['post_sid'] ?></td>
+                            <td><?= $r['admin_name'] ?></td>
+                            <!-- <td><?= $r['board_sid'] ?></td> -->
+                            <td><?= $r['board_name'] ?></td>
+                            <td><?= $r['post_title'] ?></td>
+                            <td><?= $r['post_content'] ?></td>
+                            <td><?= $r['post_date'] ?></td>
+                            <td><?= $r['update_date'] ?></td>
+                            <td><a href="p_list_admin_update.php?post_sid=<?= $r['post_sid'] ?>">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
 
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
