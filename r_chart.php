@@ -74,6 +74,8 @@ GROUP BY ri.rest_name
 ORDER BY book_count DESC
 LIMIT 6;";
 
+
+
 $stmt_restb_1 = $pdo->query($sqlrestb_1)->fetchAll();
 $bookCounts = array_column($stmt_restb_1, 'book_count');
 $arry = $bookCounts;
@@ -85,10 +87,23 @@ foreach ($stmt_restb_1 as $row) {
 }
 
 //預約總比數
+$book_sql = sprintf("SELECT COUNT(*) FROM rest_book");
+$book_row = $pdo->query($book_sql)->fetchColumn();
 
 //餐廳總比數
-$rest_sql = "SELECT COUNT(*) FROM rest_info";
-$rest_row = $pdo->query($rest_sql)->fetchAll();
+$rest_sql = sprintf("SELECT COUNT(*) FROM rest_info");
+$rest_row = $pdo->query($rest_sql)->fetchColumn();
+
+
+//餐廳評價平均
+// $rest_cmtsql = sprintf("SELECT rc.rest_sid, ri.rest_name, ROUND(AVG(rc.cmt_evnt), 1) AS avg_cmt_evnt, ROUND(AVG(rc.cmt_food), 1) AS avg_cmt_food, ROUND(AVG(rc.cmt_service), 1) AS avg_cmt_service, ROUND(AVG(rc.cmt_cp), 1) AS avg_cmt_cp
+// FROM rest_cmt rc
+// JOIN rest_info ri ON rc.rest_sid = ri.rest_sid
+// GROUP BY rc.rest_sid;
+
+// ");
+// $cmt_row = $pdo->query($rest_cmtsql)->fetchAll();
+
 
 
 ?>
@@ -104,11 +119,15 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 
     .r_catg {
         font-weight: 800;
+        font-size: 28px;
+
     }
 
     .r_book {
         font-weight: 800;
         margin-top: 100px;
+        font-size: 28px;
+
     }
 
     .r_total1,
@@ -116,16 +135,23 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
         font-weight: 800;
         margin-top: 50px;
         margin-bottom: 10px;
+        font-size: 28px;
+
     }
 
-    .r_content {
-        height: 80px;
-        background-color: #efefef;
+    .r_content1,
+    .r_content2 {
+        height: 90px;
+        background-color: #FFF7D4;
+        border: 2px solid #FFE194;
         margin-bottom: 50px;
         padding: 30px;
-        margin-right: 20px;
-        border-radius: 8px;
+        border-radius: 6px;
+        font-size: 20px;
+    }
 
+    .r_content1 {
+        margin-right: 40px;
     }
 </style>
 
@@ -133,22 +159,22 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 <?php include './partsNOEDIT/navbar.php' ?>
 
 
-<div class="container pt-5 pb-5">
+<div class="r-con container pt-5 pb-5 ">
     <div class="d-flex">
         <div class="vstack">
-            <h5 class="r_total1">餐廳總數</h5>
-            <div class="r_content" id="recordCount">200</div>
+            <h5 class="r_total1">平台餐廳總數</h5>
+            <div class="r_content1 vertical-middle" id="recordCount"></div>
         </div>
         <div class="vstack">
-            <h5 class="r_total2">平台與約總數</h5>
-            <div class="r_content">2000</div>
+            <h5 class="r_total2">平台預約總數</h5>
+            <div class="r_content2 vertical-middle" id="bookCount"></div>
         </div>
     </div>
     <div class="chartBox">
         <h5 class="r_catg">餐廳類別</h5>
         <canvas id="myChart"></canvas>
     </div>
-    <div class="">
+    <div class="mb-4">
         <h5 class="r_book">餐廳預約</h5>
         <canvas id="myChart2"></canvas>
     </div>
@@ -158,11 +184,16 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var recordCount = <?php echo $rest_row[0][0]; ?>;
-
-
+    var recordCount = <?= json_encode($rest_row, JSON_UNESCAPED_UNICODE) ?>;
+    var recordCountStr = recordCount.toString();
     var rContent = document.getElementById('recordCount');
-    rContent.innerText = '總紀錄：' + recordCount;
+    rContent.innerText = '總數：' + recordCountStr + '間';
+
+
+    var bookCount = <?= json_encode($book_row, JSON_UNESCAPED_UNICODE) ?>;
+    var bookCountStr = bookCount.toString();
+    var bContent = document.getElementById('bookCount');
+    bContent.innerText = '總數：' + bookCountStr + '次';
 
 
     var restaurantCounts = <?= json_encode($arr, JSON_UNESCAPED_UNICODE) ?>;
@@ -176,7 +207,6 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
             label: '餐廳類別統計',
             data: restaurantCounts,
             backgroundColor: [
-
                 'rgba(255, 159, 64, 0.4)',
             ],
             borderColor: [
@@ -241,5 +271,55 @@ $rest_row = $pdo->query($rest_sql)->fetchAll();
             }
         }
     });
+
+    // function handleRestSelect() {
+    //     var restSelect = document.getElementById('restSelect');
+    //     var restSid = restSelect.value;
+    //     console.log(restSid);
+    //     fetch('r_ratings.php?rest_sid=' + restSid)
+    //         .then(response => response.json())
+    //         .then(obj => {
+
+    //             const rows = obj.getData;
+
+    //             var canvasContainer = document.getElementById('chart3');
+    //             canvasContainer.innerHTML = '<canvas id="chart3"></canvas>';
+
+
+    //             var chartData = {
+    //                 labels: ['環境', '食物', '服務', 'CP值'],
+    //                 datasets: [{
+    //                     label: '評價分析',
+    //                     data: [
+    //                         rows.avg_cmt_evnt,
+    //                         rows.avg_cmt_food,
+    //                         rows.avg_cmt_service,
+    //                         rows.avg_cmt_cp
+    //                     ],
+    //                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
+    //                     borderColor: 'rgba(75, 192, 192, 1)',
+    //                     borderWidth: 1
+    //                 }]
+    //             };
+
+    //             // 使用 Chart.js 繪製長條圖
+    //             var ctx3 = document.getElementById('chart3').getContext('2d');
+    //             new Chart(ctx3, {
+    //                 type: 'bar',
+    //                 data: chartData,
+    //                 options: {
+    //                     scales: {
+    //                         y: {
+    //                             beginAtZero: true
+    //                         }
+    //                     }
+    //                 }
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.error('發生錯誤:', error);
+    //         });
+    // }
+    // restSelect.addEventListener('change', handleRestSelect);
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>

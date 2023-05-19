@@ -367,8 +367,12 @@ $ritems = $pdo->query($rsql)->fetchAll();
         const n_end = document.querySelector('#n_end');
         const infoBar = document.querySelector('#infoBar');
 
+
         let isPass = true;
 
+
+
+        // 檢查p_max輸入是否為數字
 
 
         //用餐時間沒有填
@@ -505,13 +509,13 @@ $ritems = $pdo->query($rsql)->fetchAll();
                     if (obj.success) {
                         infoBar.classList.remove('alert-danger');
                         infoBar.classList.add('alert-success');
-                        infoBar.innerHTML = "資料更新成功!";
+                        infoBar.innerHTML = "餐廳新增成功!";
                         infoBar.style.display = 'block';
 
                     } else {
                         infoBar.classList.remove('alert-success');
                         infoBar.classList.add('alert-danger');
-                        infoBar.innerHTML = "資料更新失敗";
+                        infoBar.innerHTML = "餐廳新增失敗";
                         infoBar.style.display = 'block';
                     }
                     setTimeout(() => {

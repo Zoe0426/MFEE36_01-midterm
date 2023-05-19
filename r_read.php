@@ -50,6 +50,28 @@ if ($totalRows) {
         width: 100%;
         padding: 0 40px;
     }
+
+    .r_th {
+        background-color: #FFF7D4 !important;
+    }
+
+    .r_underline {
+        border-bottom: 2.5px solid #FFD95A;
+    }
+
+    .asc,
+    .book_asc {
+        color: #FFB84C;
+        cursor: pointer;
+    }
+
+    /* .r_thover:hover {
+        background-color: #ffefb3 !important;
+    } */
+
+    /* .r_table {
+        border: 1px solid #B7C4CF;
+    } */
 </style>
 
 <div class="t_row pt-4">
@@ -74,7 +96,7 @@ if ($totalRows) {
             </div>
         </form>
         <form name="reset" onsubmit="checkForm1(event)">
-            <button type="submit" class="search btn btn-light me-2">重置</button>
+            <button type="submit" class="reset btn btn-light me-2">重置</button>
         </form>
 
 
@@ -85,27 +107,27 @@ if ($totalRows) {
 
 
     <div class="row">
-        <table class="table table-bordered  table-striped  table-hover ">
-            <thead>
+        <table class="r_table table table-striped table-hover">
+            <thead class="r_underline">
                 <tr>
-                    <th class="bg-info-subtle py-3" scope="col">編號 <i class="asc fa-solid fa-caret-down ms-1 text-primary" id="asc"></i></th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳名稱</th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳類別</th>
-                    <th class="bg-info-subtle py-3" scope="col">餐廳電話</th>
-                    <th class="bg-info-subtle py-3" scope="col">早上開始時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">晚上結束時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">用餐時間</th>
-                    <th class="bg-info-subtle py-3" scope="col">星期</th>
-                    <th class="bg-info-subtle py-3" scope="col">人數上限</th>
-                    <th class="bg-info-subtle py-3" scope="col">預約次數 <i class="book_asc fa-solid fa-caret-down ms-1 text-primary" id="book_asc"></i></th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">細項</th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">編輯</th>
-                    <th class="bg-info-subtle py-3 text-center" scope="col" class="text-center">刪除</th>
+                    <th class="r_th py-3" scope="col">編號 <i class="asc fa-solid fa-caret-down ms-1" id="asc"></i></th>
+                    <th class="r_th py-3" scope="col">餐廳名稱</th>
+                    <th class="r_th py-3" scope="col">餐廳類別</th>
+                    <th class="r_th py-3" scope="col">餐廳電話</th>
+                    <th class="r_th py-3" scope="col">早上開始時間</th>
+                    <th class="r_th py-3" scope="col">晚上結束時間</th>
+                    <th class="r_th py-3" scope="col">用餐時間</th>
+                    <th class="r_th py-3" scope="col">星期</th>
+                    <th class="r_th py-3" scope="col">人數上限</th>
+                    <th class="r_th py-3" scope="col">預約次數 <i class="book_asc fa-solid fa-caret-down ms-1 " id="book_asc"></i></th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">細項</th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">編輯</th>
+                    <th class="r_th py-3 text-center" scope="col" class="text-center">刪除</th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider">
+            <tbody>
                 <?php foreach ($rows as $r) : ?>
-                    <tr>
+                    <tr class="r_thover">
 
                         <td class="py-3"><?= $r['rest_sid'] ?></td>
                         <td class="py-3"><?= $r['rest_name'] ?></td>
@@ -125,7 +147,7 @@ if ($totalRows) {
                                 <i class=" fa-solid fa-pen-to-square text-success"></i>
                             </a>
                         </td>
-                        <td class="text-center align-middle"><a href="javascript: delete_it(<?= $r['rest_sid'] ?>)">
+                        <td class="text-center align-middle"><a href="javascript: delete_it(<?= $r['rest_sid'] ?>, '<?= $r['rest_name'] ?>')">
                                 <i class="fa-solid fa-trash-can text-danger "></i>
                             </a></td>
 
@@ -170,20 +192,39 @@ if ($totalRows) {
     </div>
 </div>
 <?php include './partsNOEDIT/script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // 刪除提示
-    function delete_it(sid) {
-        if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
-            location.href = 'r_delete_api.php?rest_sid=' + sid;
-        }
+    // function delete_it(sid) {
+    //     if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
+    //         location.href = 'r_delete_api.php?rest_sid=' + sid;
+    //     }
+    // }
+
+    function delete_it(sid, rest_name) {
+        Swal.fire({
+            title: '',
+            text: `是否要刪除 "編號${sid} ${rest_name}" 的資料?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#adb5bd',
+            confirmButtonText: '確定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = 'r_delete_api.php?rest_sid=' + sid;
+            }
+        });
     }
+
     // booking順序
     const basc = document.querySelector('#book_asc');
     let isAscending1 = true;
 
     basc.addEventListener('click', function() {
-        const apiUrlb = isAscending1 ? 'r_book_asc_api.php' : 'r_book_desc_api.php';
+        const apiUrlb = isAscending1 ? 'r_book_desc_api.php' : 'r_book_asc_api.php';
         const caretIcon = document.querySelector('.book_asc');
 
 
@@ -636,7 +677,7 @@ if ($totalRows) {
     }
 
 
-    // 關鍵字搜尋
+    //餐廳類別
     const catgSelect = document.querySelector('#catg_sid');
 
     catgSelect.addEventListener('change', function() {
