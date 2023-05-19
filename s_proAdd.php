@@ -119,9 +119,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="s_sup_sid">產品類別</label>
+
                         <div class="row">
                             <div class="col-6">
+                                <label class="form-label" for="s_sup_sid">產品類別</label>
                                 <select class="form-select" name="cat_sid" id="s_cat_sid" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopCat as $r) : ?>
@@ -130,15 +131,17 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                                 </select>
                             </div>
                             <div class="col-6">
+                                <label class="form-label" for="s_catDet_sid">細項類別</label>
                                 <select class="form-select" name="catDet_sid" id="s_catDet_sid" disabled></select>
                             </div>
                         </div>
                         <div class="form-text"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="s_sup_sid">供應商</label>
+
                         <div class="row">
                             <div class="col-6">
+                                <label class="form-label" for="s_sup_sid">供應商</label>
                                 <select class="form-select" name="sup_sid" id="s_sup_sid" data-required="1">
                                     <option value="" selected disabled>--請選擇--</option>
                                     <?php foreach ($r_shopSup as $r) : ?>
@@ -147,6 +150,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
                                 </select>
                             </div>
                             <div class="col-6">
+                                <label class="form-label" for="s_sup_MIW">製造地</label>
                                 <select class="form-select" name="sup_MIW" id="s_sup_MIW" disabled></select>
                             </div>
                         </div>
