@@ -14,22 +14,18 @@ require './partsNOEDIT/connect-db.php'
 </style>
 <?php include './partsNOEDIT/navbar.php' ?>
 <div class="container mt-5 pt-5">
-    <div class="row">
-
-        <div class="col-6">
-            <h1 class="mb-4">前五大熱銷商品</h1>
-            <div class="dataA">
-                <canvas id="myChart"></canvas>
-            </div>
-
+    <div>
+        <h1 class="mb-4">前五大熱銷商品</h1>
+        <div class="dataA">
+            <canvas id="myChart"></canvas>
         </div>
-        <!-- <div class="col-6">
-            <h1 class="mb-4">前五大銷售額</h1>
-            <div class="dataA">
-                <canvas id="myChart2"></canvas>
-            </div>
-        </div> -->
+    </div>
 
+    <div class="pb-5">
+        <h1 class="mb-4">前五大銷售額</h1>
+        <div class="dataA">
+            <canvas id="myChart2"></canvas>
+        </div>
     </div>
 
 </div>
@@ -42,32 +38,40 @@ require './partsNOEDIT/connect-db.php'
             .then(r => r.json())
             .then(obj => {
                 let {
-                    top5,
-                    salesQtyAmount
+                    top5bestSales,
+                    salesQtyAmount,
+                    top5salesAmount,
+                    totalDetail
                 } = obj;
 
-                console.log(top5)
-                console.log(salesQtyAmount)
+                console.log(top5bestSales)
+                //console.log(salesQtyAmount)
+                console.log(top5salesAmount)
                 const totalSalesNum = salesQtyAmount.total_sales_amount
                 // console.log(typeof top5[0].saleAmount)
                 let otherNum = 0;
                 const arrName = [];
                 const arrNum = [];
-                for (let t of top5) {
+                for (let t of top5bestSales) {
                     let sNum = t.saleQty
                     otherNum += parseInt(sNum)
                     arrNum.push(sNum)
-                    arrName.push(`(${t.cat})   ${t.proName}`)
+                    arrName.push(`(${t.catDetName}) ${t.proSid}--${t.proName}`)
                     console.log(t.saleQty)
-                    // arrQ.push((t.slaeAmount / salesQtyAmount.total_sales_amount))
-                    // arrN.push(t.proName)
-                    // sumQ += parseInt(t.slaeAmount)
                 }
                 arrNum.push(otherNum)
                 arrName.push('其他')
                 // console.log(arrQ)
                 console.log(otherNum)
                 console.log(arrNum)
+                arr2Name = [];
+                arr2Sup = [];
+                arr2SalesAmount = []
+                for (let a of top5salesAmount) {
+                    arr2Name.push(`(${a.catDetName}) ${a.proSid}--${a.proName}`)
+                    arr2SalesAmount.push(a.saleAmount)
+                }
+
                 const dataDNchart = new Chart(document.querySelector('#myChart'), {
                     type: 'doughnut',
                     data: {
@@ -110,31 +114,40 @@ require './partsNOEDIT/connect-db.php'
                     }
                 })
 
+                const databar = new Chart(document.querySelector('#myChart2'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr2Name,
+                        datasets: [{
+                            label: "",
+                            data: arr2SalesAmount,
+                            backgroundColor: [
+                                '#60ACFC',
+                                '#5BC49F',
+                                '#FEB64D',
+                                '#FF7C7C',
+                                // '#32D3EB',
+                                '#9287E7'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                })
+
+
             })
     }
 
     getData()
 
 
-    // const ctx = document.getElementById('myChart2');
-
-    // new Chart(ctx, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: [12, 19, 3, 5, 2, 3],
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             y: {
-    //                 beginAtZero: true
-    //             }
-    //         }
-    //     }
-    // });
+    ;
 </script>
 <?php include './partsNOEDIT/html-foot.php' ?>
