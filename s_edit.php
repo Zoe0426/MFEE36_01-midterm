@@ -416,6 +416,48 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             }
         }
 
+        const spec1 = document.querySelectorAll('.s_spec_sid1')
+        const spec2 = document.querySelectorAll('.s_spec_sid2')
+        const specDet1 = document.querySelectorAll('.s_specDet_sid1')
+        const specDet2 = document.querySelectorAll('.s_specDet_sid2')
+        const obj = {};
+
+        for (let i = 0, max = spec1.length; i < max; i++) {
+            const selspec1 = `${spec1[i].value}-${specDet1[i].value}-${spec2[i].value}-${specDet2[i].value}`
+            const selspec2 = `${spec2[i].value}-${specDet2[i].value}-${spec1[i].value}-${specDet1[i].value}`
+
+            let duplicate = false
+            Object.keys(obj).forEach(ele => {
+                //console.log(123)
+                if (ele == selspec1) {
+                    duplicate = true
+                    return
+                }
+            })
+
+            if (!duplicate) {
+                obj[selspec1] = i;
+                obj[selspec2] = i;
+            } else {
+                isPass = false;
+                spec1[obj[selspec1]].style.border = '1px solid red';
+                specDet1[obj[selspec1]].style.border = '1px solid red';
+                spec2[obj[selspec1]].style.border = '1px solid red';
+                specDet2[obj[selspec1]].style.border = '1px solid red';
+                spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+
+                spec1[i].style.border = '1px solid red';
+                specDet1[i].style.border = '1px solid red';
+                spec2[i].style.border = '1px solid red';
+                specDet2[i].style.border = '1px solid red';
+                spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+
+                console.log('有重複')
+            }
+        }
+
         if (isPass) {
             const fd = new FormData(document.s_Form3);
             fetch('s_edit-api.php', {

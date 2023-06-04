@@ -323,41 +323,42 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         const spec2 = document.querySelectorAll('.s_spec_sid2')
         const specDet1 = document.querySelectorAll('.s_specDet_sid1')
         const specDet2 = document.querySelectorAll('.s_specDet_sid2')
-        const combinations = [];
+        const obj = {};
 
-        // 遍历每一组下拉选项
-        for (let i = 0; i < spec1.length; i++) {
-            const combination = [spec1[i].value, spec2[i].value, specDet1[i].value, specDet2[i].value];
+        for (let i = 0, max = spec1.length; i < max; i++) {
+            const selspec1 = `${spec1[i].value}-${specDet1[i].value}-${spec2[i].value}-${specDet2[i].value}`
+            const selspec2 = `${spec2[i].value}-${specDet2[i].value}-${spec1[i].value}-${specDet1[i].value}`
 
-            // 将四列的值组成一个排列组合
-            combinations.push(combination.join('-'));
-        }
+            let duplicate = false
+            Object.keys(obj).forEach(ele => {
+                //console.log(123)
+                if (ele == selspec1) {
+                    duplicate = true
+                    return
+                }
+            })
 
-        const isDuplicateCombination = (arr) => new Set(arr).size !== arr.length;
+            if (!duplicate) {
+                obj[selspec1] = i;
+                obj[selspec2] = i;
+            } else {
+                isPass = false;
+                spec1[obj[selspec1]].style.border = '1px solid red';
+                specDet1[obj[selspec1]].style.border = '1px solid red';
+                spec2[obj[selspec1]].style.border = '1px solid red';
+                specDet2[obj[selspec1]].style.border = '1px solid red';
+                spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
 
-        if (isDuplicateCombination(combinations)) {
-            // 存在相同的排列组合
-            isPass = false;
+                spec1[i].style.border = '1px solid red';
+                specDet1[i].style.border = '1px solid red';
+                spec2[i].style.border = '1px solid red';
+                specDet2[i].style.border = '1px solid red';
+                spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
 
-            spec1.forEach((element) => {
-                element.style.border = '1px solid red';
-                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            });
-
-            spec2.forEach((element) => {
-                element.style.border = '1px solid red';
-                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            });
-
-            specDet1.forEach((element) => {
-                element.style.border = '1px solid red';
-                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            });
-
-            specDet2.forEach((element) => {
-                element.style.border = '1px solid red';
-                element.closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            });
+                console.log('有重複')
+            }
         }
 
         if (isPass) {
