@@ -328,69 +328,61 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         for (let i = 0, max = spec1.length; i < max; i++) {
             const selspec1 = `${spec1[i].value}-${specDet1[i].value}-${spec2[i].value}-${specDet2[i].value}`
             const selspec2 = `${spec2[i].value}-${specDet2[i].value}-${spec1[i].value}-${specDet1[i].value}`
-            if (i == 0) {
+            if (obj[selspec1] == undefined) {
                 obj[selspec1] = i;
                 obj[selspec2] = i;
             } else {
-                Object.keys(obj).forEach(ele => {
-                    //console.log(123)
-                    if (ele != selspec1) {
-                        obj[selspec1] = i;
-                        obj[selspec2] = i;
-                    } else {
-                        spec1[obj[selspec1]].style.border = '1px solid red';
-                        specDet1[obj[selspec1]].style.border = '1px solid red';
-                        spec2[obj[selspec1]].style.border = '1px solid red';
-                        specDet2[obj[selspec1]].style.border = '1px solid red';
-                        spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-                        spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec1[obj[selspec1]].style.border = '1px solid red';
+                specDet1[obj[selspec1]].style.border = '1px solid red';
+                spec2[obj[selspec1]].style.border = '1px solid red';
+                specDet2[obj[selspec1]].style.border = '1px solid red';
+                spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
 
-                        spec1[i].style.border = '1px solid red';
-                        specDet1[i].style.border = '1px solid red';
-                        spec2[i].style.border = '1px solid red';
-                        specDet2[i].style.border = '1px solid red';
-                        spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-                        spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec1[i].style.border = '1px solid red';
+                specDet1[i].style.border = '1px solid red';
+                spec2[i].style.border = '1px solid red';
+                specDet2[i].style.border = '1px solid red';
+                spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+                spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
 
-                        console.log('有重複')
-                    }
-
-                })
-                console.log(obj)
+                console.log('有重複')
             }
-
-
-            // let duplicate = false
-            // Object.keys(obj).forEach(ele => {
-            //     //console.log(123)
-            //     if (ele == selspec1) {
-            //         duplicate = true
-            //         return
-            //     }
-            // })
-
-            // if (!duplicate) {
-            //     obj[selspec1] = i;
-            //     obj[selspec2] = i;
-            // } else {
-            //     isPass = false;
-            //     spec1[obj[selspec1]].style.border = '1px solid red';
-            //     specDet1[obj[selspec1]].style.border = '1px solid red';
-            //     spec2[obj[selspec1]].style.border = '1px solid red';
-            //     specDet2[obj[selspec1]].style.border = '1px solid red';
-            //     spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            //     spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-
-            //     spec1[i].style.border = '1px solid red';
-            //     specDet1[i].style.border = '1px solid red';
-            //     spec2[i].style.border = '1px solid red';
-            //     specDet2[i].style.border = '1px solid red';
-            //     spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-            //     spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
-
-            //     console.log('有重複')
-            // }
         }
+
+        console.log(obj)
+
+        // let duplicate = false
+        // Object.keys(obj).forEach(ele => {
+        //     //console.log(123)
+        //     if (ele == selspec1) {
+        //         duplicate = true
+        //         return
+        //     }
+        // })
+
+        // if (!duplicate) {
+        //     obj[selspec1] = i;
+        //     obj[selspec2] = i;
+        // } else {
+        //     isPass = false;
+        //     spec1[obj[selspec1]].style.border = '1px solid red';
+        //     specDet1[obj[selspec1]].style.border = '1px solid red';
+        //     spec2[obj[selspec1]].style.border = '1px solid red';
+        //     specDet2[obj[selspec1]].style.border = '1px solid red';
+        //     spec1[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+        //     spec2[obj[selspec1]].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+
+        //     spec1[i].style.border = '1px solid red';
+        //     specDet1[i].style.border = '1px solid red';
+        //     spec2[i].style.border = '1px solid red';
+        //     specDet2[i].style.border = '1px solid red';
+        //     spec1[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+        //     spec2[i].closest('.mb-3').lastChild.textContent = '* 規格重複請修正';
+
+        //     console.log('有重複')
+        // }
+
 
         if (isPass) {
             const fd = new FormData(document.s_Form3);
