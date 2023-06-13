@@ -11,7 +11,7 @@ $output = [
 
 
 if (!empty($_FILES['shopTepProImg'])) {
-    $filename = sha1($_FILES['shopTepProImg']['name'] . uniqid()) . 'jpg';
+    $filename = sha1($_FILES['shopTepProImg']['name'] . uniqid()) . '.jpg';
     if (move_uploaded_file($_FILES['shopTepProImg']['tmp_name'], "./s_Imgs/$filename")) {
         $output['filename'] = $filename;
     } else {
