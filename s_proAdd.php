@@ -92,6 +92,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
             <div class="d-flex align-item-center">
                 <h2 class="me-auto pt-3 m-0">新增商品</h2>
                 <div class="mt-3 s_allbtn mb-3">
+                    <button type="button" class="btn btn-primary me-3" onclick="createSup()">新增供應商</button>
                     <button type="button" class="btn btn-warning" onclick="createSpec()">新增規格</button>
                 </div>
             </div>
@@ -247,6 +248,10 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
 <?php include './partsNOEDIT/script.php' ?>
 <script>
     const theDocFrag = document.createDocumentFragment();
+
+    function createSup() {
+        location.href = 's_supAdd.php'
+    }
 
     function createSpec() {
         location.href = 's_proSpecAdd.php'
@@ -618,7 +623,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         removeChild(supMIWSel)
         for (let a of supMIW) {
             if (supSelId == a.sup_sid) {
-                createOp('option', a.sup_MIW_sid, a.sup_MIW)
+                createOp('option', a.sup_MIW, a.sup_MIW)
             }
         }
         supMIWSel.append(theDocFrag)

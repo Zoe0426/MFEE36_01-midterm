@@ -685,7 +685,7 @@ $r_shopSpecDet = $pdo->query($sql_shopSpecDet)->fetchAll();
         supMIWSel.innerHTML = ""
         for (let a of supMIW) {
             if (supSelId == a.sup_sid) {
-                createOp('option', a.sup_MIW_sid, a.sup_MIW)
+                createOp('option', a.sup_MIW, a.sup_MIW)
             }
         }
         supMIWSel.append(theDocFrag)
