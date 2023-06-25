@@ -18,12 +18,12 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
         background-color: #e0e0e0;
     }
 
-    .s_proDetTd:nth-child(6) {
+    .s_proDetTd:nth-child(7) {
         text-align: left;
     }
 
-    .s_proDetTd:nth-child(7),
-    .s_proDetTd:nth-child(8) {
+    .s_proDetTd:nth-child(8),
+    .s_proDetTd:nth-child(9) {
         text-align: right;
     }
 
@@ -40,8 +40,13 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
         width: 200px;
         display: none;
     }
+
+    .s_proDetImg {
+        width: 100px;
+
+    }
 </style>
-<?php include './partsNOEDIT/navbar.php' ?>
+<?php /*include './partsNOEDIT/navbar.php' */ ?>
 
 <div class="container p-3 mt-5">
     <div class="d-flex my-3 px-0">
@@ -390,13 +395,29 @@ $r_shopCatDet = $pdo->query($sql_shopCatDet)->fetchAll();
                 let turnToArr = Object.values(j);
                 let theTr = document.createElement('tr')
                 theTr.classList.add("s_proDetTr")
-                for (let k of turnToArr) {
-                    let theTd = document.createElement('td');
-                    theTd.classList.add("s_proDetTd")
-                    let theTxt = document.createTextNode(k);
-                    theTd.append(theTxt);
-                    theTr.append(theTd);
-                }
+
+                turnToArr.forEach((k, index) => {
+                    if (index === 2) {
+                        let theTd = document.createElement('td');
+                        theTd.classList.add("s_proDetTd")
+                        let theImg = document.createElement('img');
+                        theImg.setAttribute('src', `./s_imgs/${k}`)
+                        theImg.classList.add("s_proDetImg")
+                        theTd.append(theImg);
+                        theTr.append(theTd);
+                    } else {
+                        let theTd = document.createElement('td');
+                        theTd.classList.add("s_proDetTd")
+                        let theTxt = document.createTextNode(k);
+                        theTd.append(theTxt);
+                        theTr.append(theTd);
+                    }
+
+                })
+
+                // for (let k of turnToArr) {
+
+                // }
                 let theDetTd = document.createElement('td');
                 let theDetTxt = createEl2('i', 'fa-solid', 'fa-circle-info')
                 theDetTd.classList.add("s_proDetTh")

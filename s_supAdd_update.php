@@ -169,7 +169,7 @@ $r_shopSup = $pdo->query($sql_shopSup)->fetchAll();
                         infoBar.classList.add('alert-success');
                         infoBar.style.display = 'block'
                         setTimeout(() => {
-                            location.href = 's_proAdd.php'
+                            location.href = 's_proAdd_update.php'
                         }, 2000)
                     } else {
                         infoBar.innerText = '新增失敗';

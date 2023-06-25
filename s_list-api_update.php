@@ -41,7 +41,7 @@ if ($totalRows) {
         header("Location: ?page=$totalPages");
         exit;
     };
-    $sql = sprintf('SELECT p.product_sid, pd.product_detail_sid, p.category_detail_sid, p.for_pet_type,p.name, pd.price, pd.qty, p.shelf_status, p.update_date, pd.for_age FROM `shop_product_detail` pd
+    $sql = sprintf('SELECT p.product_sid, pd.product_detail_sid, p.category_detail_sid, p.for_pet_type,p.name, pd.price, pd.qty, p.shelf_status, p.update_date, pd.for_age, pd.img FROM `shop_product_detail` pd
     JOIN `shop_product` p ON pd.`product_sid`=p.`product_sid` 
     JOIN `shop_category` c ON p.`category_sid`=c.`category_sid` and p.`category_detail_sid` =c.`category_detail_sid` WHERE p.`shelf_status` !=3 %s LIMIT %s, %s', $searchRank, ($page - 1) * $perPage, $perPage);
     $rows = $pdo->query($sql)->fetchAll();
@@ -116,6 +116,7 @@ $filteredArray = array_map(function ($item) {
     return [
         '商品編號' => $item['product_sid'],
         '細項編號' => $item['product_detail_sid'],
+        '細項照片' => $item['img'],
         '商品類別' => $catDetName,
         '適用對象' => $proFor,
         '適用年齡' => $proForAge,
