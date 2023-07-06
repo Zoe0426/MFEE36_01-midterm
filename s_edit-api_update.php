@@ -90,7 +90,7 @@ if (!empty($_POST['name'])) {
         $specific_sid1 = empty($_POST['specific_sid1']) ? [] : $_POST['specific_sid1'];
         $specific_detail_sid1 = empty($_POST['specific_detail_sid1']) ? [] : $_POST['specific_detail_sid1'];
         $specific_sid2 = empty($_POST['specific_sid2']) ? [] : $_POST['specific_sid2'];
-        $specific_detail_sid2 = empty($_POST['specific_detail_sid2']) ? [] : $_POST['specific_sid2'];
+        $specific_detail_sid2 = empty($_POST['specific_detail_sid2']) ? [] : $_POST['specific_detail_sid2'];
 
         $name = [];
         for ($i = 0, $max = count($specific_sid1); $i < $max; $i++) {
