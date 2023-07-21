@@ -41,20 +41,38 @@ if (!$result) {
 
 $events = $result->fetch_all(MYSQLI_ASSOC);
 //var_dump($events);
-//Insert the shop items into the cart
+//Insert the shop items into the cart for mem00300
 foreach ($shop_items as $item) {
     $mysqli->query("INSERT INTO order_cart ( `member_sid`, `rel_type`, `rel_sid`, 
     `rel_seq_sid`, `product_qty`, `adult_qty`,
      `child_qty`, `order_status`) 
-     VALUES ('{$member['member_sid']}', 'product', '{$item['product_sid']}', 
+     VALUES ('mem00300', 'shop', '{$item['product_sid']}', 
      '{$item['product_detail_sid']}', " . rand(1, 5) . ", null, 
      null, '001')");
 
 }
 
-//Insert the events into the cart
+//Insert the events into the cart for mem00300
 foreach ($events as $event) {
-    $mysqli->query("INSERT INTO order_cart ( `member_sid`, `rel_type`, `rel_sid`, `rel_seq_sid`, `product_qty`, `adult_qty`, `child_qty`, `order_status`) VALUES ('{$member['member_sid']}', 'activity', '{$event['activity_sid']}', '{$event['activity_group_sid']}', null, " . rand(1, 2) . ", " . rand(1, 2) . ", '001')");
+    $mysqli->query("INSERT INTO order_cart ( `member_sid`, `rel_type`, `rel_sid`, `rel_seq_sid`, `product_qty`, `adult_qty`, `child_qty`, `order_status`)
+     VALUES ('mem00300', 'activity', '{$event['activity_sid']}', '{$event['activity_group_sid']}', null, " . rand(1, 2) . ", " . rand(1, 2) . ", '001')");
 }
+
+//Insert the shop items into the cart
+// foreach ($shop_items as $item) {
+//     $mysqli->query("INSERT INTO order_cart ( `member_sid`, `rel_type`, `rel_sid`, 
+//     `rel_seq_sid`, `product_qty`, `adult_qty`,
+//      `child_qty`, `order_status`) 
+//      VALUES ('{$member['member_sid']}', 'shop', '{$item['product_sid']}', 
+//     '{$item['product_detail_sid']}', " . rand(1, 5) . ", null, 
+//     null, '001')");
+
+// }
+
+//Insert the events into the cart
+// foreach ($events as $event) {
+//     $mysqli->query("INSERT INTO order_cart ( `member_sid`, `rel_type`, `rel_sid`, `rel_seq_sid`, `product_qty`, `adult_qty`, `child_qty`, `order_status`)
+//      VALUES ('{$member['member_sid']}', 'activity', '{$event['activity_sid']}', '{$event['activity_group_sid']}', null, " . rand(1, 2) . ", " . rand(1, 2) . ", '001')");
+// }
 
 $mysqli->close();
